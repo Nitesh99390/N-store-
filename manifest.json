@@ -10,6 +10,18 @@
       "src": "https://play-lh.googleusercontent.com/F4OwSATxSyETbmkPqZ4kmEGvNmjBf7sY8pgNrytJEnyaEJPT4i-En-EtKC3TlpoH5w",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/react.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/react.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
