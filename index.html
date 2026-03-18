@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+    <meta name="google-site-verification" content="Za1pEupQLM-LlPnODka_5pMgrC6DyOzmuDaZBepfg7Q" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    
     <title>N-Store | App & Game Hub</title>
+    <meta name="description" content="N-Store: Discover the best web apps, tools, and HTML5 games. Play instantly without downloading.">
+    <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online">
     
-    <meta name="theme-color" content="#01875f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     
-    <link rel="manifest" href='data:application/manifest+json,{"name":"N-Store","short_name":"N-Store","start_url":".","display":"standalone","background_color":"#ffffff","theme_color":"#01875f","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/888/888841.png","sizes":"512x512","type":"image/png"}]}'>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
+        /* Modern N-Store Theme Variables */
         :root {
             --bg-main: #ffffff;
             --surface: #ffffff;
@@ -38,151 +38,285 @@
             --card-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.3s; padding-bottom: 70px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.3s ease; }
 
+        /* Top Navbar */
         nav {
             display: flex; align-items: center; justify-content: space-between;
             padding: 14px 24px; position: sticky; top: 0;
             background: var(--surface); z-index: 100;
             border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            flex-wrap: wrap; gap: 10px;
         }
-
-        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; cursor: pointer; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
         
         .search-bar {
             background: var(--hover-bg); border-radius: 24px;
             display: flex; align-items: center; padding: 10px 20px;
-            width: 45%; border: 1px solid transparent;
+            width: 45%; max-width: 500px; border: 1px solid transparent;
+            transition: border 0.3s, background 0.3s;
         }
-        .search-bar input { border: none; background: transparent; color: var(--text-main); outline: none; width: 100%; margin-left: 10px; }
+        .search-bar:focus-within { border-color: var(--primary); background: transparent; }
+        .search-bar i { color: var(--text-sub); }
+        .search-bar input {
+            border: none; background: transparent; color: var(--text-main);
+            outline: none; width: 100%; margin-left: 12px; font-size: 15px;
+        }
 
-        .tabs { display: flex; gap: 30px; padding: 0 24px; border-bottom: 1px solid var(--border); overflow-x: auto; }
-        .tab { padding: 16px 0; font-weight: 500; color: var(--text-sub); cursor: pointer; white-space: nowrap; position: relative; }
-        .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+        .theme-btn { 
+            background: var(--hover-bg); border: none; width: 40px; height: 40px; 
+            border-radius: 50%; font-size: 18px; color: var(--text-main); 
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .theme-btn:hover { background: var(--border); }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 25px; }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+        /* Navigation Tabs */
+        .tabs {
+            display: flex; gap: 30px; padding: 0 24px;
+            border-bottom: 1px solid var(--border); background: var(--surface);
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab {
+            padding: 16px 0; font-weight: 500; font-size: 14px;
+            color: var(--text-sub); cursor: pointer; white-space: nowrap;
+            transition: color 0.2s; position: relative;
+        }
+        .tab.active { color: var(--primary); }
+        .tab.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
+            height: 3px; background: var(--primary); border-radius: 3px 3px 0 0;
+        }
+
+        /* Main Content */
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 24px; }
+        .section-header { margin-bottom: 24px; }
+        .section-title { font-size: 22px; font-weight: 600; }
+
+        /* Polished App Grid */
+        .app-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px;
+        }
         
         .app-card {
-            background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border);
-            text-align: center; text-decoration: none; color: inherit; transition: 0.2s;
+            background: var(--surface); display: flex; flex-direction: column; 
+            align-items: center; text-align: center; text-decoration: none; color: inherit;
+            padding: 20px 16px; border-radius: 16px; border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--card-shadow);
         }
-        .app-card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow); }
+        .app-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); border-color: transparent;}
 
-        .app-icon { width: 70px; height: 70px; border-radius: 15px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; }
-        
-        .install-btn { 
-            background: var(--primary-light); color: var(--primary); border: none; 
-            padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; margin-top: 10px; width: 100%;
+        .app-icon {
+            width: 75px; height: 75px; border-radius: 18px;
+            object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 32px; color: white; margin-bottom: 16px;
         }
 
-        /* PWA Install Button Style */
-        #pwaInstallBtn {
-            display: none; background: var(--primary); color: white; border: none;
-            padding: 10px 20px; border-radius: 50px; position: fixed; bottom: 85px;
-            left: 50%; transform: translateX(-50%); z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        .app-info { display: flex; flex-direction: column; gap: 4px; width: 100%; margin-bottom: 16px; }
+        .app-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-dev { font-size: 12px; color: var(--text-sub); }
+        .app-meta { font-size: 12px; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 4px;}
+        .star { color: #fbbc04; font-size: 11px; }
+
+        .install-btn {
+            background-color: var(--primary-light); color: var(--primary);
+            border: none; padding: 8px 0; width: 90%;
+            border-radius: 24px; font-weight: 600; font-size: 13px;
+            cursor: pointer; transition: all 0.2s; margin-top: auto;
         }
+        .app-card:hover .install-btn { background-color: var(--primary); color: white; }
+
+        /* Mobile Bottom Nav */
+        .bottom-nav {
+            display: none; position: fixed; bottom: 0; width: 100%;
+            background: var(--surface); border-top: 1px solid var(--border);
+            justify-content: space-around; padding: 12px 0; z-index: 100;
+        }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-sub); font-size: 11px; cursor: pointer; font-weight: 500;}
+        .bottom-nav-item.active { color: var(--primary); }
+
+        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 50px; font-size: 16px; line-height: 1.5;}
 
         @media (max-width: 768px) {
-            .search-bar { display: none; }
-            .app-grid { grid-template-columns: repeat(2, 1fr); }
+            .search-bar { width: 100%; max-width: none; margin-top: 10px; order: 3;}
+            nav { padding: 12px 16px; }
+            .bottom-nav { display: flex; }
+            .container { padding-bottom: 80px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+            .app-card { padding: 16px 12px; }
+            .app-icon { width: 65px; height: 65px; font-size: 28px; }
         }
     </style>
 </head>
 <body>
 
-    <button id="pwaInstallBtn"><i class="fa-solid fa-download"></i> Install N-Store</button>
-
     <nav>
-        <div class="logo-area">
+        <div class="logo-area" onclick="filterCategory('All')">
             <i class="fa-brands fa-google-play" style="color: var(--primary);"></i>
             <span>N-Store</span>
         </div>
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search apps...">
+            <input type="text" id="searchInput" placeholder="Search for apps & games...">
         </div>
-        <button id="themeToggle" style="background:none; border:none; cursor:pointer; font-size:20px; color:var(--text-main);">
+        <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
             <i class="fa-regular fa-moon"></i>
         </button>
     </nav>
 
     <div class="tabs">
-        <div class="tab active" onclick="filterCat('All')">For you</div>
-        <div class="tab" onclick="filterCat('App')">Apps</div>
-        <div class="tab" onclick="filterCat('Game')">Games</div>
+        <div class="tab active" onclick="filterCategory('All')">For you</div>
+        <div class="tab" onclick="filterCategory('Top charts')">Top charts</div>
+        <div class="tab" onclick="filterCategory('Game')">Games</div>
+        <div class="tab" onclick="filterCategory('App')">Apps</div>
     </div>
 
     <div class="container">
-        <h2 id="sectionTitle" style="margin-bottom: 20px;">Recommended</h2>
-        <div class="app-grid" id="projectGrid"></div>
+        <div class="section-header">
+            <h2 class="section-title" id="sectionTitle">Recommended for you</h2>
+        </div>
+        
+        <div class="app-grid" id="projectGrid">
+            </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active" onclick="filterCategory('Game')">
+            <i class="fa-solid fa-gamepad fa-lg"></i>
+            <span>Games</span>
+        </div>
+        <div class="bottom-nav-item" onclick="filterCategory('App')">
+            <i class="fa-solid fa-border-all fa-lg"></i>
+            <span>Apps</span>
+        </div>
+        <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus()">
+            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            <span>Search</span>
+        </div>
     </div>
 
     <script>
-        // --- PROJECTS DATA ---
+        // --- APNE GITHUB PROJECTS YAHAN ADD KAREIN 👇 ---
         const myProjects = [
-            { title: "FM Radio", developer: "Nitesh", category: "App", rating: "4.8", link: "hello.html", iconClass: "fa-solid fa-radio", iconBg: "#ff5722" },
-            { title: "N-OS System", developer: "Nitesh", category: "App", rating: "5.0", link: "hi.html", iconClass: "fa-solid fa-mobile-screen-button", iconBg: "#4285f4" }
+    {
+        title: "FM Radio",
+        developer: "Nitesh",
+        category: "App",
+        rating: "4.8",
+        link: "hello.html",
+        iconClass: "fa-solid fa-radio",
+        iconBg: "#ff5722"
+    },
+    {
+        title: "N-OS System",
+        developer: "Nitesh",
+        category: "App",
+        rating: "5.0",
+        link: "hi.html",
+        iconClass: "fa-solid fa-mobile-screen-button",
+        iconBg: "#4285f4"
+    }
+
+        
+            /* TEMPLATE (Isko copy karke use karein):
+            {
+                title: "App Ka Naam",
+                developer: "Aapka Naam",
+                category: "App", // "App" ya "Game" likhein
+                rating: "4.8",
+                link: "https://your-github-username.github.io/project-link",
+                iconClass: "fa-solid fa-gamepad", // FontAwesome icon class yahan dalein
+                iconBg: "#01875f" // Icon background color (jaise #ea4335, #4285f4 etc.)
+            },
+            */
         ];
+        // --------------------------------------------------
 
         const grid = document.getElementById('projectGrid');
-        
-        function render(filter = 'All') {
+        const searchInput = document.getElementById('searchInput');
+        const sectionTitle = document.getElementById('sectionTitle');
+        let currentFilter = 'All';
+
+        function renderProjects(searchQuery = '') {
             grid.innerHTML = '';
-            myProjects.forEach(p => {
-                if (filter === 'All' || p.category === filter) {
-                    grid.innerHTML += `
-                        <a href="${p.link}" class="app-card">
-                            <div class="app-icon" style="background:${p.iconBg}"><i class="${p.iconClass}"></i></div>
-                            <div style="font-weight:600">${p.title}</div>
-                            <div style="font-size:12px; color:var(--text-sub)">${p.developer}</div>
-                            <button class="install-btn">Open</button>
-                        </a>`;
+
+            // Agar array khali hai (jaise abhi hai)
+            if (myProjects.length === 0) {
+                grid.innerHTML = '<div class="no-results"><i class="fa-solid fa-folder-open fa-3x" style="margin-bottom:15px; color: var(--primary);"></i><br>Abhi tak koi app add nahi kiya gaya hai.<br>Code mein <b>myProjects</b> array ko update karein!</div>';
+                return;
+            }
+            
+            const filtered = myProjects.filter(project => {
+                const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = currentFilter === 'All' || currentFilter === 'Top charts' || project.category === currentFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results"><i class="fa-regular fa-face-frown fa-2x" style="margin-bottom:10px;"></i><br>No matching apps found.</div>';
+                return;
+            }
+
+            filtered.forEach(project => {
+                const card = `
+                    <a href="${project.link}" target="_blank" class="app-card">
+                        <div class="app-icon" style="background-color: ${project.iconBg}">
+                            <i class="${project.iconClass}"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-title">${project.title}</div>
+                            <div class="app-dev">${project.developer}</div>
+                            <div class="app-meta">
+                                ${project.rating} <i class="fa-solid fa-star star"></i>
+                            </div>
+                        </div>
+                        <button class="install-btn">Open</button>
+                    </a>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+            
+            if(category === 'All') sectionTitle.innerText = 'Recommended for you';
+            else if(category === 'Top charts') sectionTitle.innerText = 'Top charts';
+            else sectionTitle.innerText = `Top ${category}s`;
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if(tab.innerText.includes(category) || (category === 'All' && tab.innerText === 'For you')) {
+                    tab.classList.add('active');
                 }
             });
+
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.innerText.includes(category)) item.classList.add('active');
+            });
+
+            renderProjects(searchInput.value);
         }
 
-        function filterCat(cat) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            render(cat);
-        }
-
-        // --- THEME TOGGLE ---
-        const themeBtn = document.getElementById('themeToggle');
-        themeBtn.onclick = () => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            themeBtn.innerHTML = isDark ? '<i class="fa-regular fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-        };
-
-        // --- PWA SERVICE WORKER REGISTRATION (BLOB METHOD) ---
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('install', e => self.skipWaiting());
-                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
-            `;
-            const blob = new Blob([swCode], { type: 'text/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
-        }
-
-        // --- INSTALL PROMPT LOGIC ---
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('pwaInstallBtn').style.display = 'block';
+        searchInput.addEventListener('input', (e) => {
+            renderProjects(e.target.value);
         });
 
-        document.getElementById('pwaInstallBtn').onclick = () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(() => {
-                document.getElementById('pwaInstallBtn').style.display = 'none';
-            });
-        };
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            themeBtn.innerHTML = newTheme === 'light' ? '<i class="fa-regular fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color:#fbbc04;"></i>';
+        });
 
-        render();
+        renderProjects();
     </script>
 </body>
 </html>
