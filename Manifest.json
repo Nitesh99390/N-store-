@@ -1,0 +1,15 @@
+{
+  "name": "SinghPriya Infinity OS",
+  "short_name": "SP-OS",
+  "start_url": "hi.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#00f2ff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1183/1183672.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
