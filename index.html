@@ -6,162 +6,214 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
     
-    <title>N-Store | App & Game Hub</title>
+    <title>N-Store | Premium App & Game Hub</title>
     <meta name="description" content="N-Store: Discover the best web apps, tools, and HTML5 games. Play instantly without downloading.">
     <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online">
     <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
 
-<meta name="theme-color" content="#000000">
-<link rel="apple-touch-icon" href="icon-192x192.png">
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('n-store PWA Registered!'))
-        .catch(err => console.log('Registration failed', err));
-    });
-  }
-</script>
-    
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('N-Store PWA Registered!'))
+            .catch(err => console.log('Registration failed', err));
+        });
+      }
+    </script>
+    
     <style>
-        /* Modern N-Store Theme Variables */
+        /* Premium N-Store Theme Variables */
         :root {
-            --bg-main: #ffffff;
+            --bg-main: #f8fafc;
             --surface: #ffffff;
-            --text-main: #202124;
-            --text-sub: #5f6368;
-            --primary: #01875f;
-            --primary-light: #e6f4ea;
-            --border: #e0e0e0;
-            --hover-bg: #f4f5f7;
-            --card-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --primary: #10b981; /* Emerald Green */
+            --primary-hover: #059669;
+            --primary-light: #d1fae5;
+            --border: #e2e8f0;
+            --hover-bg: #f1f5f9;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            --card-hover-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            --popup-bg: rgba(255, 255, 255, 0.95);
         }
 
         [data-theme="dark"] {
-            --bg-main: #18191a;
-            --surface: #242526;
-            --text-main: #e4e6eb;
-            --text-sub: #b0b3b8;
-            --primary: #81c995;
-            --primary-light: rgba(129, 201, 149, 0.15);
-            --border: #3a3b3c;
-            --hover-bg: #3a3b3c;
-            --card-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            --bg-main: #0f172a;
+            --surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --primary: #10b981;
+            --primary-hover: #34d399;
+            --primary-light: rgba(16, 185, 129, 0.15);
+            --border: #334155;
+            --hover-bg: #334155;
+            --nav-bg: rgba(30, 41, 59, 0.85);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --popup-bg: rgba(30, 41, 59, 0.95);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.4s ease, color 0.4s ease; }
 
-        /* Top Navbar */
+        /* Sleek Glassmorphism Navbar */
         nav {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 24px; position: sticky; top: 0;
-            background: var(--surface); z-index: 100;
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            flex-wrap: wrap; gap: 10px;
+            padding: 16px 28px; position: sticky; top: 0;
+            background: var(--nav-bg); z-index: 100;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;
         }
-        .logo-area { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
+        .logo-area i { filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3)); }
         
         .search-bar {
-            background: var(--hover-bg); border-radius: 24px;
-            display: flex; align-items: center; padding: 10px 20px;
-            width: 45%; max-width: 500px; border: 1px solid transparent;
-            transition: border 0.3s, background 0.3s;
+            background: var(--hover-bg); border-radius: 30px;
+            display: flex; align-items: center; padding: 12px 24px;
+            width: 45%; max-width: 500px; border: 1.5px solid transparent;
+            transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-        .search-bar:focus-within { border-color: var(--primary); background: transparent; }
-        .search-bar i { color: var(--text-sub); }
+        .search-bar:focus-within { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
+        .search-bar i { color: var(--text-sub); font-size: 16px; }
         .search-bar input {
             border: none; background: transparent; color: var(--text-main);
-            outline: none; width: 100%; margin-left: 12px; font-size: 15px;
+            outline: none; width: 100%; margin-left: 14px; font-size: 15px; font-weight: 500;
         }
+        .search-bar input::placeholder { color: var(--text-sub); font-weight: 400; }
 
         .theme-btn { 
-            background: var(--hover-bg); border: none; width: 40px; height: 40px; 
+            background: var(--surface); border: 1px solid var(--border); width: 44px; height: 44px; 
             border-radius: 50%; font-size: 18px; color: var(--text-main); 
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .theme-btn:hover { background: var(--border); }
+        .theme-btn:hover { background: var(--hover-bg); transform: rotate(15deg) scale(1.05); }
 
-        /* Navigation Tabs */
+        /* Refined Navigation Tabs */
         .tabs {
-            display: flex; gap: 30px; padding: 0 24px;
+            display: flex; gap: 32px; padding: 0 28px;
             border-bottom: 1px solid var(--border); background: var(--surface);
             overflow-x: auto; scrollbar-width: none;
         }
         .tabs::-webkit-scrollbar { display: none; }
         .tab {
-            padding: 16px 0; font-weight: 500; font-size: 14px;
+            padding: 18px 0; font-weight: 600; font-size: 15px;
             color: var(--text-sub); cursor: pointer; white-space: nowrap;
-            transition: color 0.2s; position: relative;
+            transition: color 0.3s ease; position: relative;
         }
+        .tab:hover { color: var(--text-main); }
         .tab.active { color: var(--primary); }
         .tab.active::after {
             content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
-            height: 3px; background: var(--primary); border-radius: 3px 3px 0 0;
+            height: 3px; background: var(--primary); border-radius: 4px 4px 0 0;
+            box-shadow: 0 -2px 8px rgba(16, 185, 129, 0.4);
         }
 
         /* Main Content */
-        .container { max-width: 1200px; margin: 0 auto; padding: 30px 24px; }
-        .section-header { margin-bottom: 24px; }
-        .section-title { font-size: 22px; font-weight: 600; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 40px 28px; }
+        .section-header { margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;}
+        .section-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
 
-        /* Polished App Grid */
-        .app-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px;
+        /* Premium App Grid & Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
         
         .app-card {
             background: var(--surface); display: flex; flex-direction: column; 
             align-items: center; text-align: center; text-decoration: none; color: inherit;
-            padding: 20px 16px; border-radius: 16px; border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--card-shadow);
+            padding: 24px 20px; border-radius: 24px; border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease backwards;
         }
-        .app-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); border-color: transparent;}
+        .app-card:hover { 
+            transform: translateY(-6px) scale(1.02); 
+            box-shadow: var(--card-hover-shadow); 
+            border-color: var(--primary-light);
+        }
 
         .app-icon {
-            width: 75px; height: 75px; border-radius: 18px;
-            object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            width: 85px; height: 85px; border-radius: 22px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             display: flex; justify-content: center; align-items: center; 
-            font-size: 32px; color: white; margin-bottom: 16px;
+            font-size: 38px; color: white; margin-bottom: 18px;
+            overflow: hidden; transition: transform 0.3s ease;
         }
+        .app-card:hover .app-icon { transform: scale(1.05) rotate(-3deg); }
 
-        .app-info { display: flex; flex-direction: column; gap: 4px; width: 100%; margin-bottom: 16px; }
-        .app-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .app-dev { font-size: 12px; color: var(--text-sub); }
-        .app-meta { font-size: 12px; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 4px;}
-        .star { color: #fbbc04; font-size: 11px; }
+        .app-info { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 20px; }
+        .app-title { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .app-dev { font-size: 13px; color: var(--text-sub); font-weight: 500; }
+        .app-meta { font-size: 12px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;}
+        .star { color: #fbbf24; font-size: 12px; }
 
         .install-btn {
             background-color: var(--primary-light); color: var(--primary);
-            border: none; padding: 8px 0; width: 90%;
-            border-radius: 24px; font-weight: 600; font-size: 13px;
-            cursor: pointer; transition: all 0.2s; margin-top: auto;
+            border: none; padding: 10px 0; width: 100%;
+            border-radius: 30px; font-weight: 700; font-size: 14px;
+            cursor: pointer; transition: all 0.3s ease; margin-top: auto;
         }
-        .app-card:hover .install-btn { background-color: var(--primary); color: white; }
+        .app-card:hover .install-btn { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+        /* PWA Install Popup */
+        .pwa-popup {
+            position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150%);
+            width: 90%; max-width: 400px; background: var(--popup-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 20px; border-radius: 24px; border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 1000;
+            display: flex; flex-direction: column; gap: 16px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0;
+        }
+        .pwa-popup.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        
+        .pwa-content { display: flex; align-items: center; gap: 16px; }
+        .pwa-icon { width: 50px; height: 50px; border-radius: 14px; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;}
+        .pwa-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);}
+        .pwa-text p { font-size: 13px; color: var(--text-sub); line-height: 1.4;}
+        
+        .pwa-actions { display: flex; gap: 12px; }
+        .pwa-btn { flex: 1; padding: 10px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: 0.2s;}
+        .pwa-btn-cancel { background: var(--hover-bg); color: var(--text-main); }
+        .pwa-btn-install { background: var(--primary); color: white; }
+        .pwa-btn-install:hover { background: var(--primary-hover); }
 
         /* Mobile Bottom Nav */
         .bottom-nav {
             display: none; position: fixed; bottom: 0; width: 100%;
-            background: var(--surface); border-top: 1px solid var(--border);
-            justify-content: space-around; padding: 12px 0; z-index: 100;
+            background: var(--nav-bg); border-top: 1px solid var(--border);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            justify-content: space-around; padding: 14px 0; z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom, 14px);
         }
-        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-sub); font-size: 11px; cursor: pointer; font-weight: 500;}
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); font-size: 12px; cursor: pointer; font-weight: 600; transition: color 0.3s ease;}
         .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item i { transition: transform 0.3s ease; }
+        .bottom-nav-item.active i { transform: translateY(-3px); }
 
-        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 50px; font-size: 16px; line-height: 1.5;}
+        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 60px 20px; font-size: 18px; line-height: 1.6; font-weight: 500;}
 
         @media (max-width: 768px) {
-            .search-bar { width: 100%; max-width: none; margin-top: 10px; order: 3;}
-            nav { padding: 12px 16px; }
+            .search-bar { width: 100%; max-width: none; margin-top: 12px; order: 3;}
+            nav { padding: 16px; }
             .bottom-nav { display: flex; }
-            .container { padding-bottom: 80px; }
-            .app-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-            .app-card { padding: 16px 12px; }
-            .app-icon { width: 65px; height: 65px; font-size: 28px; }
+            .container { padding: 24px 16px 100px 16px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+            .app-card { padding: 20px 16px; border-radius: 20px;}
+            .app-icon { width: 75px; height: 75px; font-size: 32px; border-radius: 18px;}
+            .pwa-popup { bottom: 90px; width: 92%; }
         }
     </style>
 </head>
@@ -174,7 +226,7 @@
         </div>
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search for apps & games...">
+            <input type="text" id="searchInput" placeholder="Search premium apps & games...">
         </div>
         <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
             <i class="fa-regular fa-moon"></i>
@@ -197,16 +249,32 @@
             </div>
     </div>
 
+    <div id="pwa-install-prompt" class="pwa-popup">
+        <div class="pwa-content">
+            <div class="pwa-icon">
+                <i class="fa-brands fa-google-play"></i>
+            </div>
+            <div class="pwa-text">
+                <h4>Install N-Store App</h4>
+                <p>Add to home screen for faster access & offline features!</p>
+            </div>
+        </div>
+        <div class="pwa-actions">
+            <button class="pwa-btn pwa-btn-cancel" id="pwa-cancel-btn">Not Now</button>
+            <button class="pwa-btn pwa-btn-install" id="pwa-install-btn">Install Now</button>
+        </div>
+    </div>
+
     <div class="bottom-nav">
         <div class="bottom-nav-item active" onclick="filterCategory('Game')">
             <i class="fa-solid fa-gamepad fa-lg"></i>
             <span>Games</span>
         </div>
         <div class="bottom-nav-item" onclick="filterCategory('App')">
-            <i class="fa-solid fa-border-all fa-lg"></i>
+            <i class="fa-solid fa-layer-group fa-lg"></i>
             <span>Apps</span>
         </div>
-        <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus()">
+        <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus(); window.scrollTo(0,0);">
             <i class="fa-solid fa-magnifying-glass fa-lg"></i>
             <span>Search</span>
         </div>
@@ -216,56 +284,41 @@
         // --- APNE GITHUB PROJECTS YAHAN ADD KAREIN 👇 ---
         const myProjects = [
             {
-    title: "Memory Game",
-    developer: "Nitesh",
-    category: "Game",
-    rating: "4.9",
-    link: "memorygame.html",
-    imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", 
-    iconBg: "#ff9800"
-},
-            
-        {
-    title: "Bubble Shooter",
-    developer: "Nitesh",
-    category: "Game",
-    rating: "4.8",
-    link: "hello1.html",
-    iconClass: "fa-solid fa-circle-dot", 
-    iconBg: "#2196f3"
-},
-            
-    {
-        title: "FM Radio",
-        developer: "Nitesh",
-        category: "App",
-        rating: "4.8",
-        link: "hello.html",
-        iconClass: "fa-solid fa-radio",
-        iconBg: "#ff5722"
-    },
-    {
-        title: "N-OS System",
-        developer: "Nitesh",
-        category: "App",
-        rating: "5.0",
-        link: "hi.html",
-        iconClass: "fa-solid fa-mobile-screen-button",
-        iconBg: "#4285f4"
-    }
-
-        
-            /* TEMPLATE (Isko copy karke use karein):
-            {
-                title: "App Ka Naam",
-                developer: "Aapka Naam",
-                category: "App", // "App" ya "Game" likhein
-                rating: "4.8",
-                link: "https://your-github-username.github.io/project-link",
-                iconClass: "fa-solid fa-gamepad", // FontAwesome icon class yahan dalein
-                iconBg: "#01875f" // Icon background color (jaise #ea4335, #4285f4 etc.)
+                title: "Memory Game",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "memorygame.html",
+                imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", 
+                iconBg: "#ffffff"
             },
-            */
+            {
+                title: "Bubble Shooter",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.8",
+                link: "hello1.html",
+                iconClass: "fa-solid fa-circle-dot", 
+                iconBg: "#3b82f6" 
+            },
+            {
+                title: "FM Radio",
+                developer: "Nitesh",
+                category: "App",
+                rating: "4.8",
+                link: "hello.html",
+                iconClass: "fa-solid fa-radio",
+                iconBg: "#f97316" 
+            },
+            {
+                title: "N-OS System",
+                developer: "Nitesh",
+                category: "App",
+                rating: "5.0",
+                link: "hi.html",
+                iconClass: "fa-solid fa-mobile-screen-button",
+                iconBg: "#6366f1" 
+            }
         ];
         // --------------------------------------------------
 
@@ -277,9 +330,8 @@
         function renderProjects(searchQuery = '') {
             grid.innerHTML = '';
 
-            // Agar array khali hai (jaise abhi hai)
             if (myProjects.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fa-solid fa-folder-open fa-3x" style="margin-bottom:15px; color: var(--primary);"></i><br>Abhi tak koi app add nahi kiya gaya hai.<br>Code mein <b>myProjects</b> array ko update karein!</div>';
+                grid.innerHTML = '<div class="no-results"><i class="fa-solid fa-folder-open fa-3x" style="margin-bottom:20px; color: var(--primary);"></i><br>Abhi tak koi app add nahi kiya gaya hai.</div>';
                 return;
             }
             
@@ -290,24 +342,33 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fa-regular fa-face-frown fa-2x" style="margin-bottom:10px;"></i><br>No matching apps found.</div>';
+                grid.innerHTML = '<div class="no-results"><i class="fa-regular fa-face-frown fa-3x" style="margin-bottom:20px; color: var(--text-sub);"></i><br>No matching apps found.</div>';
                 return;
             }
 
-            filtered.forEach(project => {
+            filtered.forEach((project, index) => {
+                let iconContent = '';
+                if (project.imageIcon) {
+                    iconContent = `<img src="${project.imageIcon}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">`;
+                } else {
+                    iconContent = `<i class="${project.iconClass}"></i>`;
+                }
+
+                const animationDelay = index * 0.05;
+
                 const card = `
-                    <a href="${project.link}" target="_blank" class="app-card">
+                    <a href="${project.link}" target="_blank" class="app-card" style="animation-delay: ${animationDelay}s">
                         <div class="app-icon" style="background-color: ${project.iconBg}">
-                            <i class="${project.iconClass}"></i>
+                            ${iconContent}
                         </div>
                         <div class="app-info">
-                            <div class="app-title">${project.title}</div>
+                            <div class="app-title" title="${project.title}">${project.title}</div>
                             <div class="app-dev">${project.developer}</div>
                             <div class="app-meta">
                                 ${project.rating} <i class="fa-solid fa-star star"></i>
                             </div>
                         </div>
-                        <button class="install-btn">Open</button>
+                        <button class="install-btn">Get</button>
                     </a>
                 `;
                 grid.innerHTML += card;
@@ -319,7 +380,7 @@
             
             if(category === 'All') sectionTitle.innerText = 'Recommended for you';
             else if(category === 'Top charts') sectionTitle.innerText = 'Top charts';
-            else sectionTitle.innerText = `Top ${category}s`;
+            else sectionTitle.innerText = `Premium ${category}s`;
 
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
@@ -340,6 +401,7 @@
             renderProjects(e.target.value);
         });
 
+        // Theme Toggle Logic
         const themeBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
         
@@ -347,9 +409,52 @@
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             html.setAttribute('data-theme', newTheme);
-            themeBtn.innerHTML = newTheme === 'light' ? '<i class="fa-regular fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color:#fbbc04;"></i>';
+            
+            if (newTheme === 'dark') {
+                themeBtn.innerHTML = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0f172a');
+            } else {
+                themeBtn.innerHTML = '<i class="fa-regular fa-moon"></i>';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+            }
         });
 
+        // PWA Install Logic
+        let deferredPrompt;
+        const pwaPopup = document.getElementById('pwa-install-prompt');
+        const installBtn = document.getElementById('pwa-install-btn');
+        const cancelBtn = document.getElementById('pwa-cancel-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Show the custom popup after 2 seconds of page load
+            setTimeout(() => {
+                pwaPopup.classList.add('show');
+            }, 2000);
+        });
+
+        installBtn.addEventListener('click', async () => {
+            // Hide our custom UI
+            pwaPopup.classList.remove('show');
+            if (deferredPrompt) {
+                // Show the standard prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            pwaPopup.classList.remove('show');
+        });
+
+        // Initial render
         renderProjects();
     </script>
 </body>
