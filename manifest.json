@@ -1,28 +1,21 @@
 {
-  "name": "SinghPriya Infinity OS",
-  "short_name": "SP-OS",
-  "start_url": "hi.html",
-  "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#00f2ff",
+  "short_name": "n-store",
+  "name": "n-store Digital Shop",
   "icons": [
     {
-      "src": "https://play-lh.googleusercontent.com/F4OwSATxSyETbmkPqZ4kmEGvNmjBf7sY8pgNrytJEnyaEJPT4i-En-EtKC3TlpoH5w",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
     },
     {
-      "src": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/react.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/react.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "src": "icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
-  ]
+  ],
+  "start_url": "/index.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000"
 }
-
