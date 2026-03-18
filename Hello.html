@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Global Radio | Live Stream</title>
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --accent: #f43f5e;
+            --bg-dark: #0f172a;
+            --glass: rgba(15, 23, 42, 0.75);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.4) 0%, #0f172a 90%);
+        }
+
+        .main-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header-section h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .radio-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .search-area {
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+        }
+
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #bae6fd;
+            font-size: 1rem;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 30px;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: bounce 1s infinite ease-in-out;
+        }
+
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.3s; }
+
+        .playing-info {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .station-name { font-weight: 600; color: #fff; }
+        .station-loc { font-size: 0.8rem; color: #94a3b8; }
+
+        audio {
+            width: 100%;
+            height: 45px;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { height: 10px; }
+            50% { height: 25px; }
+        }
+
+        @media (max-width: 480px) {
+            .header-section h1 { font-size: 2rem; }
+            .radio-card { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero"></div>
+
+<div class="main-wrapper">
+    <div class="header-section">
+        <h1>Global Radio</h1>
+        <p style="color: #94a3b8;">देश या भाषा का नाम लिखें, संगीत अपने आप हाजिर होगा</p>
+    </div>
+
+    <div class="radio-card">
+        <div class="search-area">
+            <input type="text" id="searchInput" placeholder="जैसे: India, Hindi, Pop..." value="India" autocomplete="off">
+        </div>
+
+        <div class="select-wrapper">
+            <select id="stationList">
+                <option value="">-- स्टेशन लोड हो रहे हैं... --</option>
+            </select>
+        </div>
+
+        <div class="playing-info" id="nowPlaying">
+            <div>
+                <div class="station-name" id="curName">Not Playing</div>
+                <div class="station-loc" id="curLoc">Select a station to begin</div>
+            </div>
+            <div class="visualizer" id="viz" style="display: none;">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+        </div>
+
+        <audio id="player" controls></audio>
+        
+        <p style="text-align: center; font-size: 0.75rem; color: #64748b; margin-top: 20px;">
+            Auto-Search Enabled • Powered by Radio Browser
+        </p>
+    </div>
+</div>
+
+<script>
+    const player = document.getElementById('player');
+    const stationList = document.getElementById('stationList');
+    const searchInput = document.getElementById('searchInput');
+    const nowPlaying = document.getElementById('nowPlaying');
+    const viz = document.getElementById('viz');
+
+    let timeout = null;
+
+    async function getStations() {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        stationList.innerHTML = '<option>खोज रहे हैं...</option>';
+        
+        try {
+            // हम 'name' और 'tag' दोनों में सर्च कर रहे हैं ताकि बेहतर रिजल्ट मिलें
+            const res = await fetch(`https://de1.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(query)}&limit=50&hidebroken=true&order=clickcount&reverse=true`);
+            const data = await res.json();
+            
+            if (data.length === 0) {
+                stationList.innerHTML = '<option value="">कोई स्टेशन नहीं मिला</option>';
+                return;
+            }
+
+            stationList.innerHTML = '<option value="">-- स्टेशन चुनें (${data.length} मिले) --</option>';
+            data.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.url_resolved;
+                opt.dataset.name = s.name;
+                opt.dataset.country = s.country;
+                opt.innerText = `${s.name} (${s.countrycode || 'Global'})`;
+                stationList.appendChild(opt);
+            });
+        } catch (e) {
+            stationList.innerHTML = '<option>नेटवर्क एरर: फिर कोशिश करें</option>';
+        }
+    }
+
+    // ऑटो-सर्च लॉजिक (Debounce)
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        // जब यूजर टाइप करना बंद करेगा, उसके 500ms बाद सर्च शुरू होगा
+        timeout = setTimeout(() => {
+            getStations();
+        }, 500);
+    });
+
+    stationList.onchange = () => {
+        const opt = stationList.options[stationList.selectedIndex];
+        if(!opt || !opt.value) return;
+
+        nowPlaying.style.display = 'flex';
+        document.getElementById('curName').innerText = opt.dataset.name;
+        document.getElementById('curLoc').innerText = `🌍 ${opt.dataset.country}`;
+        
+        player.src = opt.value;
+        player.play().catch(err => console.log("Auto-play blocked or failed"));
+        viz.style.display = 'flex';
+    };
+
+    // पेज लोड होते ही डिफॉल्ट वैल्यू (India) के स्टेशन दिखाएं
+    window.onload = getStations;
+</script>
+
+</body>
+</html>
