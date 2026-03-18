@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>स्टार बबल शूटर • प्रीमियम</title>
+    <style>
+        * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
+        body, html {
+            width: 100%; height: 100%;
+            background: #0b192c; 
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; touch-action: none;
+        }
+
+        /* --- DASHBOARD --- */
+        #homeScreen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top, #1a365d 0%, #0b192c 100%);
+            z-index: 200; display: flex; flex-direction: column;
+            align-items: center; padding: 30px 20px; overflow-y: auto;
+        }
+        #homeScreen h1 {
+            color: #00e5ff; font-size: 2.5rem; text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+            margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase;
+        }
+        .level-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
+            width: 100%; max-width: 400px; padding-bottom: 50px;
+        }
+        .level-btn {
+            aspect-ratio: 1; border-radius: 15px; font-size: 1.5rem; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            border: none; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .level-btn:active { transform: scale(0.95); }
+        .level-unlocked {
+            background: linear-gradient(135deg, #00e5ff 0%, #0077ff 100%); color: white;
+            box-shadow: 0 5px 15px rgba(0, 119, 255, 0.4);
+        }
+        .level-locked {
+            background: #1a2a40; color: #4a5568; cursor: not-allowed;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* --- GAME UI (नया लेआउट) --- */
+        #gameContainer {
+            position: relative; width: 100%; height: 100%;
+            background: radial-gradient(circle at top, #1a365d 0%, #0b192c 100%);
+            display: none; /* Hidden initially */
+        }
+        canvas { display: block; width: 100%; height: 100%; }
+        
+        #ui-layer {
+            position: absolute; bottom: 10px; left: 0; width: 100%;
+            padding: 8px 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .bottom-left, .bottom-center, .bottom-right {
+            display: flex; gap: 12px; align-items: center;
+            pointer-events: auto;
+        }
+        /* बैक बटन – सिर्फ तीर */
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            width: 48px; height: 48px;
+            border-radius: 30px;
+            font-size: 2rem; /* बड़ा तीर */
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: 0.1s ease;
+        }
+        .icon-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
+        
+        /* स्कोर और गोले बचे */
+        .stats-modern {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            padding: 8px 20px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .stat-item {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .stat-icon {
+            font-size: 1.3rem;
+        }
+        .stat-value {
+            font-size: 1.3rem;
+            color: #00e5ff;
+            text-shadow: 0 0 8px cyan;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* स्वैप बटन (रंग बदलो) */
+        .swap-btn {
+            background: linear-gradient(145deg, #7f5af0, #2cb67d);
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px #2cb67d80;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            pointer-events: auto;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .swap-btn:active { transform: scale(0.95); }
+        .swap-btn.disabled {
+            opacity: 0.4; pointer-events: none; filter: grayscale(0.7);
+        }
+
+        /* --- ओवरले (जीत / हार) --- */
+        #overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 25, 44, 0.9); 
+            backdrop-filter: blur(6px);
+            display: none;
+            flex-direction: column; justify-content: center; align-items: center; z-index: 100;
+        }
+        #overlay h1 {
+            color: #ff0844; font-size: 3rem; text-shadow: 0 0 20px #ff0844;
+            margin-bottom: 10px; text-align: center;
+        }
+        #starsContainer {
+            margin: 15px 0 10px;
+            font-size: 3rem;
+            letter-spacing: 10px;
+            filter: drop-shadow(0 0 12px gold);
+        }
+        .star-filled { color: #FFD700; }
+        .star-empty { color: #4a4a4a; }
+
+        #finalScoreDisplay {
+            color: white; font-size: 1.5rem; margin-bottom: 20px;
+        }
+        #finalScoreDisplay span { color: #00e5ff; font-size: 2rem; font-weight: bold; }
+        
+        .overlay-buttons { display: flex; gap: 15px; margin-top: 10px; }
+        .action-btn {
+            background: linear-gradient(45deg, #ff0844 0%, #ffb199 100%); color: white;
+            border: none; padding: 15px 30px; border-radius: 30px;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 8, 68, 0.5); pointer-events: auto;
+        }
+        .action-btn.home { background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3); }
+        .action-btn:active { transform: translateY(5px); }
+    </style>
+</head>
+<body>
+
+<div id="homeScreen">
+    <h1>स्तर चुनें</h1>
+    <div class="level-grid" id="levelGrid"></div>
+</div>
+
+<div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    
+    <!-- नया UI : बटन नीचे, सिर्फ तीर + स्कोर + गोले + स्वैप -->
+    <div id="ui-layer">
+        <div class="bottom-left">
+            <button class="icon-btn" id="backBtn">←</button>
+        </div>
+        <div class="bottom-center">
+            <div class="stats-modern">
+                <div class="stat-item"><span class="stat-icon">🏆</span><span class="stat-value" id="scoreDisplay">0</span></div>
+                <div class="stat-item"><span class="stat-icon">🔫</span><span class="stat-value" id="shotsDisplay">0</span></div>
+            </div>
+        </div>
+        <div class="bottom-right">
+            <button class="swap-btn" id="swapBtn"><span>🔄</span> <span id="swapCount">3</span></button>
+        </div>
+    </div>
+
+    <!-- ओवरले (अब सितारों के साथ) -->
+    <div id="overlay">
+        <h1 id="overlayTitle">GAME OVER</h1>
+        <div id="starsContainer">★★★</div>
+        <div id="finalScoreDisplay">स्कोर: <span id="finalScoreVal">0</span></div>
+        <div class="overlay-buttons">
+            <button class="action-btn home" id="overlayHomeBtn">होम</button>
+            <button class="action-btn" id="overlayBtn">फिर खेलें</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // टच स्क्रॉल रोकें
+    document.getElementById('gameContainer').addEventListener('touchmove', e => { if(e.cancelable) e.preventDefault(); }, { passive: false });
+
+    // --- DASHBOARD ---
+    const TOTAL_LEVELS = 50; 
+    let maxUnlockedLevel = parseInt(localStorage.getItem('premiumBubble_maxLevel')) || 1;
+    let currentPlayingLevel = 1;
+
+    function renderDashboard() {
+        const grid = document.getElementById('levelGrid');
+        grid.innerHTML = '';
+        for (let i = 1; i <= TOTAL_LEVELS; i++) {
+            const btn = document.createElement('button');
+            if (i <= maxUnlockedLevel) {
+                btn.className = 'level-btn level-unlocked';
+                btn.innerText = i;
+                btn.onclick = () => startGame(i);
+            } else {
+                btn.className = 'level-btn level-locked';
+                btn.innerText = '🔒';
+            }
+            grid.appendChild(btn);
+        }
+    }
+
+    // --- गेम वेरिएबल्स ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const scoreSpan = document.getElementById('scoreDisplay');
+    const shotsSpan = document.getElementById('shotsDisplay');
+    const swapCountSpan = document.getElementById('swapCount');
+    const overlay = document.getElementById('overlay');
+    const finalScoreVal = document.getElementById('finalScoreVal');
+    const starsContainer = document.getElementById('starsContainer');
+    const overlayTitle = document.getElementById('overlayTitle');
+    const overlayBtn = document.getElementById('overlayBtn');
+
+    let COLS, ROWS, BUBBLE_RADIUS, BUBBLE_DIAMETER, ROW_HEIGHT, COL_WIDTH, SHOOTER_Y;
+    const SHOT_SPEED = 1500; 
+    const COLORS = ['#ff3366', '#00e5ff', '#39ff14', '#ffff00', '#bc13fe'];
+    const EMPTY = -1;
+
+    let grid = [];               
+    let currentBubble = null;    
+    let nextBubbleColor = 0;      
+    let score = 0;
+    // नए वेरिएबल : सीमित गोले, स्वैप, सितारे
+    let shotsRemaining = 0;
+    let initialShots = 0;        // लेवल शुरू में कितने गोले थे (स्टार के लिए)
+    let swapsRemaining = 3;
+    let gameState = 'paused'; 
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight - 100;
+    let isAiming = false; 
+    let particles = [], fallingBubbles = [];
+    let lastTime = 0;
+
+    let audioCtx = null;
+    function initAudio() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if(AudioContext) audioCtx = new AudioContext();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSound(type) {
+        if (!audioCtx) return; 
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        if (type === 'shoot') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'pop') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+    }
+
+    // --- रिसाइज़ और ग्रिड सेटअप ---
+    function resizeCanvas() {
+        if(document.getElementById('gameContainer').style.display === 'none') return;
+        canvas.width = window.innerWidth || 320; 
+        canvas.height = window.innerHeight || 480;
+
+        BUBBLE_RADIUS = Math.max(10, Math.min(Math.floor(canvas.width / 24), 20)); 
+        BUBBLE_DIAMETER = BUBBLE_RADIUS * 2; 
+        ROW_HEIGHT = BUBBLE_RADIUS * Math.sqrt(3); 
+        COL_WIDTH = BUBBLE_DIAMETER; 
+        
+        let newCols = Math.max(5, Math.floor(canvas.width / COL_WIDTH));
+        let newRows = Math.max(5, Math.floor(canvas.height / ROW_HEIGHT) - 2); 
+        
+        SHOOTER_Y = canvas.height - BUBBLE_RADIUS - 40;
+        
+        if (grid.length > 0) {
+            let tempGrid = Array(newRows).fill().map(() => Array(newCols).fill(EMPTY));
+            let maxR = Math.min(ROWS || 0, newRows);
+            let maxC = Math.min(COLS || 0, newCols);
+            for(let r=0; r<maxR; r++) {
+                if(!grid[r]) continue;
+                for(let c=0; c<maxC; c++) {
+                    if(grid[r][c] !== undefined) tempGrid[r][c] = grid[r][c];
+                }
+            }
+            grid = tempGrid;
+        }
+        COLS = newCols; ROWS = newRows;
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // उपलब्ध रंग
+    function getAvailableColors() {
+        let available = new Set();
+        for (let r = 0; r < ROWS; r++) {
+            if(!grid[r]) continue;
+            for (let c = 0; c < COLS; c++) {
+                if (grid[r][c] !== EMPTY) available.add(grid[r][c]);
+            }
+        }
+        return Array.from(available);
+    }
+
+    function rollNextColor() {
+        let available = getAvailableColors();
+        if (available.length === 0) return 0; 
+        return available[Math.floor(Math.random() * available.length)];
+    }
+
+    // --- लेवल शुरू करें (सीमित गोले + स्वैप) ---
+    function createLevel(lvl) {
+        grid = Array(ROWS).fill().map(() => Array(COLS).fill(EMPTY));
+        let startRows = Math.min(4 + Math.floor(lvl/2), Math.floor(ROWS / 2)); 
+        for (let row = 0; row < startRows; row++) {
+            let colsInRow = (row % 2 === 0) ? COLS : COLS - 1;
+            for (let col = 0; col < colsInRow; col++) grid[row][col] = Math.floor(Math.random() * COLORS.length);
+        }
+        
+        // गोलों की संख्या गिनें
+        let totalBubbles = 0;
+        for (let r = 0; r < ROWS; r++) if(grid[r]) for (let c = 0; c < COLS; c++) if(grid[r][c] !== EMPTY) totalBubbles++;
+        
+        // शुरुआती गोले (थोड़े अतिरिक्त) + स्वैप
+        initialShots = Math.max(15, Math.floor(totalBubbles * 1.3)) + lvl;  // level के साथ थोड़ा बढ़ता है
+        shotsRemaining = initialShots;
+        swapsRemaining = 3;   // हर लेवल में 3 स्वैप मिलते हैं
+        
+        updateUI();
+
+        particles = []; fallingBubbles = [];
+        gameState = 'playing'; overlay.style.display = 'none';
+        nextBubbleColor = rollNextColor();
+    }
+
+    function updateUI() {
+        scoreSpan.innerText = score;
+        shotsSpan.innerText = shotsRemaining;
+        swapCountSpan.innerText = swapsRemaining;
+        if (swapsRemaining <= 0) {
+            document.getElementById('swapBtn').classList.add('disabled');
+        } else {
+            document.getElementById('swapBtn').classList.remove('disabled');
+        }
+    }
+
+    function getCellCenter(row, col) {
+        let x = col * COL_WIDTH + BUBBLE_RADIUS;
+        if (row % 2 === 1) x += BUBBLE_RADIUS; 
+        return { x, y: row * ROW_HEIGHT + BUBBLE_RADIUS };
+    }
+
+    function createExplosion(x, y, colorIdx) {
+        playSound('pop');
+        for (let i = 0; i < 12; i++) {
+            particles.push({
+                x, y, vx: (Math.random() - 0.5) * 600, vy: (Math.random() - 0.5) * 600,
+                radius: Math.random() * 5 + 2, color: COLORS[colorIdx], alpha: 1, decay: Math.random() * 2 + 1
+            });
+        }
+    }
+
+    function createFallingBubble(x, y, color) { fallingBubbles.push({ x, y, vy: 0, gravity: 1500, color }); }
+
+    // शूट करें – गोली खत्म होने का ध्यान
+    function shootBubble() {
+        if (currentBubble || gameState !== 'playing') return;
+        if (shotsRemaining <= 0) {
+            // गोले नहीं बचे तो गेम ओवर
+            triggerGameOver('गोले खतम!', '#ff0844', false);
+            return;
+        }
+
+        let startX = canvas.width / 2;
+        let dx = mouseX - startX, dy = mouseY - SHOOTER_Y;
+        if(dy > -20) dy = -20; 
+        
+        let angle = Math.atan2(dy, dx);
+        playSound('shoot');
+        currentBubble = { x: startX, y: SHOOTER_Y, vx: Math.cos(angle) * SHOT_SPEED, vy: Math.sin(angle) * SHOT_SPEED, color: nextBubbleColor };
+        
+        // गोली चलाई -> गोले कम करो
+        shotsRemaining--;
+        updateUI();
+
+        nextBubbleColor = rollNextColor();
+        
+        // अगर शूट करने के बाद 0 गोले बचे और कोई current नहीं (हमेशा होता है) तो चेक बाद में होगा
+    }
+
+    // मैच हटाना + फ्लोटिंग
+    function processMatches(startRow, startCol) {
+        if(!grid[startRow]) return; 
+        let color = grid[startRow][startCol];
+        let queue = [[startRow, startCol]];
+        let matchSet = new Set([`${startRow},${startCol}`]);
+        let matches = [[startRow, startCol]];
+
+        let getNeighbors = (row, col) => {
+            let isOdd = row % 2 !== 0;
+            let n = [ [row, col - 1], [row, col + 1] ];
+            if (isOdd) n.push([row - 1, col], [row - 1, col + 1], [row + 1, col], [row + 1, col + 1]);
+            else n.push([row - 1, col - 1], [row - 1, col], [row + 1, col - 1], [row + 1, col]);
+            return n.filter(([r, c]) => r >= 0 && r < ROWS && c >= 0 && c < COLS);
+        };
+
+        while (queue.length > 0) {
+            let [r, c] = queue.shift();
+            for (let [nr, nc] of getNeighbors(r, c)) {
+                if (grid[nr] && grid[nr][nc] === color && !matchSet.has(`${nr},${nc}`)) {
+                    matchSet.add(`${nr},${nc}`); matches.push([nr, nc]); queue.push([nr, nc]);
+                }
+            }
+        }
+
+        if (matches.length >= 3) {
+            matches.forEach(([r, c]) => { 
+                let center = getCellCenter(r, c);
+                createExplosion(center.x, center.y, grid[r][c]);
+                grid[r][c] = EMPTY; 
+            });
+            score += matches.length * 10;
+            removeFloatingBubbles(getNeighbors);
+        }
+    }
+
+    function removeFloatingBubbles(getNeighbors) {
+        let connectedSet = new Set(), queue = [];
+        for (let c = 0; c < COLS; c++) {
+            if (grid[0] && grid[0][c] !== EMPTY) { queue.push([0, c]); connectedSet.add(`0,${c}`); }
+        }
+        while (queue.length > 0) {
+            let [r, c] = queue.shift();
+            for (let [nr, nc] of getNeighbors(r, c)) {
+                if (grid[nr] && grid[nr][nc] !== EMPTY && !connectedSet.has(`${nr},${nc}`)) {
+                    connectedSet.add(`${nr},${nc}`); queue.push([nr, nc]);
+                }
+            }
+        }
+        let dropped = 0;
+        for (let r = 0; r < ROWS; r++) {
+            if(!grid[r]) continue;
+            for (let c = 0; c < COLS; c++) {
+                if (grid[r][c] !== EMPTY && !connectedSet.has(`${r},${c}`)) {
+                    let center = getCellCenter(r, c);
+                    createFallingBubble(center.x, center.y, grid[r][c]);
+                    grid[r][c] = EMPTY; dropped++;
+                }
+            }
+        }
+        score += dropped * 20;
+        updateUI();
+    }
+
+    function snapToGrid(x, y) {
+        let bestRow = Math.max(0, Math.min(Math.round((y - BUBBLE_RADIUS) / ROW_HEIGHT), ROWS - 1));
+        let offset = (bestRow % 2 === 1) ? BUBBLE_RADIUS : 0;
+        let bestCol = Math.max(0, Math.min(Math.round((x - BUBBLE_RADIUS - offset) / COL_WIDTH), COLS - 1));
+
+        if(!grid[bestRow]) return;
+
+        if (grid[bestRow][bestCol] !== EMPTY) {
+            let minD = Infinity, finalR = bestRow, finalC = bestCol;
+            for(let r=0; r<ROWS; r++){
+                if(!grid[r]) continue;
+                for(let c=0; c<COLS; c++){
+                    if(grid[r][c] === EMPTY){
+                        let center = getCellCenter(r, c);
+                        let d = Math.hypot(x - center.x, y - center.y);
+                        if(d < minD){ minD = d; finalR = r; finalC = c; }
+                    }
+                }
+            }
+            bestRow = finalR; bestCol = finalC;
+        }
+
+        grid[bestRow][bestCol] = currentBubble.color; currentBubble = null;
+        processMatches(bestRow, bestCol);
+        
+        // जीत की जाँच
+        let remainingBubbles = 0;
+        for (let r = 0; r < ROWS; r++) if(grid[r]) for (let c = 0; c < COLS; c++) if(grid[r][c] !== EMPTY) remainingBubbles++;
+        
+        if(remainingBubbles === 0) {
+            // LEVEL WON
+            if(currentPlayingLevel === maxUnlockedLevel && currentPlayingLevel < TOTAL_LEVELS) {
+                maxUnlockedLevel++;
+                localStorage.setItem('premiumBubble_maxLevel', maxUnlockedLevel);
+            }
+            // स्टार कैलकुलेशन (बचे गोलों के आधार पर)
+            let stars = 1;
+            let remainingShots = shotsRemaining;
+            if (remainingShots >= initialShots * 0.5) stars = 3;
+            else if (remainingShots >= initialShots * 0.2) stars = 2;
+            else stars = 1;
+            if (remainingShots <= 0) stars = 0;  // कोई गोला न बचा तो 0 स्टार (होना नहीं चाहिए, फिर भी)
+            
+            triggerGameOver('लेवल पूरा!', '#39ff14', true, stars);
+        } else {
+            let availableColors = getAvailableColors();
+            if (availableColors.length > 0 && !availableColors.includes(nextBubbleColor)) {
+                nextBubbleColor = rollNextColor();
+            }
+            // हार (नीचे छू गए)
+            if(grid[ROWS-1] && grid[ROWS-1].some(c => c !== EMPTY) || (grid[ROWS-2] && grid[ROWS-2].some(c => c !== EMPTY))) {
+                triggerGameOver('गेम ओवर', '#ff0844', false);
+            }
+            // गोले खत्म हो जाएं तो हार (ऊपर शूट में चेक किया जाता है, लेकिन फिर से जांच)
+            if (shotsRemaining <= 0 && !currentBubble) {
+                triggerGameOver('गोले खतम', '#ff0844', false);
+            }
+        }
+        updateUI();
+    }
+
+    function triggerGameOver(text, color, isWin, stars = 0) {
+        gameState = isWin ? 'levelcomplete' : 'gameover';
+        isAiming = false;
+        overlayTitle.innerText = text;
+        overlayTitle.style.color = color;
+        
+        // स्टार दिखाएँ
+        if (isWin) {
+            let starStr = '';
+            for (let i = 1; i <= 3; i++) {
+                starStr += (i <= stars) ? '<span class="star-filled">★</span>' : '<span class="star-empty">★</span>';
+            }
+            starsContainer.innerHTML = starStr;
+            finalScoreVal.innerText = score;
+            finalScoreDisplay.style.display = 'block';
+            overlayBtn.innerText = (currentPlayingLevel < TOTAL_LEVELS) ? "अगला स्तर" : "फिर खेलें";
+        } else {
+            starsContainer.innerHTML = '✖✖✖';   // हार में कोई सितारा नहीं
+            finalScoreDisplay.style.display = 'none';
+            overlayBtn.innerText = "फिर कोशिश करें";
+        }
+        
+        overlay.style.display = "flex";
+    }
+
+    // --- स्वैप फंक्शन (रंग बदलो) ---
+    function swapColor() {
+        if (gameState !== 'playing' || swapsRemaining <= 0) return;
+        let available = getAvailableColors();
+        if (available.length > 1) {
+            let newColor = nextBubbleColor;
+            while (newColor === nextBubbleColor && available.length > 1) {
+                newColor = available[Math.floor(Math.random() * available.length)];
+            }
+            nextBubbleColor = newColor;
+        } else {
+            // सिर्फ एक रंग है तो वही रहेगा (कुछ नहीं बदल सकते)
+        }
+        swapsRemaining--;
+        updateUI();
+        playSound('pop');  // हल्की आवाज
+    }
+
+    // --- ड्रॉइंग और ट्रैजेक्टरी (पहले जैसा) ---
+    function drawDirectBubble(x, y, colorIdx, alpha = 1.0) {
+        ctx.globalAlpha = alpha;
+        let colorStr = COLORS[colorIdx];
+        let gradient = ctx.createRadialGradient(x - BUBBLE_RADIUS/3, y - BUBBLE_RADIUS/3, BUBBLE_RADIUS/10, x, y, BUBBLE_RADIUS);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(0.3, colorStr);
+        gradient.addColorStop(1, '#000000');
+
+        ctx.beginPath();
+        ctx.arc(x, y, BUBBLE_RADIUS - 1, 0, Math.PI*2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+    }
+
+    function drawTrajectory() {
+        let startX = canvas.width / 2;
+        let dx = mouseX - startX, dy = mouseY - SHOOTER_Y;
+        if(dy > -20) dy = -20; 
+        
+        let angle = Math.atan2(dy, dx);
+        
+        let rayX = startX;
+        let rayY = SHOOTER_Y;
+        let step = BUBBLE_RADIUS / 1.5; 
+        let vX = Math.cos(angle) * step;
+        let vY = Math.sin(angle) * step;
+
+        let points = [{x: rayX, y: rayY}];
+        let hit = false;
+        let maxLoops = 200; 
+
+        while (!hit && maxLoops > 0) {
+            rayX += vX; rayY += vY; maxLoops--;
+
+            if (rayX - BUBBLE_RADIUS < 0) { rayX = BUBBLE_RADIUS; vX *= -1; points.push({x: rayX, y: rayY}); } 
+            else if (rayX + BUBBLE_RADIUS > canvas.width) { rayX = canvas.width - BUBBLE_RADIUS; vX *= -1; points.push({x: rayX, y: rayY}); }
+            if (rayY - BUBBLE_RADIUS < 0) { rayY = BUBBLE_RADIUS; hit = true; points.push({x: rayX, y: rayY}); break; }
+
+            let checkRow = Math.max(0, Math.min(Math.round((rayY - BUBBLE_RADIUS) / ROW_HEIGHT), ROWS - 1));
+            let collision = false;
+            for (let r = Math.max(0, checkRow - 1); r <= Math.min(ROWS - 1, checkRow + 1); r++) {
+                if(!grid[r]) continue;
+                for (let c = 0; c < COLS; c++) {
+                    if (grid[r][c] !== EMPTY) {
+                        let center = getCellCenter(r, c);
+                        if (Math.hypot(rayX - center.x, rayY - center.y) < BUBBLE_DIAMETER - 2) {
+                            hit = true; collision = true; break;
+                        }
+                    }
+                }
+                if(collision) break;
+            }
+            if (hit) points.push({x: rayX, y: rayY});
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+        ctx.strokeStyle = COLORS[nextBubbleColor];
+        ctx.setLineDash([8, 12]); ctx.lineWidth = 3; ctx.stroke(); ctx.setLineDash([]);
+
+        if (points.length > 0) {
+            let last = points[points.length - 1];
+            drawDirectBubble(last.x, last.y, nextBubbleColor, 0.4); 
+        }
+    }
+
+    // --- update और draw लूप ---
+    function update(dt) {
+        if (gameState !== 'playing') return;
+
+        if (currentBubble) {
+            currentBubble.x += currentBubble.vx * dt;
+            currentBubble.y += currentBubble.vy * dt;
+
+            if (currentBubble.x - BUBBLE_RADIUS < 0 || currentBubble.x + BUBBLE_RADIUS > canvas.width) {
+                currentBubble.vx *= -1;
+                currentBubble.x = Math.max(BUBBLE_RADIUS, Math.min(currentBubble.x, canvas.width - BUBBLE_RADIUS));
+            }
+
+            if (currentBubble.y - BUBBLE_RADIUS < 0) { snapToGrid(currentBubble.x, currentBubble.y); return; }
+
+            for (let r = 0; r < ROWS; r++) {
+                if(!grid[r]) continue;
+                for (let c = 0; c < COLS; c++) {
+                    if (grid[r][c] !== EMPTY) {
+                        let center = getCellCenter(r, c);
+                        if (Math.hypot(currentBubble.x - center.x, currentBubble.y - center.y) < BUBBLE_DIAMETER - 2) {
+                            snapToGrid(currentBubble.x, currentBubble.y); return;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            p.x += p.vx * dt; p.y += p.vy * dt; p.alpha -= p.decay * dt;
+            if (p.alpha <= 0) particles.splice(i, 1);
+        }
+
+        for (let i = fallingBubbles.length - 1; i >= 0; i--) {
+            let fb = fallingBubbles[i];
+            fb.vy += fb.gravity * dt; fb.y += fb.vy * dt;
+            if (fb.y > canvas.height + BUBBLE_RADIUS) fallingBubbles.splice(i, 1);
+        }
+    }
+
+    function draw() {
+        let bgGradient = ctx.createRadialGradient(canvas.width/2, 0, canvas.height/10, canvas.width/2, 0, canvas.height);
+        bgGradient.addColorStop(0, '#1a365d'); bgGradient.addColorStop(1, '#0b192c');
+        ctx.fillStyle = bgGradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let r = 0; r < ROWS; r++) {
+            if(!grid[r]) continue;
+            for (let c = 0; c < COLS; c++) {
+                if (grid[r][c] !== EMPTY) {
+                    let center = getCellCenter(r, c); drawDirectBubble(center.x, center.y, grid[r][c]);
+                }
+            }
+        }
+
+        fallingBubbles.forEach(fb => drawDirectBubble(fb.x, fb.y, fb.color));
+
+        particles.forEach(p => {
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color; ctx.fill(); ctx.globalAlpha = 1;
+        });
+
+        if (!currentBubble && gameState === 'playing') {
+            if (isAiming) drawTrajectory();
+            drawDirectBubble(canvas.width/2, SHOOTER_Y, nextBubbleColor);
+        }
+
+        if (currentBubble) drawDirectBubble(currentBubble.x, currentBubble.y, currentBubble.color);
+    }
+
+    // --- इवेंट हैंडलर ---
+    window.addEventListener('pointerdown', e => {
+        if (gameState !== 'playing' || e.target.closest('#ui-layer') || e.target.closest('#overlay')) return;
+        initAudio(); 
+        isAiming = true;
+        mouseX = e.clientX; mouseY = e.clientY;
+        if(mouseY > SHOOTER_Y - BUBBLE_RADIUS) mouseY = SHOOTER_Y - BUBBLE_RADIUS; 
+    });
+    
+    window.addEventListener('pointermove', e => {
+        if (!isAiming) return;
+        mouseX = e.clientX; mouseY = e.clientY;
+        if(mouseY > SHOOTER_Y - BUBBLE_RADIUS) mouseY = SHOOTER_Y - BUBBLE_RADIUS; 
+    });
+    
+    window.addEventListener('pointerup', e => {
+        if (isAiming) {
+            if(!currentBubble) shootBubble();
+            isAiming = false;
+        }
+    });
+
+    // बटन इवेंट
+    document.getElementById('swapBtn').addEventListener('click', swapColor);
+    document.getElementById('backBtn').addEventListener('click', goHome);
+    document.getElementById('overlayHomeBtn').addEventListener('click', goHome);
+    overlayBtn.addEventListener('click', () => {
+        if (gameState === 'levelcomplete' && currentPlayingLevel < TOTAL_LEVELS) {
+            currentPlayingLevel++;
+        }
+        startGame(currentPlayingLevel);
+    });
+
+    function startGame(levelNum) {
+        currentPlayingLevel = levelNum;
+        score = 0;
+        document.getElementById('homeScreen').style.display = 'none';
+        document.getElementById('gameContainer').style.display = 'block';
+        resizeCanvas();
+        createLevel(currentPlayingLevel);
+        updateUI();
+    }
+
+    function goHome() {
+        gameState = 'paused';
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('gameContainer').style.display = 'none';
+        document.getElementById('homeScreen').style.display = 'flex';
+        renderDashboard();
+    }
+
+    // गेम लूप
+    function gameLoop(timestamp) {
+        if (!timestamp) timestamp = performance.now(); 
+        if (!lastTime) lastTime = timestamp;
+        let dt = (timestamp - lastTime) / 1000;
+        if (dt > 0.1) dt = 0.1; 
+        lastTime = timestamp;
+
+        if(gameState === 'playing') update(dt); 
+        if(document.getElementById('gameContainer').style.display !== 'none') draw(); 
+        
+        requestAnimationFrame(gameLoop);
+    }
+
+    // शुरुआत
+    renderDashboard();
+    requestAnimationFrame(gameLoop);
+})();
+</script>
+</body>
+</html>
