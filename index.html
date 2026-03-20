@@ -79,7 +79,7 @@
         .search-bar {
             background: var(--hover-bg); border-radius: 30px;
             display: flex; align-items: center; padding: 12px 24px;
-            width: 45%; max-width: 500px; border: 1.5px solid transparent;
+            width: 40%; max-width: 500px; border: 1.5px solid transparent;
             transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
         .search-bar:focus-within { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
@@ -97,6 +97,8 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .theme-btn:hover { background: var(--hover-bg); transform: rotate(15deg) scale(1.05); }
+
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
 
         /* Refined Navigation Tabs */
         .tabs {
@@ -207,7 +209,8 @@
 
         @media (max-width: 768px) {
             .search-bar { width: 100%; max-width: none; margin-top: 12px; order: 3;}
-            nav { padding: 16px; }
+            nav { padding: 16px; justify-content: space-between; }
+            .nav-actions { order: 2; }
             .bottom-nav { display: flex; }
             .container { padding: 24px 16px 100px 16px; }
             .app-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
@@ -224,13 +227,29 @@
             <i class="fa-brands fa-google-play" style="color: var(--primary);"></i>
             <span>N-Store</span>
         </div>
+        
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="searchInput" placeholder="Search premium apps & games...">
         </div>
-        <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
-            <i class="fa-regular fa-moon"></i>
-        </button>
+        
+        <div class="nav-actions">
+            <div id="auth-section" style="display: flex; gap: 10px; align-items: center;">
+                <button id="loginBtn" class="theme-btn" title="Login with Google" style="width: auto; padding: 0 16px; border-radius: 22px; font-size: 14px; font-weight: 700;">
+                    <i class="fa-brands fa-google" style="margin-right: 6px; color: var(--text-main);"></i> Login
+                </button>
+                <div id="userProfile" style="display: none; align-items: center; gap: 10px;">
+                    <img id="userPhoto" src="" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover;">
+                    <button id="logoutBtn" class="theme-btn" title="Logout" style="width: 38px; height: 38px;">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
+                <i class="fa-regular fa-moon"></i>
+            </button>
+        </div>
     </nav>
 
     <div class="tabs">
@@ -281,30 +300,26 @@
     </div>
 
     <script>
-        // --- APNE GITHUB PROJECTS YAHAN ADD KAREIN 👇 ---
         const myProjects = [
             {
-    title: "Tic Tac Toe",
-    developer: "Nitesh",
-    category: "Game",
-    rating: "4.9",
-    link: "tictactoe.html",
-    // Aapne jo image di hai usko yahan image tag ya background mein use karein
-    iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png",
-    iconBg: "#ffffff",
-    isPWA: true
-},
-            
+                title: "Tic Tac Toe",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "tictactoe.html",
+                iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png",
+                iconBg: "#ffffff",
+                isPWA: true
+            },
             {
-    title: "Simon Game",
-    developer: "Nitesh",
-    category: "Game",
-    rating: "4.9",
-    link: "simon.html",
-    imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", 
-    iconBg: "#4caf50" 
-},
-            
+                title: "Simon Game",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "simon.html",
+                imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", 
+                iconBg: "#4caf50" 
+            },
             {
                 title: "Memory Game",
                 developer: "Nitesh",
@@ -342,7 +357,6 @@
                 iconBg: "#6366f1" 
             }
         ];
-        // --------------------------------------------------
 
         const grid = document.getElementById('projectGrid');
         const searchInput = document.getElementById('searchInput');
@@ -370,8 +384,9 @@
 
             filtered.forEach((project, index) => {
                 let iconContent = '';
-                if (project.imageIcon) {
-                    iconContent = `<img src="${project.imageIcon}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">`;
+                if (project.imageIcon || project.iconImg) {
+                    const imgSrc = project.imageIcon ? project.imageIcon : project.iconImg;
+                    iconContent = `<img src="${imgSrc}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">`;
                 } else {
                     iconContent = `<i class="${project.iconClass}"></i>`;
                 }
@@ -390,7 +405,7 @@
                                 ${project.rating} <i class="fa-solid fa-star star"></i>
                             </div>
                         </div>
-                        <button class="install-btn">Get</button>
+                        <button class="install-btn">Play</button>
                     </a>
                 `;
                 grid.innerHTML += card;
@@ -400,6 +415,7 @@
         function filterCategory(category) {
             currentFilter = category;
             
+            // Note: Section title text can be overridden by Firebase Auth if logged in
             if(category === 'All') sectionTitle.innerText = 'Recommended for you';
             else if(category === 'Top charts') sectionTitle.innerText = 'Top charts';
             else sectionTitle.innerText = `Premium ${category}s`;
@@ -448,26 +464,19 @@
         const cancelBtn = document.getElementById('pwa-cancel-btn');
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
             e.preventDefault();
-            // Stash the event so it can be triggered later.
             deferredPrompt = e;
-            // Show the custom popup after 2 seconds of page load
             setTimeout(() => {
                 pwaPopup.classList.add('show');
             }, 2000);
         });
 
         installBtn.addEventListener('click', async () => {
-            // Hide our custom UI
             pwaPopup.classList.remove('show');
             if (deferredPrompt) {
-                // Show the standard prompt
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log(`User response: ${outcome}`);
-                // We've used the prompt, and can't use it again, throw it away
                 deferredPrompt = null;
             }
         });
@@ -478,6 +487,79 @@
 
         // Initial render
         renderProjects();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA",
+            authDomain: "n-store-bad6b.firebaseapp.com",
+            projectId: "n-store-bad6b",
+            storageBucket: "n-store-bad6b.firebasestorage.app",
+            messagingSenderId: "431750611629",
+            appId: "1:431750611629:web:07d1941c9782fb3d48fc24",
+            measurementId: "G-QB4HC3YYRF"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Target Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userProfile = document.getElementById('userProfile');
+        const userPhoto = document.getElementById('userPhoto');
+        const sectionTitleElement = document.getElementById('sectionTitle');
+
+        // Login Action
+        loginBtn.onclick = () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("Logged In Successfully!", result.user);
+                })
+                .catch((error) => {
+                    console.error("Login Error:", error);
+                    alert("Login Failed: " + error.message);
+                });
+        };
+
+        // Logout Action
+        logoutBtn.onclick = () => {
+            signOut(auth).then(() => {
+                console.log("Logged Out");
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        };
+
+        // Auto Update UI based on User State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User logged in hai
+                loginBtn.style.display = 'none';
+                userProfile.style.display = 'flex';
+                userPhoto.src = user.photoURL || 'https://via.placeholder.com/38';
+                
+                // Greeting set karein using their Google Name
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
+                if (currentFilter === 'All') {
+                    sectionTitleElement.innerText = `Welcome back, ${firstName}!`;
+                }
+            } else {
+                // User logged out hai
+                loginBtn.style.display = 'flex';
+                userProfile.style.display = 'none';
+                
+                // Default title wapas lagayein
+                if (currentFilter === 'All') {
+                    sectionTitleElement.innerText = 'Recommended for you';
+                }
+            }
+        });
     </script>
 </body>
 </html>
