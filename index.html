@@ -242,27 +242,47 @@
 
         .chat-messages {
             flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
-            background: var(--bg-main);
+            background: var(--bg-main); scroll-behavior: smooth;
         }
         
-        .msg-row { display: flex; gap: 10px; max-width: 85%; }
+        .msg-row { display: flex; gap: 10px; max-width: 85%; position: relative; transition: all 0.3s ease; }
         .msg-row.me { align-self: flex-end; flex-direction: row-reverse; }
         .msg-row.other { align-self: flex-start; }
         
+        /* Delete Animation */
+        @keyframes fadeOutMsg {
+            to { opacity: 0; transform: scale(0.9); margin-bottom: -50px; }
+        }
+        .msg-row.deleting { animation: fadeOutMsg 0.3s ease forwards; }
+        
         .msg-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--border);}
         
-        .msg-content { display: flex; flex-direction: column; gap: 4px; }
+        .msg-content { display: flex; flex-direction: column; gap: 4px; position: relative; }
         .msg-row.me .msg-content { align-items: flex-end; }
         .msg-row.other .msg-content { align-items: flex-start; }
 
-        .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; }
+        .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; display: flex; gap: 6px; align-items: center;}
+        .msg-time { font-size: 9px; opacity: 0.7; font-weight: normal; }
         
         .msg-bubble {
             padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4;
             word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
         }
         .msg-row.me .msg-bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
         .msg-row.other .msg-bubble { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-top-left-radius: 4px; }
+
+        /* Delete Button UI */
+        .delete-msg-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            left: -30px; width: 24px; height: 24px; border-radius: 50%;
+            background: #ef4444; color: white; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; opacity: 0; transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
+        .msg-row.me:hover .delete-msg-btn { opacity: 1; left: -35px; }
+        .delete-msg-btn:hover { background: #dc2626; transform: translateY(-50%) scale(1.1); }
 
         .chat-input-area {
             padding: 16px; background: var(--surface); border-top: 1px solid var(--border);
@@ -300,6 +320,7 @@
             .pwa-popup { bottom: 90px; width: 92%; }
             .chat-window { width: 90%; right: 5%; bottom: 100px; height: 60vh; z-index: 1001; }
             .chat-toggle-btn { bottom: 100px; right: 20px; width: 55px; height: 55px; z-index: 1000;}
+            .msg-row.me .delete-msg-btn { opacity: 1; left: -30px; } /* Always visible on mobile for user's msgs */
         }
     </style>
 </head>
@@ -413,6 +434,7 @@
     </div>
 
     <script>
+        // Data & App Logic Setup (Unchanged)
         const myProjects = [
             {
                 title: "Tic Tac Toe",
@@ -602,7 +624,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        import { getDatabase, ref, push, onChildAdded, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        // Added 'remove' and 'onChildRemoved' for delete functionality
+        import { getDatabase, ref, push, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA",
@@ -619,18 +642,16 @@
         const provider = new GoogleAuthProvider();
         const db = getDatabase(app);
         
-        // Load last 50 messages to save data
         const messagesRef = ref(db, 'global_chat');
         const recentMessagesQuery = query(messagesRef, limitToLast(50));
 
-        // Auth & App UI Elements
+        // UI Elements
         const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const userProfile = document.getElementById('userProfile');
         const userPhoto = document.getElementById('userPhoto');
         const sectionTitleElement = document.getElementById('sectionTitle');
         
-        // Chat UI Elements
         const chatToggleBtn = document.getElementById('chatToggleBtn');
         const chatWindow = document.getElementById('chatWindow');
         const chatCloseBtn = document.getElementById('chatCloseBtn');
@@ -641,49 +662,42 @@
         const chatOverlayLoginBtn = document.getElementById('chatOverlayLoginBtn');
         const chatBadge = document.getElementById('chatBadge');
 
-        // Chat Toggle Logic
+        // Chat Toggle
         let isChatOpen = false;
         chatToggleBtn.onclick = () => {
             isChatOpen = true;
             chatWindow.classList.add('active');
-            chatBadge.style.display = 'none'; // Clear notifications
-            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 300); // Scroll to bottom on open
+            chatBadge.style.display = 'none';
+            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 300);
         };
         chatCloseBtn.onclick = () => {
             isChatOpen = false;
             chatWindow.classList.remove('active');
         };
 
-        // Authentication Handlers
-        const loginUser = () => {
-            signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
-        };
+        // Authentication
+        const loginUser = () => signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
         loginBtn.onclick = loginUser;
         chatOverlayLoginBtn.onclick = loginUser;
         logoutBtn.onclick = () => signOut(auth);
 
-        // Track Current User and Update UI dynamically
         let currentUser = null;
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             if (user) {
-                // UI Updates for Logged In User
                 loginBtn.style.display = 'none';
                 userProfile.style.display = 'flex';
                 userPhoto.src = user.photoURL || 'https://via.placeholder.com/38';
                 
-                // Greeting update
                 const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
                 if (document.querySelector('.tab.active').innerText === 'For you') {
                     sectionTitleElement.innerText = `Welcome back, ${firstName}!`;
                 }
                 
-                // Unlock Chat UI
                 chatLoginOverlay.style.display = 'none';
                 chatInput.disabled = false;
                 chatSendBtn.disabled = false;
             } else {
-                // UI Updates for Logged Out User
                 loginBtn.style.display = 'flex';
                 userProfile.style.display = 'none';
                 
@@ -691,14 +705,13 @@
                     sectionTitleElement.innerText = 'Recommended for you';
                 }
                 
-                // Lock Chat UI
                 chatLoginOverlay.style.display = 'flex';
                 chatInput.disabled = true;
                 chatSendBtn.disabled = true;
             }
         });
 
-        // Send Message Function
+        // Send Message
         const sendMessage = () => {
             if (!currentUser) return;
             const text = chatInput.value.trim();
@@ -709,7 +722,7 @@
                 name: currentUser.displayName,
                 photo: currentUser.photoURL,
                 text: text,
-                timestamp: serverTimestamp()
+                timestamp: serverTimestamp() // Save exact server time
             });
 
             chatInput.value = '';
@@ -721,33 +734,79 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Listen for Realtime Chat Messages
+        // --------------------------------------------------------
+        // FIREBASE REALTIME LISTENERS (Add & Remove)
+        // --------------------------------------------------------
+
+        // 1. When a message is ADDED
         onChildAdded(recentMessagesQuery, (snapshot) => {
             const msg = snapshot.val();
+            const msgId = snapshot.key; // Get Unique ID for the message
             const isMe = currentUser && msg.uid === currentUser.uid;
             
             const msgDiv = document.createElement('div');
+            // Add custom ID attribute so we can find it later when deleting
             msgDiv.className = `msg-row ${isMe ? 'me' : 'other'}`;
+            msgDiv.id = `msg-${msgId}`; 
+            msgDiv.dataset.id = msgId;
             
             const photoUrl = msg.photo || 'https://via.placeholder.com/32';
             const firstName = msg.name ? msg.name.split(' ')[0] : 'User';
+            
+            // Format time (Fallback to current time if serverTimestamp is pending)
+            const timeString = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
             msgDiv.innerHTML = `
                 <img src="${photoUrl}" class="msg-avatar" alt="User">
                 <div class="msg-content">
-                    ${!isMe ? `<span class="msg-name">${firstName}</span>` : ''}
-                    <div class="msg-bubble">${msg.text}</div>
+                    <span class="msg-name">
+                        ${!isMe ? firstName : 'You'} 
+                        <span class="msg-time">${timeString}</span>
+                    </span>
+                    <div class="msg-bubble">
+                        ${msg.text}
+                        ${isMe ? `<button class="delete-msg-btn" title="Delete Message"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </div>
                 </div>
             `;
             
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Trigger Notification Badge if message received while chat is closed
-            if (!isChatOpen && !isMe) {
-                chatBadge.style.display = 'block';
+            if (!isChatOpen && !isMe) chatBadge.style.display = 'block';
+        });
+
+        // 2. Event Delegation for Delete Button Click
+        // Since this is a module, we attach the event to the parent container
+        chatMessages.addEventListener('click', (e) => {
+            const deleteBtn = e.target.closest('.delete-msg-btn');
+            if (deleteBtn) {
+                const msgRow = deleteBtn.closest('.msg-row');
+                const msgId = msgRow.dataset.id;
+                
+                // Confirm before deleting
+                if(confirm("Kya aap wakai is message ko delete karna chahte hain?")) {
+                    remove(ref(db, `global_chat/${msgId}`))
+                        .catch(err => alert("Error deleting message: " + err));
+                }
             }
         });
+
+        // 3. When a message is REMOVED from Firebase (Sync for everyone)
+        onChildRemoved(messagesRef, (snapshot) => {
+            const msgId = snapshot.key;
+            const msgElement = document.getElementById(`msg-${msgId}`);
+            
+            if (msgElement) {
+                // Add CSS animation class
+                msgElement.classList.add('deleting');
+                // Remove from DOM after animation completes
+                setTimeout(() => {
+                    msgElement.remove();
+                }, 300);
+            }
+        });
+
     </script>
 </body>
 </html>
