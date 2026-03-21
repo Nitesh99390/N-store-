@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+    <meta name="google-site-verification" content="Za1pEupQLM-LlPnODka_5pMgrC6DyOzmuDaZBepfg7Q" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
-
+    
     <title>N-Store | Premium App & Game Hub</title>
     <meta name="description" content="N-Store: Discover the best web apps, tools, and HTML5 games. Play instantly without downloading.">
     <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online">
@@ -34,7 +35,7 @@
             --surface: #ffffff;
             --text-main: #0f172a;
             --text-sub: #64748b;
-            --primary: #10b981;
+            --primary: #10b981; /* Emerald Green */
             --primary-hover: #059669;
             --primary-light: #d1fae5;
             --border: #e2e8f0;
@@ -72,7 +73,6 @@
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;
         }
-        
         .logo-area { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
         .logo-area i { filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3)); }
         
@@ -89,7 +89,7 @@
             outline: none; width: 100%; margin-left: 14px; font-size: 15px; font-weight: 500;
         }
         .search-bar input::placeholder { color: var(--text-sub); font-weight: 400; }
-        
+
         .theme-btn { 
             background: var(--surface); border: 1px solid var(--border); width: 44px; height: 44px; 
             border-radius: 50%; font-size: 18px; color: var(--text-main); 
@@ -97,6 +97,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .theme-btn:hover { background: var(--hover-bg); transform: rotate(15deg) scale(1.05); }
+
         .nav-actions { display: flex; align-items: center; gap: 12px; }
 
         /* Refined Navigation Tabs */
@@ -123,7 +124,7 @@
         .container { max-width: 1280px; margin: 0 auto; padding: 40px 28px; }
         .section-header { margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;}
         .section-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
-        
+
         /* Premium App Grid & Animations */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -131,19 +132,20 @@
         }
 
         .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
+        
         .app-card {
             background: var(--surface); display: flex; flex-direction: column; 
             align-items: center; text-align: center; text-decoration: none; color: inherit;
             padding: 24px 20px; border-radius: 24px; border: 1px solid var(--border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
-            animation: fadeInUp 0.5s ease backwards; position: relative; cursor: pointer;
+            animation: fadeInUp 0.5s ease backwards;
         }
         .app-card:hover { 
             transform: translateY(-6px) scale(1.02); 
             box-shadow: var(--card-hover-shadow); 
             border-color: var(--primary-light);
         }
-        
+
         .app-icon {
             width: 85px; height: 85px; border-radius: 22px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
@@ -152,28 +154,22 @@
             overflow: hidden; transition: transform 0.3s ease;
         }
         .app-card:hover .app-icon { transform: scale(1.05) rotate(-3deg); }
-        
+
         .app-info { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 20px; }
         .app-title { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
         .app-dev { font-size: 13px; color: var(--text-sub); font-weight: 500; }
         .app-meta { font-size: 12px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;}
         .star { color: #fbbf24; font-size: 12px; }
-        
-        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 60px 20px; font-size: 18px; line-height: 1.6; font-weight: 500;}
-        
-        /* Action Buttons on Card */
-        .card-actions { display: flex; width: 100%; gap: 10px; margin-top: auto; }
-        .icon-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--hover-bg); border: none; color: var(--text-sub); cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center;}
-        .icon-btn:hover { background: #fee2e2; color: #ef4444; }
-        .icon-btn.active { color: #ef4444; }
-        
+
         .install-btn {
             background-color: var(--primary-light); color: var(--primary);
-            border: none; padding: 10px 0; flex: 1;
+            border: none; padding: 10px 0; width: 100%;
             border-radius: 30px; font-weight: 700; font-size: 14px;
-            cursor: pointer; transition: all 0.3s ease;
+            cursor: pointer; transition: all 0.3s ease; margin-top: auto;
         }
         .app-card:hover .install-btn { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 60px 20px; font-size: 18px; line-height: 1.6; font-weight: 500;}
 
         /* PWA Install Popup */
         .pwa-popup {
@@ -225,7 +221,7 @@
             position: absolute; top: 0; right: 0; background: #ef4444; width: 14px; height: 14px;
             border-radius: 50%; border: 2px solid var(--surface); display: none;
         }
-        
+
         .chat-window {
             position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px;
             background: var(--surface); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
@@ -235,7 +231,7 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .chat-window.active { transform: translateY(0); opacity: 1; pointer-events: all; }
-        
+
         .chat-header {
             padding: 18px 20px; background: var(--primary); color: white;
             display: flex; justify-content: space-between; align-items: center;
@@ -243,10 +239,10 @@
         }
         .chat-header .close-btn { cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.2); transition: 0.2s;}
         .chat-header .close-btn:hover { background: rgba(255,255,255,0.3); }
-        
+
         .chat-messages {
             flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
-            background: var(--bg-main); scroll-behavior: smooth; position: relative;
+            background: var(--bg-main); scroll-behavior: smooth;
         }
         
         .msg-row { display: flex; gap: 10px; max-width: 85%; position: relative; transition: all 0.3s ease; }
@@ -264,7 +260,7 @@
         .msg-content { display: flex; flex-direction: column; gap: 4px; position: relative; }
         .msg-row.me .msg-content { align-items: flex-end; }
         .msg-row.other .msg-content { align-items: flex-start; }
-        
+
         .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; display: flex; gap: 6px; align-items: center;}
         .msg-time { font-size: 9px; opacity: 0.7; font-weight: normal; }
         
@@ -275,7 +271,7 @@
         }
         .msg-row.me .msg-bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
         .msg-row.other .msg-bubble { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-top-left-radius: 4px; }
-        
+
         /* Delete Button UI */
         .delete-msg-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
@@ -287,7 +283,7 @@
         }
         .msg-row.me:hover .delete-msg-btn { opacity: 1; left: -35px; }
         .delete-msg-btn:hover { background: #dc2626; transform: translateY(-50%) scale(1.1); }
-        
+
         .chat-input-area {
             padding: 16px; background: var(--surface); border-top: 1px solid var(--border);
             display: flex; gap: 10px; align-items: center;
@@ -304,14 +300,13 @@
         }
         .chat-send-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
         .chat-send-btn:disabled { background: var(--text-sub); cursor: not-allowed; box-shadow: none; transform: none;}
-        
+
         .chat-overlay-login {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(248, 250, 252, 0.9); backdrop-filter: blur(5px);
+            background: rgba(var(--bg-main), 0.9); backdrop-filter: blur(5px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 10; gap: 15px; text-align: center; padding: 20px;
         }
-        [data-theme="dark"] .chat-overlay-login { background: rgba(15, 23, 42, 0.9); }
 
         @media (max-width: 768px) {
             .search-bar { width: 100%; max-width: none; margin-top: 12px; order: 3;}
@@ -325,11 +320,8 @@
             .pwa-popup { bottom: 90px; width: 92%; }
             .chat-window { width: 90%; right: 5%; bottom: 100px; height: 60vh; z-index: 1001; }
             .chat-toggle-btn { bottom: 100px; right: 20px; width: 55px; height: 55px; z-index: 1000;}
-            .msg-row.me .delete-msg-btn { opacity: 1; left: -30px; }
+            .msg-row.me .delete-msg-btn { opacity: 1; left: -30px; } /* Always visible on mobile for user's msgs */
         }
-
-        /* Admin tools */
-        #adminTools { display: none; padding: 10px 20px; background: #fff3cd; color: #856404; border-radius: 10px; margin-bottom: 20px; text-align: center; border: 1px solid #ffeeba;}
     </style>
 </head>
 <body>
@@ -352,11 +344,12 @@
                 </button>
                 <div id="userProfile" style="display: none; align-items: center; gap: 10px;">
                     <img id="userPhoto" src="" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover;">
-                    <button id="logoutBtn" class="theme-btn" title="Logout">
+                    <button id="logoutBtn" class="theme-btn" title="Logout" style="width: 38px; height: 38px;">
                         <i class="fa-solid fa-sign-out-alt"></i>
                     </button>
                 </div>
             </div>
+
             <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
                 <i class="fa-regular fa-moon"></i>
             </button>
@@ -365,22 +358,17 @@
 
     <div class="tabs">
         <div class="tab active" onclick="filterCategory('All')">For you</div>
-        <div class="tab" onclick="filterCategory('Top charts')">Top charts <i class="fa-solid fa-fire" style="color:#ef4444; font-size:12px;"></i></div>
-        <div class="tab" onclick="filterCategory('Library')">My Library <i class="fa-solid fa-heart" style="color:#ef4444; font-size:12px;"></i></div>
+        <div class="tab" onclick="filterCategory('Top charts')">Top charts</div>
         <div class="tab" onclick="filterCategory('Game')">Games</div>
         <div class="tab" onclick="filterCategory('App')">Apps</div>
     </div>
 
     <div class="container">
-        <div id="adminTools">
-            <b>Admin Setup:</b> Apna purana hardcoded data Firebase mein upload karein? 
-            <button onclick="uploadOldDataToFirebase()" style="padding: 5px 10px; margin-left:10px; cursor:pointer;">Upload Data</button>
-        </div>
         <div class="section-header">
             <h2 class="section-title" id="sectionTitle">Recommended for you</h2>
         </div>
-        
-        <div class="app-grid" id="projectGrid"></div>
+        <div class="app-grid" id="projectGrid">
+            </div>
     </div>
 
     <div id="pwa-install-prompt" class="pwa-popup">
@@ -418,22 +406,23 @@
         <i class="fa-solid fa-comment-dots"></i>
         <div class="badge" id="chatBadge"></div>
     </button>
-    
+
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
             <div><i class="fa-solid fa-users" style="margin-right: 8px;"></i> Global Lounge</div>
             <div class="close-btn" id="chatCloseBtn"><i class="fa-solid fa-xmark"></i></div>
         </div>
         
-        <div class="chat-messages" id="chatMessages"></div>
-        
+        <div class="chat-messages" id="chatMessages">
+            </div>
+
         <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Type a message..." disabled>
             <button class="chat-send-btn" id="chatSendBtn" disabled>
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
-        
+
         <div class="chat-overlay-login" id="chatLoginOverlay">
             <i class="fa-solid fa-lock fa-3x" style="color: var(--text-sub);"></i>
             <h3 style="color: var(--text-main);">Login to Chat</h3>
@@ -444,10 +433,199 @@
         </div>
     </div>
 
+    <script>
+        // Data & App Logic Setup (Unchanged)
+        const myProjects = [
+            {
+                title: "Tic Tac Toe",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "tictactoe.html",
+                iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png",
+                iconBg: "#ffffff"
+            },
+            {
+                title: "Simon Game",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "simon.html",
+                imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", 
+                iconBg: "#4caf50" 
+            },
+            {
+                title: "Memory Game",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.9",
+                link: "memorygame.html",
+                imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", 
+                iconBg: "#ffffff"
+            },
+            {
+                title: "Bubble Shooter",
+                developer: "Nitesh",
+                category: "Game",
+                rating: "4.8",
+                link: "hello1.html",
+                iconClass: "fa-solid fa-circle-dot", 
+                iconBg: "#3b82f6" 
+            },
+            {
+                title: "FM Radio",
+                developer: "Nitesh",
+                category: "App",
+                rating: "4.8",
+                link: "hello.html",
+                iconClass: "fa-solid fa-radio",
+                iconBg: "#f97316" 
+            },
+            {
+                title: "N-OS System",
+                developer: "Nitesh",
+                category: "App",
+                rating: "5.0",
+                link: "hi.html",
+                iconClass: "fa-solid fa-mobile-screen-button",
+                iconBg: "#6366f1" 
+            }
+        ];
+
+        const grid = document.getElementById('projectGrid');
+        const searchInput = document.getElementById('searchInput');
+        const sectionTitle = document.getElementById('sectionTitle');
+        let currentFilter = 'All';
+
+        function renderProjects(searchQuery = '') {
+            grid.innerHTML = '';
+
+            if (myProjects.length === 0) {
+                grid.innerHTML = '<div class="no-results"><i class="fa-solid fa-folder-open fa-3x" style="margin-bottom:20px; color: var(--primary);"></i><br>Abhi tak koi app add nahi kiya gaya hai.</div>';
+                return;
+            }
+            
+            const filtered = myProjects.filter(project => {
+                const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = currentFilter === 'All' || currentFilter === 'Top charts' || project.category === currentFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results"><i class="fa-regular fa-face-frown fa-3x" style="margin-bottom:20px; color: var(--text-sub);"></i><br>No matching apps found.</div>';
+                return;
+            }
+
+            filtered.forEach((project, index) => {
+                let iconContent = '';
+                if (project.imageIcon || project.iconImg) {
+                    const imgSrc = project.imageIcon ? project.imageIcon : project.iconImg;
+                    iconContent = `<img src="${imgSrc}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">`;
+                } else {
+                    iconContent = `<i class="${project.iconClass}"></i>`;
+                }
+
+                const animationDelay = index * 0.05;
+
+                const card = `
+                    <a href="${project.link}" target="_blank" class="app-card" style="animation-delay: ${animationDelay}s">
+                        <div class="app-icon" style="background-color: ${project.iconBg}">
+                            ${iconContent}
+                        </div>
+                        <div class="app-info">
+                            <div class="app-title" title="${project.title}">${project.title}</div>
+                            <div class="app-dev">${project.developer}</div>
+                            <div class="app-meta">
+                                ${project.rating} <i class="fa-solid fa-star star"></i>
+                            </div>
+                        </div>
+                        <button class="install-btn">Play</button>
+                    </a>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+            
+            if(category === 'All') sectionTitle.innerText = 'Recommended for you';
+            else if(category === 'Top charts') sectionTitle.innerText = 'Top charts';
+            else sectionTitle.innerText = `Premium ${category}s`;
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if(tab.innerText.includes(category) || (category === 'All' && tab.innerText === 'For you')) {
+                    tab.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.innerText.includes(category)) item.classList.add('active');
+            });
+
+            renderProjects(searchInput.value);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            renderProjects(e.target.value);
+        });
+
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeBtn.innerHTML = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0f172a');
+            } else {
+                themeBtn.innerHTML = '<i class="fa-regular fa-moon"></i>';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+            }
+        });
+
+        // PWA Install Logic
+        let deferredPrompt;
+        const pwaPopup = document.getElementById('pwa-install-prompt');
+        const installBtn = document.getElementById('pwa-install-btn');
+        const cancelBtn = document.getElementById('pwa-cancel-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                pwaPopup.classList.add('show');
+            }, 2000);
+        });
+
+        installBtn.addEventListener('click', async () => {
+            pwaPopup.classList.remove('show');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            pwaPopup.classList.remove('show');
+        });
+
+        // Initial render
+        renderProjects();
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, set, get, update, push, increment, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        // Added 'remove' and 'onChildRemoved' for delete functionality
+        import { getDatabase, ref, push, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA",
@@ -463,232 +641,121 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
         const db = getDatabase(app);
+        
+        const messagesRef = ref(db, 'global_chat');
+        const recentMessagesQuery = query(messagesRef, limitToLast(50));
 
-        // Global State
-        window.allApps = []; 
-        window.userFavorites = {}; 
-        window.currentUser = null;
-        let currentFilter = 'All';
-
-        const grid = document.getElementById('projectGrid');
-        const searchInput = document.getElementById('searchInput');
+        // UI Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userProfile = document.getElementById('userProfile');
+        const userPhoto = document.getElementById('userPhoto');
         const sectionTitleElement = document.getElementById('sectionTitle');
+        
+        const chatToggleBtn = document.getElementById('chatToggleBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatCloseBtn = document.getElementById('chatCloseBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+        const chatLoginOverlay = document.getElementById('chatLoginOverlay');
+        const chatOverlayLoginBtn = document.getElementById('chatOverlayLoginBtn');
+        const chatBadge = document.getElementById('chatBadge');
 
-        // Authentication Logic
+        // Chat Toggle
+        let isChatOpen = false;
+        chatToggleBtn.onclick = () => {
+            isChatOpen = true;
+            chatWindow.classList.add('active');
+            chatBadge.style.display = 'none';
+            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 300);
+        };
+        chatCloseBtn.onclick = () => {
+            isChatOpen = false;
+            chatWindow.classList.remove('active');
+        };
+
+        // Authentication
+        const loginUser = () => signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
+        loginBtn.onclick = loginUser;
+        chatOverlayLoginBtn.onclick = loginUser;
+        logoutBtn.onclick = () => signOut(auth);
+
+        let currentUser = null;
         onAuthStateChanged(auth, (user) => {
-            window.currentUser = user;
+            currentUser = user;
             if (user) {
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('userProfile').style.display = 'flex';
-                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/38';
-                
-                document.getElementById('adminTools').style.display = 'block'; 
+                loginBtn.style.display = 'none';
+                userProfile.style.display = 'flex';
+                userPhoto.src = user.photoURL || 'https://via.placeholder.com/38';
                 
                 const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
                 if (document.querySelector('.tab.active').innerText === 'For you') {
                     sectionTitleElement.innerText = `Welcome back, ${firstName}!`;
                 }
                 
-                document.getElementById('chatLoginOverlay').style.display = 'none';
-                document.getElementById('chatInput').disabled = false;
-                document.getElementById('chatSendBtn').disabled = false;
-
-                // Fetch User Favorites
-                const favRef = ref(db, `users/${user.uid}/favorites`);
-                onValue(favRef, (snapshot) => {
-                    window.userFavorites = snapshot.val() || {};
-                    window.renderProjects(searchInput.value);
-                });
+                chatLoginOverlay.style.display = 'none';
+                chatInput.disabled = false;
+                chatSendBtn.disabled = false;
             } else {
-                document.getElementById('loginBtn').style.display = 'flex';
-                document.getElementById('userProfile').style.display = 'none';
-                window.userFavorites = {};
-                document.getElementById('adminTools').style.display = 'none';
+                loginBtn.style.display = 'flex';
+                userProfile.style.display = 'none';
                 
                 if (document.querySelector('.tab.active').innerText === 'For you') {
                     sectionTitleElement.innerText = 'Recommended for you';
                 }
                 
-                document.getElementById('chatLoginOverlay').style.display = 'flex';
-                document.getElementById('chatInput').disabled = true;
-                document.getElementById('chatSendBtn').disabled = true;
-
-                window.renderProjects(searchInput.value);
+                chatLoginOverlay.style.display = 'flex';
+                chatInput.disabled = true;
+                chatSendBtn.disabled = true;
             }
         });
 
-        const loginUser = () => signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
-        document.getElementById('loginBtn').onclick = loginUser;
-        document.getElementById('chatOverlayLoginBtn').onclick = loginUser;
-        document.getElementById('logoutBtn').onclick = () => signOut(auth);
-
-        // Fetch Apps from Firebase
-        const appsRef = ref(db, 'apps');
-        onValue(appsRef, (snapshot) => {
-            window.allApps = [];
-            if(snapshot.exists()) {
-                snapshot.forEach(child => {
-                    window.allApps.push({ id: child.key, ...child.val() });
-                });
-            }
-            window.renderProjects(searchInput.value);
-        });
-
-        // Render Logic
-        window.renderProjects = (searchQuery = '') => {
-            grid.innerHTML = '';
-            let filtered = window.allApps.filter(app => app.title.toLowerCase().includes(searchQuery.toLowerCase()));
-            
-            if (currentFilter === 'Top charts') {
-                filtered.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
-            } else if (currentFilter === 'Library') {
-                filtered = filtered.filter(app => window.userFavorites[app.id]);
-            } else if (currentFilter !== 'All') {
-                filtered = filtered.filter(app => app.category === currentFilter);
-            }
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-sub);">Oops! No apps found here.</div>';
-                return;
-            }
-
-            filtered.forEach((project, index) => {
-                const isFav = window.userFavorites[project.id] ? 'active' : '';
-                const iconContent = (project.imageIcon || project.iconImg) 
-                    ? `<img src="${project.imageIcon || project.iconImg}" alt="${project.title}" style="width:100%; height:100%; object-fit:cover; border-radius:22px;">` 
-                    : `<i class="${project.iconClass}"></i>`;
-
-                const animationDelay = index * 0.05;
-                const plays = project.playCount ? (project.playCount > 1000 ? (project.playCount/1000).toFixed(1) + 'k' : project.playCount) : 0;
-
-                const card = `
-                    <div class="app-card" style="animation-delay: ${animationDelay}s">
-                        <div class="app-icon" style="background-color: ${project.iconBg}">
-                            ${iconContent}
-                        </div>
-                        <div class="app-info">
-                            <div class="app-title" title="${project.title}">${project.title}</div>
-                            <div class="app-dev">${project.developer}</div>
-                            <div class="app-meta">
-                                <span>${project.rating} <i class="fa-solid fa-star star"></i></span>
-                                <span style="margin: 0 5px;">•</span>
-                                <span><i class="fa-solid fa-play" style="font-size:10px;"></i> ${plays} plays</span>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="icon-btn ${isFav}" onclick="toggleFavorite('${project.id}')" title="Wishlist">
-                                <i class="fa-solid fa-heart"></i>
-                            </button>
-                            <button class="install-btn" onclick="playGame('${project.id}', '${project.link}')">Play</button>
-                            <button class="icon-btn" onclick="shareApp('${project.title}', '${project.link}')" title="Share">
-                                <i class="fa-solid fa-share-nodes"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.innerHTML += card;
-            });
-        };
-
-        // Interactions & Filters
-        window.filterCategory = (category) => {
-            currentFilter = category;
-            
-            if(category === 'All') sectionTitleElement.innerText = window.currentUser ? `Welcome back, ${window.currentUser.displayName.split(' ')[0]}!` : 'Recommended for you';
-            else if(category === 'Top charts') sectionTitleElement.innerText = 'Trending Top Charts';
-            else if(category === 'Library') sectionTitleElement.innerText = 'My Favorite Games';
-            else sectionTitleElement.innerText = `Premium ${category}s`;
-
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-                if(tab.innerText.includes(category) || (category === 'All' && tab.innerText.includes('For you'))) {
-                    tab.classList.add('active');
-                }
-            });
-            document.querySelectorAll('.bottom-nav-item').forEach(item => {
-                item.classList.remove('active');
-                if(item.innerText.includes(category)) item.classList.add('active');
-            });
-            window.renderProjects(searchInput.value);
-        }
-
-        searchInput.addEventListener('input', (e) => window.renderProjects(e.target.value));
-
-        window.playGame = (appId, link) => {
-            update(ref(db, `apps/${appId}`), { playCount: increment(1) });
-            window.open(link, '_blank'); 
-        };
-
-        window.toggleFavorite = (appId) => {
-            if (!window.currentUser) return alert("Bhai, Favorites save karne ke liye login kar lo!");
-            const isFav = window.userFavorites[appId];
-            const updates = {};
-            updates[`users/${window.currentUser.uid}/favorites/${appId}`] = isFav ? null : true;
-            update(ref(db), updates);
-        };
-
-        window.shareApp = (title, link) => {
-            const url = window.location.origin + '/' + link;
-            if (navigator.share) {
-                navigator.share({ title: `Play ${title} on N-Store`, text: `Bhai yeh mast game check kar!`, url: url });
-            } else {
-                navigator.clipboard.writeText(url);
-                alert("Link copied to clipboard!");
-            }
-        };
-
-        // Chat Logic
-        const messagesRef = ref(db, 'global_chat');
-        const recentMessagesQuery = query(messagesRef, limitToLast(50));
-        let isChatOpen = false;
-        
-        document.getElementById('chatToggleBtn').onclick = () => {
-            isChatOpen = true;
-            document.getElementById('chatWindow').classList.add('active');
-            document.getElementById('chatBadge').style.display = 'none';
-            setTimeout(() => document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight, 300);
-        };
-        
-        document.getElementById('chatCloseBtn').onclick = () => {
-            isChatOpen = false;
-            document.getElementById('chatWindow').classList.remove('active');
-        };
-
+        // Send Message
         const sendMessage = () => {
-            if (!window.currentUser) return;
-            const chatInput = document.getElementById('chatInput');
+            if (!currentUser) return;
             const text = chatInput.value.trim();
             if (text.length === 0) return;
+
             push(messagesRef, {
-                uid: window.currentUser.uid,
-                name: window.currentUser.displayName,
-                photo: window.currentUser.photoURL,
+                uid: currentUser.uid,
+                name: currentUser.displayName,
+                photo: currentUser.photoURL,
                 text: text,
-                timestamp: serverTimestamp()
+                timestamp: serverTimestamp() // Save exact server time
             });
+
             chatInput.value = '';
             chatInput.focus();
         };
 
-        document.getElementById('chatSendBtn').onclick = sendMessage;
-        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        chatSendBtn.onclick = sendMessage;
+        chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
 
+        // --------------------------------------------------------
+        // FIREBASE REALTIME LISTENERS (Add & Remove)
+        // --------------------------------------------------------
+
+        // 1. When a message is ADDED
         onChildAdded(recentMessagesQuery, (snapshot) => {
             const msg = snapshot.val();
-            const msgId = snapshot.key; 
-            const isMe = window.currentUser && msg.uid === window.currentUser.uid;
+            const msgId = snapshot.key; // Get Unique ID for the message
+            const isMe = currentUser && msg.uid === currentUser.uid;
             
             const msgDiv = document.createElement('div');
+            // Add custom ID attribute so we can find it later when deleting
             msgDiv.className = `msg-row ${isMe ? 'me' : 'other'}`;
             msgDiv.id = `msg-${msgId}`; 
             msgDiv.dataset.id = msgId;
             
             const photoUrl = msg.photo || 'https://via.placeholder.com/32';
             const firstName = msg.name ? msg.name.split(' ')[0] : 'User';
-            const timeString = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
+            // Format time (Fallback to current time if serverTimestamp is pending)
+            const timeString = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
             msgDiv.innerHTML = `
                 <img src="${photoUrl}" class="msg-avatar" alt="User">
                 <div class="msg-content">
@@ -703,74 +770,43 @@
                 </div>
             `;
             
-            const chatMessages = document.getElementById('chatMessages');
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            if (!isChatOpen && !isMe) document.getElementById('chatBadge').style.display = 'block';
+
+            if (!isChatOpen && !isMe) chatBadge.style.display = 'block';
         });
 
-        document.getElementById('chatMessages').addEventListener('click', (e) => {
+        // 2. Event Delegation for Delete Button Click
+        // Since this is a module, we attach the event to the parent container
+        chatMessages.addEventListener('click', (e) => {
             const deleteBtn = e.target.closest('.delete-msg-btn');
             if (deleteBtn) {
                 const msgRow = deleteBtn.closest('.msg-row');
                 const msgId = msgRow.dataset.id;
+                
+                // Confirm before deleting
                 if(confirm("Kya aap wakai is message ko delete karna chahte hain?")) {
-                    remove(ref(db, `global_chat/${msgId}`)).catch(err => alert("Error deleting message: " + err));
+                    remove(ref(db, `global_chat/${msgId}`))
+                        .catch(err => alert("Error deleting message: " + err));
                 }
             }
         });
 
+        // 3. When a message is REMOVED from Firebase (Sync for everyone)
         onChildRemoved(messagesRef, (snapshot) => {
             const msgId = snapshot.key;
             const msgElement = document.getElementById(`msg-${msgId}`);
+            
             if (msgElement) {
+                // Add CSS animation class
                 msgElement.classList.add('deleting');
-                setTimeout(() => msgElement.remove(), 300);
+                // Remove from DOM after animation completes
+                setTimeout(() => {
+                    msgElement.remove();
+                }, 300);
             }
         });
 
-        // Theme Toggle
-        const themeBtn = document.getElementById('themeToggle');
-        themeBtn.onclick = () => {
-            const html = document.documentElement;
-            const newTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            themeBtn.innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>' : '<i class="fa-regular fa-moon"></i>';
-        };
-
-        // PWA Install Logic
-        let deferredPrompt;
-        const pwaPopup = document.getElementById('pwa-install-prompt');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            setTimeout(() => pwaPopup.classList.add('show'), 2000);
-        });
-        document.getElementById('pwa-install-btn').addEventListener('click', async () => {
-            pwaPopup.classList.remove('show');
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            }
-        });
-        document.getElementById('pwa-cancel-btn').addEventListener('click', () => pwaPopup.classList.remove('show'));
-
-        // Admin Data Migration Script
-        window.uploadOldDataToFirebase = () => {
-            const oldProjects = [
-                { title: "Tic Tac Toe", developer: "Nitesh", category: "Game", rating: "4.9", link: "tictactoe.html", iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png", iconBg: "#ffffff", playCount: 154 },
-                { title: "Simon Game", developer: "Nitesh", category: "Game", rating: "4.9", link: "simon.html", imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", iconBg: "#4caf50", playCount: 342 },
-                { title: "Memory Game", developer: "Nitesh", category: "Game", rating: "4.9", link: "memorygame.html", imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", iconBg: "#ffffff", playCount: 89 },
-                { title: "Bubble Shooter", developer: "Nitesh", category: "Game", rating: "4.8", link: "hello1.html", iconClass: "fa-solid fa-circle-dot", iconBg: "#3b82f6", playCount: 450 },
-                { title: "FM Radio", developer: "Nitesh", category: "App", rating: "4.8", link: "hello.html", iconClass: "fa-solid fa-radio", iconBg: "#f97316", playCount: 210 },
-                { title: "N-OS System", developer: "Nitesh", category: "App", rating: "5.0", link: "hi.html", iconClass: "fa-solid fa-mobile-screen-button", iconBg: "#6366f1", playCount: 500 }
-            ];
-            if(confirm("Are you sure you want to push old hardcoded data to Firebase?")) {
-                oldProjects.forEach(app => push(ref(db, 'apps'), app));
-                alert("Data uploaded successfully! Ab 'Admin Setup' bar hide kar sakte ho code se.");
-            }
-        };
     </script>
 </body>
 </html>
