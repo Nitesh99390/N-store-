@@ -1,257 +1,776 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-    <meta name="google-site-verification" content="Za1pEupQLM-LlPnODka_5pMgrC6DyOzmuDaZBepfg7Q" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="color-scheme" content="light dark">
-    <title>N-Store | Next Gen App & Game Hub</title>
-    <meta name="description" content="N-Store: Dynamic app store with realtime updates, ratings, wishlist, and offline play.">
+
+    <title>N-Store | Premium App & Game Hub</title>
+    <meta name="description" content="N-Store: Discover the best web apps, tools, and HTML5 games. Play instantly without downloading.">
+    <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online">
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#10b981">
+    <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('N-Store PWA Registered!'))
+            .catch(err => console.log('Registration failed', err));
+        });
+      }
+    </script>
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Premium N-Store Theme Variables */
         :root {
-            --bg-main: #f8fafc; --surface: #ffffff; --text-main: #0f172a; --text-sub: #64748b;
-            --primary: #10b981; --primary-hover: #059669; --primary-light: #d1fae5;
-            --border: #e2e8f0; --hover-bg: #f1f5f9; --nav-bg: rgba(255,255,255,0.85);
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.03); --card-hover-shadow: 0 12px 25px rgba(0,0,0,0.08);
-            --popup-bg: rgba(255,255,255,0.95); --danger: #ef4444; --star: #fbbf24;
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --primary-light: #d1fae5;
+            --border: #e2e8f0;
+            --hover-bg: #f1f5f9;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            --card-hover-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            --popup-bg: rgba(255, 255, 255, 0.95);
         }
+
         [data-theme="dark"] {
-            --bg-main: #0f172a; --surface: #1e293b; --text-main: #f8fafc; --text-sub: #94a3b8;
-            --primary: #10b981; --primary-hover: #34d399; --primary-light: rgba(16,185,129,0.15);
-            --border: #334155; --hover-bg: #334155; --nav-bg: rgba(30,41,59,0.85);
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.2); --card-hover-shadow: 0 12px 30px rgba(0,0,0,0.4);
-            --popup-bg: rgba(30,41,59,0.95);
+            --bg-main: #0f172a;
+            --surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --primary: #10b981;
+            --primary-hover: #34d399;
+            --primary-light: rgba(16, 185, 129, 0.15);
+            --border: #334155;
+            --hover-bg: #334155;
+            --nav-bg: rgba(30, 41, 59, 0.85);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --popup-bg: rgba(30, 41, 59, 0.95);
         }
-        body { background: var(--bg-main); color: var(--text-main); transition: all 0.3s; overflow-x: hidden; }
-        nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; position: sticky; top: 0; background: var(--nav-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px; z-index: 100; }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; cursor: pointer; }
-        .search-bar { background: var(--hover-bg); border-radius: 30px; display: flex; align-items: center; padding: 12px 24px; width: 40%; max-width: 500px; transition: all 0.3s; border: 1px solid transparent; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden; }
+
+        /* Sleek Glassmorphism Navbar */
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 28px; position: sticky; top: 0;
+            background: var(--nav-bg); z-index: 100;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;
+        }
+        
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
+        .logo-area i { filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3)); }
+        
+        .search-bar {
+            background: var(--hover-bg); border-radius: 30px;
+            display: flex; align-items: center; padding: 12px 24px;
+            width: 40%; max-width: 500px; border: 1.5px solid transparent;
+            transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
         .search-bar:focus-within { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
-        .search-bar input { background: transparent; border: none; outline: none; width: 100%; color: var(--text-main); margin-left: 14px; }
-        .theme-btn, .action-icon { background: var(--surface); border: 1px solid var(--border); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: var(--text-main); }
-        .theme-btn:hover, .action-icon:hover { background: var(--hover-bg); transform: scale(1.05); }
-        .tabs { display: flex; gap: 32px; padding: 0 28px; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
-        .tab { padding: 18px 0; font-weight: 600; color: var(--text-sub); cursor: pointer; position: relative; white-space: nowrap; }
+        .search-bar i { color: var(--text-sub); font-size: 16px; }
+        .search-bar input {
+            border: none; background: transparent; color: var(--text-main);
+            outline: none; width: 100%; margin-left: 14px; font-size: 15px; font-weight: 500;
+        }
+        .search-bar input::placeholder { color: var(--text-sub); font-weight: 400; }
+        
+        .theme-btn { 
+            background: var(--surface); border: 1px solid var(--border); width: 44px; height: 44px; 
+            border-radius: 50%; font-size: 18px; color: var(--text-main); 
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .theme-btn:hover { background: var(--hover-bg); transform: rotate(15deg) scale(1.05); }
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+        /* Refined Navigation Tabs */
+        .tabs {
+            display: flex; gap: 32px; padding: 0 28px;
+            border-bottom: 1px solid var(--border); background: var(--surface);
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab {
+            padding: 18px 0; font-weight: 600; font-size: 15px;
+            color: var(--text-sub); cursor: pointer; white-space: nowrap;
+            transition: color 0.3s ease; position: relative;
+        }
+        .tab:hover { color: var(--text-main); }
         .tab.active { color: var(--primary); }
-        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 4px; }
+        .tab.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
+            height: 3px; background: var(--primary); border-radius: 4px 4px 0 0;
+            box-shadow: 0 -2px 8px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Main Content */
         .container { max-width: 1280px; margin: 0 auto; padding: 40px 28px; }
-        .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 30px; flex-wrap: wrap; gap: 12px; }
-        .section-title { font-size: 24px; font-weight: 700; }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; }
-        .app-card { background: var(--surface); border-radius: 24px; border: 1px solid var(--border); padding: 20px; transition: all 0.3s; box-shadow: var(--card-shadow); position: relative; animation: fadeInUp 0.4s ease; }
-        .app-card:hover { transform: translateY(-6px); box-shadow: var(--card-hover-shadow); }
-        .app-icon { width: 80px; height: 80px; margin: 0 auto 16px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; color: white; box-shadow: 0 8px 16px rgba(0,0,0,0.1); transition: 0.2s; overflow: hidden; }
-        .app-card:hover .app-icon { transform: scale(1.02); }
-        .app-title { font-weight: 800; font-size: 16px; text-align: center; margin-top: 8px; }
-        .app-dev { font-size: 12px; color: var(--text-sub); text-align: center; }
-        .app-meta { display: flex; justify-content: center; align-items: center; gap: 12px; margin: 8px 0; font-size: 13px; font-weight: 600; }
-        .stars { color: var(--star); letter-spacing: 2px; }
-        .card-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }
-        .install-btn, .preview-btn { background: var(--primary-light); border: none; padding: 8px; border-radius: 40px; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--primary); flex: 1; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .install-btn:hover, .preview-btn:hover { background: var(--primary); color: white; }
-        .fav-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-sub); transition: 0.2s; width: 36px; border-radius: 50%; }
-        .fav-btn.active { color: #ef4444; }
-        .share-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-sub); }
-        /* modals */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; visibility: hidden; opacity: 0; transition: 0.2s; }
-        .modal.active { visibility: visible; opacity: 1; }
-        .modal-card { background: var(--surface); max-width: 450px; width: 90%; border-radius: 32px; padding: 24px; border: 1px solid var(--border); }
-        .rating-stars { display: flex; gap: 12px; justify-content: center; margin: 20px 0; font-size: 32px; cursor: pointer; color: #cbd5e1; }
-        .rating-stars i.active { color: var(--star); }
-        textarea { width: 100%; padding: 12px; border-radius: 20px; background: var(--hover-bg); border: 1px solid var(--border); color: var(--text-main); margin: 12px 0; }
-        .bottom-nav { display: none; position: fixed; bottom: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(12px); justify-content: space-around; padding: 12px 0; z-index: 99; border-top: 1px solid var(--border); }
-        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; font-size: 12px; cursor: pointer; color: var(--text-sub); }
+        .section-header { margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;}
+        .section-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
+        
+        /* Premium App Grid & Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
+        .app-card {
+            background: var(--surface); display: flex; flex-direction: column; 
+            align-items: center; text-align: center; text-decoration: none; color: inherit;
+            padding: 24px 20px; border-radius: 24px; border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease backwards; position: relative; cursor: pointer;
+        }
+        .app-card:hover { 
+            transform: translateY(-6px) scale(1.02); 
+            box-shadow: var(--card-hover-shadow); 
+            border-color: var(--primary-light);
+        }
+        
+        .app-icon {
+            width: 85px; height: 85px; border-radius: 22px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 38px; color: white; margin-bottom: 18px;
+            overflow: hidden; transition: transform 0.3s ease;
+        }
+        .app-card:hover .app-icon { transform: scale(1.05) rotate(-3deg); }
+        
+        .app-info { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 20px; }
+        .app-title { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .app-dev { font-size: 13px; color: var(--text-sub); font-weight: 500; }
+        .app-meta { font-size: 12px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;}
+        .star { color: #fbbf24; font-size: 12px; }
+        
+        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 60px 20px; font-size: 18px; line-height: 1.6; font-weight: 500;}
+        
+        /* Action Buttons on Card */
+        .card-actions { display: flex; width: 100%; gap: 10px; margin-top: auto; }
+        .icon-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--hover-bg); border: none; color: var(--text-sub); cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center;}
+        .icon-btn:hover { background: #fee2e2; color: #ef4444; }
+        .icon-btn.active { color: #ef4444; }
+        
+        .install-btn {
+            background-color: var(--primary-light); color: var(--primary);
+            border: none; padding: 10px 0; flex: 1;
+            border-radius: 30px; font-weight: 700; font-size: 14px;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .app-card:hover .install-btn { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+        /* PWA Install Popup */
+        .pwa-popup {
+            position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150%);
+            width: 90%; max-width: 400px; background: var(--popup-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 20px; border-radius: 24px; border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 1000;
+            display: flex; flex-direction: column; gap: 16px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0;
+        }
+        .pwa-popup.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        
+        .pwa-content { display: flex; align-items: center; gap: 16px; }
+        .pwa-icon { width: 50px; height: 50px; border-radius: 14px; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;}
+        .pwa-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);}
+        .pwa-text p { font-size: 13px; color: var(--text-sub); line-height: 1.4;}
+        
+        .pwa-actions { display: flex; gap: 12px; }
+        .pwa-btn { flex: 1; padding: 10px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: 0.2s;}
+        .pwa-btn-cancel { background: var(--hover-bg); color: var(--text-main); }
+        .pwa-btn-install { background: var(--primary); color: white; }
+        .pwa-btn-install:hover { background: var(--primary-hover); }
+
+        /* Mobile Bottom Nav */
+        .bottom-nav {
+            display: none; position: fixed; bottom: 0; width: 100%;
+            background: var(--nav-bg); border-top: 1px solid var(--border);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            justify-content: space-around; padding: 14px 0; z-index: 99;
+            padding-bottom: env(safe-area-inset-bottom, 14px);
+        }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); font-size: 12px; cursor: pointer; font-weight: 600; transition: color 0.3s ease;}
         .bottom-nav-item.active { color: var(--primary); }
-        .recent-section { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 30px; }
-        .recent-grid { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 12px; }
-        .recent-chip { background: var(--surface); border-radius: 40px; padding: 8px 20px; white-space: nowrap; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-        .chat-toggle-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: 0 8px 20px rgba(16,185,129,0.4); cursor: pointer; z-index: 1000; }
-        .chat-window { position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px; background: var(--surface); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); z-index: 1001; display: flex; flex-direction: column; transform: scale(0.9); opacity: 0; pointer-events: none; transition: 0.2s; border: 1px solid var(--border); }
-        .chat-window.active { transform: scale(1); opacity: 1; pointer-events: all; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 768px) { .search-bar { width: 100%; order: 3; } .bottom-nav { display: flex; } .container { padding-bottom: 100px; } .app-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); } .chat-window { width: 90%; right: 5%; bottom: 90px; } }
+        .bottom-nav-item i { transition: transform 0.3s ease; }
+        .bottom-nav-item.active i { transform: translateY(-3px); }
+
+        /* ------------- PREMIUM CHAT SYSTEM STYLES ------------- */
+        .chat-toggle-btn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--primary); color: white; border: none;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            font-size: 24px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; justify-content: center; align-items: center;
+        }
+        .chat-toggle-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5); }
+        .chat-toggle-btn .badge {
+            position: absolute; top: 0; right: 0; background: #ef4444; width: 14px; height: 14px;
+            border-radius: 50%; border: 2px solid var(--surface); display: none;
+        }
+        
+        .chat-window {
+            position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px;
+            background: var(--surface); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            z-index: 1001; border: 1px solid var(--border);
+            display: flex; flex-direction: column; overflow: hidden;
+            transform: translateY(20px); opacity: 0; pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chat-window.active { transform: translateY(0); opacity: 1; pointer-events: all; }
+        
+        .chat-header {
+            padding: 18px 20px; background: var(--primary); color: white;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 700; font-size: 16px;
+        }
+        .chat-header .close-btn { cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.2); transition: 0.2s;}
+        .chat-header .close-btn:hover { background: rgba(255,255,255,0.3); }
+        
+        .chat-messages {
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+            background: var(--bg-main); scroll-behavior: smooth; position: relative;
+        }
+        
+        .msg-row { display: flex; gap: 10px; max-width: 85%; position: relative; transition: all 0.3s ease; }
+        .msg-row.me { align-self: flex-end; flex-direction: row-reverse; }
+        .msg-row.other { align-self: flex-start; }
+        
+        /* Delete Animation */
+        @keyframes fadeOutMsg {
+            to { opacity: 0; transform: scale(0.9); margin-bottom: -50px; }
+        }
+        .msg-row.deleting { animation: fadeOutMsg 0.3s ease forwards; }
+        
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--border);}
+        
+        .msg-content { display: flex; flex-direction: column; gap: 4px; position: relative; }
+        .msg-row.me .msg-content { align-items: flex-end; }
+        .msg-row.other .msg-content { align-items: flex-start; }
+        
+        .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; display: flex; gap: 6px; align-items: center;}
+        .msg-time { font-size: 9px; opacity: 0.7; font-weight: normal; }
+        
+        .msg-bubble {
+            padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4;
+            word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .msg-row.me .msg-bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
+        .msg-row.other .msg-bubble { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-top-left-radius: 4px; }
+        
+        /* Delete Button UI */
+        .delete-msg-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            left: -30px; width: 24px; height: 24px; border-radius: 50%;
+            background: #ef4444; color: white; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; opacity: 0; transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
+        .msg-row.me:hover .delete-msg-btn { opacity: 1; left: -35px; }
+        .delete-msg-btn:hover { background: #dc2626; transform: translateY(-50%) scale(1.1); }
+        
+        .chat-input-area {
+            padding: 16px; background: var(--surface); border-top: 1px solid var(--border);
+            display: flex; gap: 10px; align-items: center;
+        }
+        .chat-input-area input {
+            flex: 1; padding: 12px 18px; border-radius: 24px; border: 1px solid var(--border);
+            background: var(--hover-bg); color: var(--text-main); outline: none; transition: 0.3s;
+        }
+        .chat-input-area input:focus { border-color: var(--primary); background: var(--surface); }
+        .chat-send-btn {
+            width: 44px; height: 44px; border-radius: 50%; background: var(--primary);
+            color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+        .chat-send-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
+        .chat-send-btn:disabled { background: var(--text-sub); cursor: not-allowed; box-shadow: none; transform: none;}
+        
+        .chat-overlay-login {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(248, 250, 252, 0.9); backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; gap: 15px; text-align: center; padding: 20px;
+        }
+        [data-theme="dark"] .chat-overlay-login { background: rgba(15, 23, 42, 0.9); }
+
+        @media (max-width: 768px) {
+            .search-bar { width: 100%; max-width: none; margin-top: 12px; order: 3;}
+            nav { padding: 16px; justify-content: space-between; }
+            .nav-actions { order: 2; }
+            .bottom-nav { display: flex; }
+            .container { padding: 24px 16px 100px 16px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+            .app-card { padding: 20px 16px; border-radius: 20px;}
+            .app-icon { width: 75px; height: 75px; font-size: 32px; border-radius: 18px;}
+            .pwa-popup { bottom: 90px; width: 92%; }
+            .chat-window { width: 90%; right: 5%; bottom: 100px; height: 60vh; z-index: 1001; }
+            .chat-toggle-btn { bottom: 100px; right: 20px; width: 55px; height: 55px; z-index: 1000;}
+            .msg-row.me .delete-msg-btn { opacity: 1; left: -30px; }
+        }
+
+        /* Admin tools */
+        #adminTools { display: none; padding: 10px 20px; background: #fff3cd; color: #856404; border-radius: 10px; margin-bottom: 20px; text-align: center; border: 1px solid #ffeeba;}
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo-area" onclick="filterCategory('All')"><i class="fa-brands fa-google-play" style="color:var(--primary)"></i><span>N-Store</span></div>
-    <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="searchInput" placeholder="Fuzzy search apps..."></div>
-    <div class="nav-actions" style="display:flex; gap:10px">
-        <div id="auth-section" style="display:flex; gap:8px; align-items:center">
-            <button id="loginBtn" class="theme-btn" style="width:auto; padding:0 16px; border-radius:22px"><i class="fa-brands fa-google"></i> Login</button>
-            <div id="userProfile" style="display:none; align-items:center; gap:8px"><img id="userPhoto" width="38" height="38" style="border-radius:50%; border:2px solid var(--primary)"><button id="logoutBtn" class="theme-btn"><i class="fa-solid fa-sign-out-alt"></i></button></div>
+    <nav>
+        <div class="logo-area" onclick="filterCategory('All')">
+            <i class="fa-brands fa-google-play" style="color: var(--primary);"></i>
+            <span>N-Store</span>
         </div>
-        <button class="theme-btn" id="themeToggle"><i class="fa-regular fa-moon"></i></button>
-    </div>
-</nav>
-
-<div class="tabs" id="tabsContainer">
-    <div class="tab active" data-cat="All">For you</div>
-    <div class="tab" data-cat="Top charts">Top charts</div>
-    <div class="tab" data-cat="Game">Games</div>
-    <div class="tab" data-cat="App">Apps</div>
-    <div class="tab" data-cat="Library">My Library</div>
-</div>
-
-<div class="container">
-    <div class="section-header"><h2 class="section-title" id="sectionTitle">🔥 Trending Now</h2></div>
-    <div class="app-grid" id="projectGrid"></div>
-    
-    <div class="recent-section" id="recentSection" style="display:none">
-        <h3 style="margin-bottom:16px"><i class="fa-solid fa-clock-rotate-left"></i> Recently Played</h3>
-        <div class="recent-grid" id="recentGrid"></div>
-    </div>
-</div>
-
-<div class="bottom-nav">
-    <div class="bottom-nav-item" data-cat="Game"><i class="fa-solid fa-gamepad fa-lg"></i><span>Games</span></div>
-    <div class="bottom-nav-item" data-cat="App"><i class="fa-solid fa-layer-group fa-lg"></i><span>Apps</span></div>
-    <div class="bottom-nav-item" data-cat="Library"><i class="fa-solid fa-heart"></i><span>Library</span></div>
-    <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus()"><i class="fa-solid fa-search"></i><span>Search</span></div>
-</div>
-
-<!-- Rating Modal -->
-<div id="ratingModal" class="modal">
-    <div class="modal-card"><h3>Rate this app</h3><div class="rating-stars" id="ratingStars"><i class="fa-regular fa-star" data-val="1"></i><i class="fa-regular fa-star" data-val="2"></i><i class="fa-regular fa-star" data-val="3"></i><i class="fa-regular fa-star" data-val="4"></i><i class="fa-regular fa-star" data-val="5"></i></div><textarea id="reviewText" placeholder="Write your review (optional)"></textarea><div style="display:flex; gap:12px"><button id="submitRatingBtn" class="install-btn" style="background:var(--primary); color:white">Submit</button><button id="closeRatingBtn" class="install-btn">Cancel</button></div></div>
-</div>
-
-<!-- Preview Modal -->
-<div id="previewModal" class="modal"><div class="modal-card" style="max-width:90%; width:800px; height:70vh"><iframe id="previewFrame" style="width:100%; height:100%; border:none; border-radius:20px"></iframe><button id="closePreviewBtn" style="margin-top:16px; width:100%" class="install-btn">Close</button></div></div>
-
-<button class="chat-toggle-btn" id="chatToggleBtn"><i class="fa-regular fa-comment-dots"></i><span id="chatBadge" style="position:absolute; top:0; right:0; background:#ef4444; width:12px; height:12px; border-radius:50%; display:none"></span></button>
-<div class="chat-window" id="chatWindow"><div class="chat-header" style="padding:16px; background:var(--primary); color:white; display:flex; justify-content:space-between"><span>Global Lounge</span><button id="chatCloseBtn" style="background:none; border:none; color:white; font-size:20px">&times;</button></div><div id="chatMessages" style="flex:1; overflow-y:auto; padding:16px"></div><div style="padding:12px; display:flex; gap:8px"><input id="chatInput" placeholder="Message" style="flex:1; padding:10px; border-radius:40px; border:1px solid var(--border)" disabled><button id="chatSendBtn" disabled class="install-btn">Send</button></div><div id="chatLoginOverlay" style="position:absolute; inset:0; background:var(--popup-bg); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px"><button id="chatOverlayLoginBtn" class="install-btn">Login to Chat</button></div></div>
-
-<script type="importmap">
-    { "imports": { "firebase/app": "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js", "firebase/auth": "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js", "firebase/database": "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js" } }
-</script>
-<script type="module">
-    import { initializeApp } from "firebase/app";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-    import { getDatabase, ref, push, onValue, set, update, remove, get, child, serverTimestamp, increment, query, orderByChild, limitToLast } from "firebase/database";
-
-    const firebaseConfig = { apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA", authDomain: "n-store-bad6b.firebaseapp.com", projectId: "n-store-bad6b", storageBucket: "n-store-bad6b.firebasestorage.app", messagingSenderId: "431750611629", appId: "1:431750611629:web:07d1941c9782fb3d48fc24" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-    const provider = new GoogleAuthProvider();
-
-    let currentUser = null;
-    let allApps = []; let favoriteIds = new Set(); let fuse = null; let currentFilter = "All";
-
-    // DOM elements
-    const gridEl = document.getElementById("projectGrid");
-    const searchInput = document.getElementById("searchInput");
-    const sectionTitleEl = document.getElementById("sectionTitle");
-    const recentSection = document.getElementById("recentSection");
-    const recentGrid = document.getElementById("recentGrid");
-    
-    // Helper: render apps with sorting/filter
-    function renderApps() {
-        let filtered = [...allApps];
-        const searchTerm = searchInput.value.trim();
-        if (searchTerm && fuse) filtered = fuse.search(searchTerm).map(r => r.item);
-        if (currentFilter === "Game") filtered = filtered.filter(a => a.category === "Game");
-        else if (currentFilter === "App") filtered = filtered.filter(a => a.category === "App");
-        else if (currentFilter === "Library" && currentUser) filtered = filtered.filter(a => favoriteIds.has(a.id));
-        else if (currentFilter === "Top charts") filtered.sort((a,b) => (b.playCount || 0) - (a.playCount || 0));
         
-        if (filtered.length === 0) { gridEl.innerHTML = `<div class="no-results">✨ Nothing found ✨</div>`; return; }
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search premium apps & games...">
+        </div>
         
-        gridEl.innerHTML = filtered.map(app => `
-            <div class="app-card" data-id="${app.id}">
-                <div class="app-icon" style="background: ${app.iconBg || '#10b981'}">${app.iconImg ? `<img src="${app.iconImg}" style="width:100%; height:100%; object-fit:cover">` : `<i class="${app.iconClass || 'fa-solid fa-cube'}"></i>`}</div>
-                <div class="app-title">${app.title}</div>
-                <div class="app-dev">${app.developer || 'N-Store'}</div>
-                <div class="app-meta"><span class="stars">${renderStars(app.avgRating || 4.5)}</span> ${(app.avgRating || 4.5).toFixed(1)} (${app.totalRatings || 0})</div>
-                <div class="card-actions">
-                    <button class="install-btn play-btn" data-link="${app.link}"><i class="fa-solid fa-play"></i> Play</button>
-                    <button class="preview-btn preview-trigger" data-link="${app.link}"><i class="fa-regular fa-eye"></i></button>
-                    <button class="fav-btn ${favoriteIds.has(app.id) ? 'active' : ''}" data-id="${app.id}"><i class="fa-${favoriteIds.has(app.id) ? 'solid' : 'regular'} fa-heart"></i></button>
-                    <button class="share-btn" data-title="${app.title}" data-link="${app.link}"><i class="fa-solid fa-share-nodes"></i></button>
+        <div class="nav-actions">
+            <div id="auth-section" style="display: flex; gap: 10px; align-items: center;">
+                <button id="loginBtn" class="theme-btn" title="Login with Google" style="width: auto; padding: 0 16px; border-radius: 22px; font-size: 14px; font-weight: 700;">
+                    <i class="fa-brands fa-google" style="margin-right: 6px; color: var(--text-main);"></i> Login
+                </button>
+                <div id="userProfile" style="display: none; align-items: center; gap: 10px;">
+                    <img id="userPhoto" src="" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover;">
+                    <button id="logoutBtn" class="theme-btn" title="Logout">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                    </button>
                 </div>
             </div>
-        `).join("");
-        attachCardEvents();
-    }
+            <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
+                <i class="fa-regular fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="tabs">
+        <div class="tab active" onclick="filterCategory('All')">For you</div>
+        <div class="tab" onclick="filterCategory('Top charts')">Top charts <i class="fa-solid fa-fire" style="color:#ef4444; font-size:12px;"></i></div>
+        <div class="tab" onclick="filterCategory('Library')">My Library <i class="fa-solid fa-heart" style="color:#ef4444; font-size:12px;"></i></div>
+        <div class="tab" onclick="filterCategory('Game')">Games</div>
+        <div class="tab" onclick="filterCategory('App')">Apps</div>
+    </div>
+
+    <div class="container">
+        <div id="adminTools">
+            <b>Admin Setup:</b> Apna purana hardcoded data Firebase mein upload karein? 
+            <button onclick="uploadOldDataToFirebase()" style="padding: 5px 10px; margin-left:10px; cursor:pointer;">Upload Data</button>
+        </div>
+        <div class="section-header">
+            <h2 class="section-title" id="sectionTitle">Recommended for you</h2>
+        </div>
+        
+        <div class="app-grid" id="projectGrid"></div>
+    </div>
+
+    <div id="pwa-install-prompt" class="pwa-popup">
+        <div class="pwa-content">
+            <div class="pwa-icon">
+                <i class="fa-brands fa-google-play"></i>
+            </div>
+            <div class="pwa-text">
+                <h4>Install N-Store App</h4>
+                <p>Add to home screen for faster access & offline features!</p>
+            </div>
+        </div>
+        <div class="pwa-actions">
+            <button class="pwa-btn pwa-btn-cancel" id="pwa-cancel-btn">Not Now</button>
+            <button class="pwa-btn pwa-btn-install" id="pwa-install-btn">Install Now</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active" onclick="filterCategory('Game')">
+            <i class="fa-solid fa-gamepad fa-lg"></i>
+            <span>Games</span>
+        </div>
+        <div class="bottom-nav-item" onclick="filterCategory('App')">
+            <i class="fa-solid fa-layer-group fa-lg"></i>
+            <span>Apps</span>
+        </div>
+        <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus(); window.scrollTo(0,0);">
+            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+            <span>Search</span>
+        </div>
+    </div>
+
+    <button class="chat-toggle-btn" id="chatToggleBtn" title="Global Chat">
+        <i class="fa-solid fa-comment-dots"></i>
+        <div class="badge" id="chatBadge"></div>
+    </button>
     
-    function renderStars(rating) { let full = Math.floor(rating); let half = rating % 1 >= 0.5; let s = ""; for(let i=0;i<full;i++) s+="<i class='fa-solid fa-star'></i>"; if(half) s+="<i class='fa-solid fa-star-half-alt'></i>"; while(s.length/24 <5) s+="<i class='fa-regular fa-star'></i>"; return s; }
-    
-    function attachCardEvents() {
-        document.querySelectorAll(".play-btn").forEach(btn => btn.addEventListener("click", async (e) => { e.preventDefault(); const link = btn.dataset.link; const card = btn.closest(".app-card"); const appId = card.dataset.id; const app = allApps.find(a=>a.id===appId); if(app && currentUser) { await update(ref(db, `apps/${appId}`), { playCount: increment(1) }); trackRecentlyPlayed(app); } window.open(link, '_blank'); canvasConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#10b981'] }); }));
-        document.querySelectorAll(".fav-btn").forEach(btn => btn.addEventListener("click", async (e) => { e.stopPropagation(); const appId = btn.dataset.id; if(!currentUser) { alert("Login to add to library"); return; } const isFav = favoriteIds.has(appId); if(isFav) { await remove(ref(db, `users/${currentUser.uid}/favorites/${appId}`)); favoriteIds.delete(appId); } else { await set(ref(db, `users/${currentUser.uid}/favorites/${appId}`), true); favoriteIds.add(appId); } renderApps(); }));
-        document.querySelectorAll(".share-btn").forEach(btn => btn.addEventListener("click", () => { const title = btn.dataset.title; const link = btn.dataset.link; if(navigator.share) navigator.share({ title, text: `Check out ${title} on N-Store`, url: link }); else { prompt("Share this link", link); } }));
-        document.querySelectorAll(".preview-trigger").forEach(btn => btn.addEventListener("click", () => { const link = btn.dataset.link; document.getElementById("previewFrame").src = link; document.getElementById("previewModal").classList.add("active"); }));
-    }
-    
-    function trackRecentlyPlayed(app) { let recent = JSON.parse(localStorage.getItem("recentlyPlayed") || "[]"); recent = recent.filter(id => id !== app.id); recent.unshift(app.id); recent = recent.slice(0, 5); localStorage.setItem("recentlyPlayed", JSON.stringify(recent)); renderRecentlyPlayed(); }
-    function renderRecentlyPlayed() { const ids = JSON.parse(localStorage.getItem("recentlyPlayed") || "[]"); if(ids.length === 0) { recentSection.style.display = "none"; return; } const recentApps = ids.map(id => allApps.find(a=>a.id===id)).filter(Boolean); if(recentApps.length===0) return; recentSection.style.display = "block"; recentGrid.innerHTML = recentApps.map(app => `<div class="recent-chip" data-id="${app.id}"><i class="fa-regular fa-clock"></i> ${app.title}</div>`).join(""); document.querySelectorAll(".recent-chip").forEach(chip => chip.addEventListener("click", () => { const app = allApps.find(a=>a.id===chip.dataset.id); if(app) window.open(app.link,'_blank'); })); }
-    
-    // Firebase listeners for apps
-    function loadApps() { onValue(ref(db, 'apps'), (snapshot) => { const data = snapshot.val(); allApps = data ? Object.entries(data).map(([id, val]) => ({ id, ...val, avgRating: val.avgRating || 4.5, totalRatings: val.totalRatings || 0, playCount: val.playCount || 0 })) : []; fuse = new Fuse(allApps, { keys: ['title', 'developer', 'category'], threshold: 0.3 }); renderApps(); renderRecentlyPlayed(); }); }
-    
-    // ratings modal logic
-    let currentRatingAppId = null; let selectedRating = 0;
-    const modal = document.getElementById("ratingModal");
-    const stars = document.querySelectorAll("#ratingStars i");
-    function openRatingModal(appId) { currentRatingAppId = appId; selectedRating = 0; stars.forEach(s => { s.className = "fa-regular fa-star"; }); modal.classList.add("active"); }
-    stars.forEach(s => s.addEventListener("click", () => { selectedRating = parseInt(s.dataset.val); stars.forEach((star,i) => { if(i<selectedRating) star.className = "fa-solid fa-star"; else star.className = "fa-regular fa-star"; }); }));
-    document.getElementById("submitRatingBtn").onclick = async () => { if(!currentUser) { alert("Login to rate"); modal.classList.remove("active"); return; } if(selectedRating===0) { alert("Select a star rating"); return; } const review = document.getElementById("reviewText").value; const ratingId = `${currentUser.uid}_${Date.now()}`; await push(ref(db, `apps/${currentRatingAppId}/ratings`), { userId: currentUser.uid, rating: selectedRating, comment: review, timestamp: serverTimestamp() }); await updateAvgRating(currentRatingAppId); modal.classList.remove("active"); document.getElementById("reviewText").value = ""; };
-    document.getElementById("closeRatingBtn").onclick = () => modal.classList.remove("active");
-    async function updateAvgRating(appId) { const ratingsSnap = await get(ref(db, `apps/${appId}/ratings`)); const ratings = ratingsSnap.val(); if(!ratings) return; let sum=0, count=0; Object.values(ratings).forEach(r => { if(r.rating){ sum+=r.rating; count++; } }); const avg = count? sum/count : 4.5; await update(ref(db, `apps/${appId}`), { avgRating: avg, totalRatings: count }); }
-    
-    // Favorites listener
-    function listenFavorites() { if(!currentUser) return; onValue(ref(db, `users/${currentUser.uid}/favorites`), (snap) => { favoriteIds.clear(); const data = snap.val(); if(data) Object.keys(data).forEach(id => favoriteIds.add(id)); renderApps(); }); }
-    
-    // Auth UI
-    onAuthStateChanged(auth, (user) => { currentUser = user; if(user){ document.getElementById("loginBtn").style.display="none"; document.getElementById("userProfile").style.display="flex"; document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/38"; listenFavorites(); } else { document.getElementById("loginBtn").style.display="flex"; document.getElementById("userProfile").style.display="none"; favoriteIds.clear(); renderApps(); } });
-    document.getElementById("loginBtn").onclick = () => signInWithPopup(auth, provider);
-    document.getElementById("logoutBtn").onclick = () => signOut(auth);
-    
-    // Chat integration (preserve existing but add to module)
-    const messagesRef = ref(db, 'global_chat'); const chatMessagesDiv = document.getElementById("chatMessages"); const chatInputEl = document.getElementById("chatInput"); const chatSend = document.getElementById("chatSendBtn"); const chatOverlay = document.getElementById("chatLoginOverlay");
-    function appendMessage(msg, msgId, isMe) { const div = document.createElement("div"); div.className = `msg-row ${isMe ? 'me' : 'other'}`; div.id = `msg-${msgId}`; div.innerHTML = `<img src="${msg.photo || 'https://via.placeholder.com/32'}" style="width:32px;height:32px;border-radius:50%"><div><b>${msg.name?.split(' ')[0] || 'User'}</b><div class="msg-bubble">${msg.text}</div>${isMe ? `<button class="delete-msg-btn" data-id="${msgId}">🗑️</button>` : ''}</div>`; chatMessagesDiv.appendChild(div); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; }
-    onValue(query(ref(db, 'global_chat'), limitToLast(50)), (snap) => { chatMessagesDiv.innerHTML = ""; const msgs = []; snap.forEach(child => { msgs.unshift({ id: child.key, ...child.val() }); }); msgs.forEach(msg => { const isMe = currentUser && msg.uid === currentUser.uid; appendMessage(msg, msg.id, isMe); }); });
-    chatSend.onclick = () => { if(!currentUser) return; const text = chatInputEl.value.trim(); if(text) { push(messagesRef, { uid: currentUser.uid, name: currentUser.displayName, photo: currentUser.photoURL, text, timestamp: serverTimestamp() }); chatInputEl.value = ""; } };
-    chatInputEl.addEventListener("keypress", e => { if(e.key==="Enter") chatSend.click(); });
-    onAuthStateChanged(auth, (user) => { if(user){ chatOverlay.style.display="none"; chatInputEl.disabled=false; chatSend.disabled=false; } else { chatOverlay.style.display="flex"; chatInputEl.disabled=true; chatSend.disabled=true; } });
-    document.getElementById("chatToggleBtn").onclick = () => document.getElementById("chatWindow").classList.toggle("active");
-    document.getElementById("chatCloseBtn").onclick = () => document.getElementById("chatWindow").classList.remove("active");
-    document.getElementById("chatOverlayLoginBtn").onclick = () => signInWithPopup(auth, provider);
-    chatMessagesDiv.addEventListener("click", async (e) => { const del = e.target.closest(".delete-msg-btn"); if(del && currentUser) { const msgId = del.dataset.id; const msgSnap = await get(ref(db, `global_chat/${msgId}`)); if(msgSnap.exists() && msgSnap.val().uid === currentUser.uid) { remove(ref(db, `global_chat/${msgId}`)); } } });
-    
-    // Theme & UI
-    const themeBtn = document.getElementById("themeToggle"); const html = document.documentElement; themeBtn.onclick = () => { const newTheme = html.getAttribute("data-theme") === "light" ? "dark" : "light"; html.setAttribute("data-theme", newTheme); themeBtn.innerHTML = newTheme === "dark" ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-regular fa-moon"></i>'; };
-    
-    // Tabs logic
-    document.querySelectorAll(".tab, .bottom-nav-item").forEach(el => { el.addEventListener("click", () => { const cat = el.dataset.cat; if(cat) { currentFilter = cat; sectionTitleEl.innerText = cat === "All" ? "🔥 For You" : cat === "Library" ? "📚 My Library" : cat === "Top charts" ? "🏆 Top Charts" : `✨ ${cat}s`; renderApps(); document.querySelectorAll(".tab, .bottom-nav-item").forEach(t => t.classList.remove("active")); document.querySelectorAll(`[data-cat="${cat}"]`).forEach(t => t.classList.add("active")); } }); });
-    // fuzzy search
-    searchInput.addEventListener("input", () => renderApps());
-    // Preview modal close
-    document.getElementById("closePreviewBtn").onclick = () => { document.getElementById("previewModal").classList.remove("active"); document.getElementById("previewFrame").src = ""; };
-    document.getElementById("previewModal").addEventListener("click", (e) => { if(e.target === document.getElementById("previewModal")) { document.getElementById("previewModal").classList.remove("active"); document.getElementById("previewFrame").src = ""; } });
-    
-    // Default initial data seeding (if apps empty)
-    async function seedInitialApps() { const snapshot = await get(ref(db, 'apps')); if(!snapshot.exists()) { const defaultApps = [ { title:"Tic Tac Toe", developer:"Nitesh", category:"Game", link:"tictactoe.html", iconImg:"https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png", iconBg:"#10b981", playCount:120, avgRating:4.8 }, { title:"Simon Game", developer:"Nitesh", category:"Game", link:"simon.html", iconImg:"https://m.media-amazon.com/images/I/61MHBFYV0mL.png", iconBg:"#3b82f6", playCount:95 }, { title:"Memory Game", developer:"Nitesh", category:"Game", link:"memorygame.html", iconImg:"https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", playCount:210 }, { title:"FM Radio", developer:"Nitesh", category:"App", link:"hello.html", iconClass:"fa-solid fa-radio", iconBg:"#f97316", playCount:45 }, { title:"N-OS System", developer:"Nitesh", category:"App", link:"hi.html", iconClass:"fa-solid fa-mobile-screen-button", iconBg:"#6366f1", playCount:310 } ]; for(let app of defaultApps) { push(ref(db, 'apps'), app); } } }
-    seedInitialApps();
-    loadApps();
-    
-    // PWA install popup simulation
-    let deferredPrompt; window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; setTimeout(() => { const pop = document.createElement("div"); pop.className = "pwa-popup show"; pop.innerHTML = `<div style="background:var(--surface); padding:20px; border-radius:24px; text-align:center"><h4>Install N-Store</h4><button id="installNowBtn" class="install-btn">Install</button><button id="pwaCancelBtn">Later</button></div>`; document.body.appendChild(pop); document.getElementById("installNowBtn")?.addEventListener("click", async () => { deferredPrompt.prompt(); pop.remove(); }); document.getElementById("pwaCancelBtn")?.addEventListener("click",()=>pop.remove()); }, 1000); });
-    
-    // Accessibility & confetti on install btn click (fake counter) already in play btn
-    window.filterCategory = (cat) => { currentFilter = cat; renderApps(); };
-    console.log("🔥 Next-gen N-Store loaded with Firebase, ratings, wishlist, top charts, offline ready!");
-</script>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div><i class="fa-solid fa-users" style="margin-right: 8px;"></i> Global Lounge</div>
+            <div class="close-btn" id="chatCloseBtn"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages"></div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Type a message..." disabled>
+            <button class="chat-send-btn" id="chatSendBtn" disabled>
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+        
+        <div class="chat-overlay-login" id="chatLoginOverlay">
+            <i class="fa-solid fa-lock fa-3x" style="color: var(--text-sub);"></i>
+            <h3 style="color: var(--text-main);">Login to Chat</h3>
+            <p style="color: var(--text-sub); font-size: 14px;">Join the community to talk with other players.</p>
+            <button class="theme-btn" id="chatOverlayLoginBtn" style="width: auto; padding: 0 20px; border-radius: 20px; background: var(--primary); color: white; border: none; font-weight: bold;">
+                <i class="fa-brands fa-google" style="margin-right: 8px;"></i> Login with Google
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, set, get, update, push, increment, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA",
+            authDomain: "n-store-bad6b.firebaseapp.com",
+            projectId: "n-store-bad6b",
+            storageBucket: "n-store-bad6b.firebasestorage.app",
+            messagingSenderId: "431750611629",
+            appId: "1:431750611629:web:07d1941c9782fb3d48fc24",
+            measurementId: "G-QB4HC3YYRF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getDatabase(app);
+
+        // Global State
+        window.allApps = []; 
+        window.userFavorites = {}; 
+        window.currentUser = null;
+        let currentFilter = 'All';
+
+        const grid = document.getElementById('projectGrid');
+        const searchInput = document.getElementById('searchInput');
+        const sectionTitleElement = document.getElementById('sectionTitle');
+
+        // Authentication Logic
+        onAuthStateChanged(auth, (user) => {
+            window.currentUser = user;
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userProfile').style.display = 'flex';
+                document.getElementById('userPhoto').src = user.photoURL || 'https://via.placeholder.com/38';
+                
+                document.getElementById('adminTools').style.display = 'block'; 
+                
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
+                if (document.querySelector('.tab.active').innerText === 'For you') {
+                    sectionTitleElement.innerText = `Welcome back, ${firstName}!`;
+                }
+                
+                document.getElementById('chatLoginOverlay').style.display = 'none';
+                document.getElementById('chatInput').disabled = false;
+                document.getElementById('chatSendBtn').disabled = false;
+
+                // Fetch User Favorites
+                const favRef = ref(db, `users/${user.uid}/favorites`);
+                onValue(favRef, (snapshot) => {
+                    window.userFavorites = snapshot.val() || {};
+                    window.renderProjects(searchInput.value);
+                });
+            } else {
+                document.getElementById('loginBtn').style.display = 'flex';
+                document.getElementById('userProfile').style.display = 'none';
+                window.userFavorites = {};
+                document.getElementById('adminTools').style.display = 'none';
+                
+                if (document.querySelector('.tab.active').innerText === 'For you') {
+                    sectionTitleElement.innerText = 'Recommended for you';
+                }
+                
+                document.getElementById('chatLoginOverlay').style.display = 'flex';
+                document.getElementById('chatInput').disabled = true;
+                document.getElementById('chatSendBtn').disabled = true;
+
+                window.renderProjects(searchInput.value);
+            }
+        });
+
+        const loginUser = () => signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
+        document.getElementById('loginBtn').onclick = loginUser;
+        document.getElementById('chatOverlayLoginBtn').onclick = loginUser;
+        document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
+        // Fetch Apps from Firebase
+        const appsRef = ref(db, 'apps');
+        onValue(appsRef, (snapshot) => {
+            window.allApps = [];
+            if(snapshot.exists()) {
+                snapshot.forEach(child => {
+                    window.allApps.push({ id: child.key, ...child.val() });
+                });
+            }
+            window.renderProjects(searchInput.value);
+        });
+
+        // Render Logic
+        window.renderProjects = (searchQuery = '') => {
+            grid.innerHTML = '';
+            let filtered = window.allApps.filter(app => app.title.toLowerCase().includes(searchQuery.toLowerCase()));
+            
+            if (currentFilter === 'Top charts') {
+                filtered.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
+            } else if (currentFilter === 'Library') {
+                filtered = filtered.filter(app => window.userFavorites[app.id]);
+            } else if (currentFilter !== 'All') {
+                filtered = filtered.filter(app => app.category === currentFilter);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-sub);">Oops! No apps found here.</div>';
+                return;
+            }
+
+            filtered.forEach((project, index) => {
+                const isFav = window.userFavorites[project.id] ? 'active' : '';
+                const iconContent = (project.imageIcon || project.iconImg) 
+                    ? `<img src="${project.imageIcon || project.iconImg}" alt="${project.title}" style="width:100%; height:100%; object-fit:cover; border-radius:22px;">` 
+                    : `<i class="${project.iconClass}"></i>`;
+
+                const animationDelay = index * 0.05;
+                const plays = project.playCount ? (project.playCount > 1000 ? (project.playCount/1000).toFixed(1) + 'k' : project.playCount) : 0;
+
+                const card = `
+                    <div class="app-card" style="animation-delay: ${animationDelay}s">
+                        <div class="app-icon" style="background-color: ${project.iconBg}">
+                            ${iconContent}
+                        </div>
+                        <div class="app-info">
+                            <div class="app-title" title="${project.title}">${project.title}</div>
+                            <div class="app-dev">${project.developer}</div>
+                            <div class="app-meta">
+                                <span>${project.rating} <i class="fa-solid fa-star star"></i></span>
+                                <span style="margin: 0 5px;">•</span>
+                                <span><i class="fa-solid fa-play" style="font-size:10px;"></i> ${plays} plays</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="icon-btn ${isFav}" onclick="toggleFavorite('${project.id}')" title="Wishlist">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+                            <button class="install-btn" onclick="playGame('${project.id}', '${project.link}')">Play</button>
+                            <button class="icon-btn" onclick="shareApp('${project.title}', '${project.link}')" title="Share">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        };
+
+        // Interactions & Filters
+        window.filterCategory = (category) => {
+            currentFilter = category;
+            
+            if(category === 'All') sectionTitleElement.innerText = window.currentUser ? `Welcome back, ${window.currentUser.displayName.split(' ')[0]}!` : 'Recommended for you';
+            else if(category === 'Top charts') sectionTitleElement.innerText = 'Trending Top Charts';
+            else if(category === 'Library') sectionTitleElement.innerText = 'My Favorite Games';
+            else sectionTitleElement.innerText = `Premium ${category}s`;
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if(tab.innerText.includes(category) || (category === 'All' && tab.innerText.includes('For you'))) {
+                    tab.classList.add('active');
+                }
+            });
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.innerText.includes(category)) item.classList.add('active');
+            });
+            window.renderProjects(searchInput.value);
+        }
+
+        searchInput.addEventListener('input', (e) => window.renderProjects(e.target.value));
+
+        window.playGame = (appId, link) => {
+            update(ref(db, `apps/${appId}`), { playCount: increment(1) });
+            window.open(link, '_blank'); 
+        };
+
+        window.toggleFavorite = (appId) => {
+            if (!window.currentUser) return alert("Bhai, Favorites save karne ke liye login kar lo!");
+            const isFav = window.userFavorites[appId];
+            const updates = {};
+            updates[`users/${window.currentUser.uid}/favorites/${appId}`] = isFav ? null : true;
+            update(ref(db), updates);
+        };
+
+        window.shareApp = (title, link) => {
+            const url = window.location.origin + '/' + link;
+            if (navigator.share) {
+                navigator.share({ title: `Play ${title} on N-Store`, text: `Bhai yeh mast game check kar!`, url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert("Link copied to clipboard!");
+            }
+        };
+
+        // Chat Logic
+        const messagesRef = ref(db, 'global_chat');
+        const recentMessagesQuery = query(messagesRef, limitToLast(50));
+        let isChatOpen = false;
+        
+        document.getElementById('chatToggleBtn').onclick = () => {
+            isChatOpen = true;
+            document.getElementById('chatWindow').classList.add('active');
+            document.getElementById('chatBadge').style.display = 'none';
+            setTimeout(() => document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight, 300);
+        };
+        
+        document.getElementById('chatCloseBtn').onclick = () => {
+            isChatOpen = false;
+            document.getElementById('chatWindow').classList.remove('active');
+        };
+
+        const sendMessage = () => {
+            if (!window.currentUser) return;
+            const chatInput = document.getElementById('chatInput');
+            const text = chatInput.value.trim();
+            if (text.length === 0) return;
+            push(messagesRef, {
+                uid: window.currentUser.uid,
+                name: window.currentUser.displayName,
+                photo: window.currentUser.photoURL,
+                text: text,
+                timestamp: serverTimestamp()
+            });
+            chatInput.value = '';
+            chatInput.focus();
+        };
+
+        document.getElementById('chatSendBtn').onclick = sendMessage;
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        onChildAdded(recentMessagesQuery, (snapshot) => {
+            const msg = snapshot.val();
+            const msgId = snapshot.key; 
+            const isMe = window.currentUser && msg.uid === window.currentUser.uid;
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg-row ${isMe ? 'me' : 'other'}`;
+            msgDiv.id = `msg-${msgId}`; 
+            msgDiv.dataset.id = msgId;
+            
+            const photoUrl = msg.photo || 'https://via.placeholder.com/32';
+            const firstName = msg.name ? msg.name.split(' ')[0] : 'User';
+            const timeString = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            msgDiv.innerHTML = `
+                <img src="${photoUrl}" class="msg-avatar" alt="User">
+                <div class="msg-content">
+                    <span class="msg-name">
+                        ${!isMe ? firstName : 'You'} 
+                        <span class="msg-time">${timeString}</span>
+                    </span>
+                    <div class="msg-bubble">
+                        ${msg.text}
+                        ${isMe ? `<button class="delete-msg-btn" title="Delete Message"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            if (!isChatOpen && !isMe) document.getElementById('chatBadge').style.display = 'block';
+        });
+
+        document.getElementById('chatMessages').addEventListener('click', (e) => {
+            const deleteBtn = e.target.closest('.delete-msg-btn');
+            if (deleteBtn) {
+                const msgRow = deleteBtn.closest('.msg-row');
+                const msgId = msgRow.dataset.id;
+                if(confirm("Kya aap wakai is message ko delete karna chahte hain?")) {
+                    remove(ref(db, `global_chat/${msgId}`)).catch(err => alert("Error deleting message: " + err));
+                }
+            }
+        });
+
+        onChildRemoved(messagesRef, (snapshot) => {
+            const msgId = snapshot.key;
+            const msgElement = document.getElementById(`msg-${msgId}`);
+            if (msgElement) {
+                msgElement.classList.add('deleting');
+                setTimeout(() => msgElement.remove(), 300);
+            }
+        });
+
+        // Theme Toggle
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.onclick = () => {
+            const html = document.documentElement;
+            const newTheme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            themeBtn.innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>' : '<i class="fa-regular fa-moon"></i>';
+        };
+
+        // PWA Install Logic
+        let deferredPrompt;
+        const pwaPopup = document.getElementById('pwa-install-prompt');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => pwaPopup.classList.add('show'), 2000);
+        });
+        document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+            pwaPopup.classList.remove('show');
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            }
+        });
+        document.getElementById('pwa-cancel-btn').addEventListener('click', () => pwaPopup.classList.remove('show'));
+
+        // Admin Data Migration Script
+        window.uploadOldDataToFirebase = () => {
+            const oldProjects = [
+                { title: "Tic Tac Toe", developer: "Nitesh", category: "Game", rating: "4.9", link: "tictactoe.html", iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png", iconBg: "#ffffff", playCount: 154 },
+                { title: "Simon Game", developer: "Nitesh", category: "Game", rating: "4.9", link: "simon.html", imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", iconBg: "#4caf50", playCount: 342 },
+                { title: "Memory Game", developer: "Nitesh", category: "Game", rating: "4.9", link: "memorygame.html", imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", iconBg: "#ffffff", playCount: 89 },
+                { title: "Bubble Shooter", developer: "Nitesh", category: "Game", rating: "4.8", link: "hello1.html", iconClass: "fa-solid fa-circle-dot", iconBg: "#3b82f6", playCount: 450 },
+                { title: "FM Radio", developer: "Nitesh", category: "App", rating: "4.8", link: "hello.html", iconClass: "fa-solid fa-radio", iconBg: "#f97316", playCount: 210 },
+                { title: "N-OS System", developer: "Nitesh", category: "App", rating: "5.0", link: "hi.html", iconClass: "fa-solid fa-mobile-screen-button", iconBg: "#6366f1", playCount: 500 }
+            ];
+            if(confirm("Are you sure you want to push old hardcoded data to Firebase?")) {
+                oldProjects.forEach(app => push(ref(db, 'apps'), app));
+                alert("Data uploaded successfully! Ab 'Admin Setup' bar hide kar sakte ho code se.");
+            }
+        };
+    </script>
 </body>
 </html>
