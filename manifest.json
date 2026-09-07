@@ -1,15 +1,50 @@
 {
-  "name": "SinghPriya Infinity OS",
-  "short_name": "SP-OS",
-  "start_url": "index.html",
+  "name": "N-Store | Premium App & Game Hub",
+  "short_name": "N-Store",
+  "description": "Discover premium web apps and HTML5 games. Play instantly — no download required.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#00f2ff",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "background_color": "#0b1120",
+  "theme_color": "#10b981",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["games", "entertainment", "utilities"],
   "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/192/1183/1183672.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "https://cdn-icons-png.flaticon.com/512/1183/1183672.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tic Tac Toe Pro",
+      "short_name": "Tic Tac Toe",
+      "url": "./tictoctoe.html",
+      "description": "Play Tic Tac Toe with time attack mode"
+    },
+    {
+      "name": "Star Bubble Shooter",
+      "short_name": "Bubble Shooter",
+      "url": "./hello1.html",
+      "description": "Pop bubbles across endless levels"
+    },
+    {
+      "name": "N-OS System",
+      "short_name": "N-OS",
+      "url": "./hi.html",
+      "description": "Mobile OS simulation in the browser"
     }
   ]
 }

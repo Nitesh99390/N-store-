@@ -3,382 +3,877 @@
 <head>
     <meta name="google-site-verification" content="Za1pEupQLM-LlPnODka_5pMgrC6DyOzmuDaZBepfg7Q" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    
+
     <title>N-Store | Premium App & Game Hub</title>
-    <meta name="description" content="N-Store: Discover the best web apps, tools, and HTML5 games. Play instantly without downloading.">
-    <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <meta name="description" content="N-Store: Discover premium web apps, tools and HTML5 games. Play instantly in your browser — no download required.">
+    <meta name="keywords" content="N-Store, Web Games, HTML5 Apps, Play online, free games, browser games, PWA">
+    <meta name="author" content="Nitesh">
+    <link rel="canonical" href="https://nitesh99390.github.io/N-store-/">
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="N-Store | Premium App & Game Hub">
+    <meta property="og:description" content="Discover premium web apps and HTML5 games. Play instantly — no download required.">
+    <meta property="og:url" content="https://nitesh99390.github.io/N-store-/">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/1183/1183672.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="N-Store | Premium App & Game Hub">
+    <meta name="twitter:description" content="Discover premium web apps and HTML5 games. Play instantly.">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b1120" media="(prefers-color-scheme: dark)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="N-Store">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1183/1183672.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1183/1183672.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "N-Store",
+      "url": "https://nitesh99390.github.io/N-store-/",
+      "description": "Premium web apps and HTML5 games hub. Play instantly in your browser.",
+      "author": { "@type": "Person", "name": "Nitesh" }
+    }
+    </script>
+
+    <!-- Theme bootstrap (prevents flash) -->
     <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('nstore-theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = saved || (prefersDark ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('N-Store PWA Registered!'))
-            .catch(err => console.log('Registration failed', err));
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js')
+            .then(function () { console.log('[N-Store] PWA service worker registered'); })
+            .catch(function (err) { console.warn('[N-Store] SW registration failed', err); });
         });
       }
     </script>
-    
+
     <style>
-        /* Premium N-Store Theme Variables */
+        /* ============================================================
+           N-STORE DESIGN SYSTEM
+        ============================================================ */
         :root {
-            --bg-main: #f8fafc;
+            --bg-main: #f6f8fb;
             --surface: #ffffff;
+            --surface-2: #f1f5f9;
             --text-main: #0f172a;
             --text-sub: #64748b;
-            --primary: #10b981; /* Emerald Green */
+            --primary: #10b981;
             --primary-hover: #059669;
             --primary-light: #d1fae5;
+            --primary-rgb: 16, 185, 129;
+            --accent: #6366f1;
+            --danger: #ef4444;
+            --warning: #f59e0b;
             --border: #e2e8f0;
             --hover-bg: #f1f5f9;
-            --nav-bg: rgba(255, 255, 255, 0.85);
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            --card-hover-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --card-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.05);
+            --card-hover-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
             --popup-bg: rgba(255, 255, 255, 0.95);
+            --overlay: rgba(15, 23, 42, 0.55);
+            --skeleton-a: #eef2f7;
+            --skeleton-b: #f8fafc;
+            --hero-grad: linear-gradient(135deg, #0f766e 0%, #10b981 45%, #6366f1 100%);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="dark"] {
-            --bg-main: #0f172a;
-            --surface: #1e293b;
-            --text-main: #f8fafc;
+            --bg-main: #0b1120;
+            --surface: #111a2e;
+            --surface-2: #1a2440;
+            --text-main: #f1f5f9;
             --text-sub: #94a3b8;
-            --primary: #10b981;
-            --primary-hover: #34d399;
-            --primary-light: rgba(16, 185, 129, 0.15);
-            --border: #334155;
-            --hover-bg: #334155;
-            --nav-bg: rgba(30, 41, 59, 0.85);
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            --card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            --popup-bg: rgba(30, 41, 59, 0.95);
+            --primary: #34d399;
+            --primary-hover: #6ee7b7;
+            --primary-light: rgba(52, 211, 153, 0.15);
+            --primary-rgb: 52, 211, 153;
+            --accent: #818cf8;
+            --border: #223050;
+            --hover-bg: #1a2440;
+            --nav-bg: rgba(11, 17, 32, 0.82);
+            --card-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+            --card-hover-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+            --popup-bg: rgba(17, 26, 46, 0.95);
+            --overlay: rgba(0, 0, 0, 0.7);
+            --skeleton-a: #172036;
+            --skeleton-b: #1f2a45;
+            --hero-grad: linear-gradient(135deg, #064e3b 0%, #0f766e 45%, #4338ca 100%);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main); color: var(--text-main);
+            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+        button, input { font-family: inherit; }
+        button { cursor: pointer; }
+        img { display: block; }
+        :focus-visible { outline: 3px solid rgba(var(--primary-rgb), 0.55); outline-offset: 2px; border-radius: 6px; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-        /* Sleek Glassmorphism Navbar */
-        nav {
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        /* ---------- Scroll progress ---------- */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 1100; transition: width 0.1s linear;
+        }
+
+        /* ---------- Offline banner ---------- */
+        .offline-banner {
+            display: none; align-items: center; justify-content: center; gap: 8px;
+            background: var(--warning); color: #1f1300; font-weight: 700; font-size: 13px;
+            padding: 8px 16px; text-align: center;
+        }
+        .offline-banner.show { display: flex; }
+
+        /* ---------- Navbar ---------- */
+        nav.topbar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 28px; position: sticky; top: 0;
+            padding: 14px 28px; position: sticky; top: 0;
             background: var(--nav-bg); z-index: 100;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%);
             border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 12px;
         }
-        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; color: var(--text-main); cursor: pointer; letter-spacing: -0.5px;}
-        .logo-area i { filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3)); }
-        
+        .logo-area {
+            display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800;
+            color: var(--text-main); cursor: pointer; letter-spacing: -0.5px; background: none; border: none;
+        }
+        .logo-mark {
+            width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+            background: var(--hero-grad); color: #fff; font-size: 18px;
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.35);
+        }
+        .logo-area .beta { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 999px; background: var(--primary-light); color: var(--primary); letter-spacing: 0.5px; }
+
         .search-bar {
             background: var(--hover-bg); border-radius: 30px;
-            display: flex; align-items: center; padding: 12px 24px;
-            width: 40%; max-width: 500px; border: 1.5px solid transparent;
-            transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            display: flex; align-items: center; padding: 11px 20px;
+            width: 40%; max-width: 520px; border: 1.5px solid transparent;
+            transition: all 0.3s var(--ease); position: relative;
         }
         .search-bar:focus-within { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-light); }
-        .search-bar i { color: var(--text-sub); font-size: 16px; }
+        .search-bar i { color: var(--text-sub); font-size: 15px; }
         .search-bar input {
             border: none; background: transparent; color: var(--text-main);
-            outline: none; width: 100%; margin-left: 14px; font-size: 15px; font-weight: 500;
+            outline: none; width: 100%; margin-left: 12px; font-size: 15px; font-weight: 500;
         }
         .search-bar input::placeholder { color: var(--text-sub); font-weight: 400; }
-
-        .theme-btn { 
-            background: var(--surface); border: 1px solid var(--border); width: 44px; height: 44px; 
-            border-radius: 50%; font-size: 18px; color: var(--text-main); 
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        .search-bar input::-webkit-search-cancel-button, .search-bar input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+        .search-bar .kbd {
+            font-size: 11px; font-weight: 700; color: var(--text-sub); border: 1px solid var(--border);
+            border-radius: 6px; padding: 2px 7px; background: var(--surface); margin-left: 8px; white-space: nowrap;
         }
-        .theme-btn:hover { background: var(--hover-bg); transform: rotate(15deg) scale(1.05); }
+        .search-clear { display: none; border: none; background: none; color: var(--text-sub); margin-left: 6px; font-size: 14px; }
+        .search-bar.has-value .search-clear { display: block; }
+        .search-bar.has-value .kbd { display: none; }
 
-        .nav-actions { display: flex; align-items: center; gap: 12px; }
+        .icon-btn {
+            background: var(--surface); border: 1px solid var(--border); width: 42px; height: 42px;
+            border-radius: 50%; font-size: 17px; color: var(--text-main);
+            transition: all 0.3s var(--ease); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); position: relative;
+        }
+        .icon-btn:hover { background: var(--hover-bg); transform: translateY(-2px); }
+        .icon-btn .count {
+            position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px;
+            border-radius: 999px; background: var(--danger); color: #fff; font-size: 10px; font-weight: 800;
+            display: none; align-items: center; justify-content: center; border: 2px solid var(--surface);
+        }
+        .icon-btn .count.show { display: flex; }
+        .nav-actions { display: flex; align-items: center; gap: 10px; }
 
-        /* Refined Navigation Tabs */
+        .pill-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 0 16px; height: 42px; text-decoration: none;
+            border-radius: 22px; border: 1px solid var(--border); background: var(--surface);
+            color: var(--text-main); font-weight: 700; font-size: 14px; transition: all 0.25s var(--ease);
+        }
+        .pill-btn:hover { background: var(--hover-bg); transform: translateY(-2px); }
+        .pill-btn.primary { background: var(--primary); color: #fff; border-color: transparent; box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3); }
+        .pill-btn.primary:hover { background: var(--primary-hover); }
+
+        /* User menu */
+        .user-wrap { position: relative; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; cursor: pointer; }
+        .user-menu {
+            position: absolute; right: 0; top: 52px; min-width: 220px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--card-hover-shadow);
+            padding: 8px; display: none; z-index: 200; animation: fadeInUp 0.2s ease;
+        }
+        .user-menu.open { display: block; }
+        .user-menu .um-head { padding: 10px 12px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+        .user-menu .um-head strong { display: block; font-size: 14px; }
+        .user-menu .um-head span { font-size: 12px; color: var(--text-sub); word-break: break-all; }
+        .user-menu button {
+            width: 100%; text-align: left; padding: 10px 12px; border: none; background: none; color: var(--text-main);
+            border-radius: 10px; font-weight: 600; font-size: 14px; display: flex; gap: 10px; align-items: center;
+        }
+        .user-menu button:hover { background: var(--hover-bg); }
+        .user-menu button.danger { color: var(--danger); }
+
+        /* ---------- Tabs ---------- */
         .tabs {
-            display: flex; gap: 32px; padding: 0 28px;
+            display: flex; gap: 30px; padding: 0 28px;
             border-bottom: 1px solid var(--border); background: var(--surface);
-            overflow-x: auto; scrollbar-width: none;
+            overflow-x: auto; scrollbar-width: none; position: sticky; top: 71px; z-index: 90;
         }
         .tabs::-webkit-scrollbar { display: none; }
         .tab {
-            padding: 18px 0; font-weight: 600; font-size: 15px;
+            padding: 16px 0; font-weight: 600; font-size: 15px; background: none; border: none;
             color: var(--text-sub); cursor: pointer; white-space: nowrap;
-            transition: color 0.3s ease; position: relative;
+            transition: color 0.3s ease; position: relative; display: flex; gap: 8px; align-items: center;
         }
         .tab:hover { color: var(--text-main); }
         .tab.active { color: var(--primary); }
         .tab.active::after {
             content: ''; position: absolute; bottom: -1px; left: 0; width: 100%;
             height: 3px; background: var(--primary); border-radius: 4px 4px 0 0;
-            box-shadow: 0 -2px 8px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 -2px 8px rgba(var(--primary-rgb), 0.4);
         }
+        .tab .tab-count { font-size: 11px; font-weight: 700; background: var(--hover-bg); color: var(--text-sub); padding: 2px 7px; border-radius: 999px; }
+        .tab.active .tab-count { background: var(--primary-light); color: var(--primary); }
 
-        /* Main Content */
-        .container { max-width: 1280px; margin: 0 auto; padding: 40px 28px; }
-        .section-header { margin-bottom: 30px; display: flex; align-items: center; justify-content: space-between;}
-        .section-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
+        /* ---------- Layout ---------- */
+        .container { max-width: 1280px; margin: 0 auto; padding: 32px 28px 60px; width: 100%; flex: 1; }
 
-        /* Premium App Grid & Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ---------- Hero ---------- */
+        .hero {
+            position: relative; overflow: hidden; border-radius: 28px; padding: 44px 40px;
+            background: var(--hero-grad); color: #fff; margin-bottom: 36px;
+            display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: center;
+            box-shadow: 0 20px 50px rgba(var(--primary-rgb), 0.25);
+            animation: fadeInUp 0.6s var(--ease) backwards;
         }
+        .hero::before, .hero::after {
+            content: ''; position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.5; pointer-events: none;
+        }
+        .hero::before { width: 320px; height: 320px; background: #a7f3d0; top: -140px; right: -80px; }
+        .hero::after { width: 260px; height: 260px; background: #c7d2fe; bottom: -140px; left: 30%; }
+        .hero-eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 999px; margin-bottom: 16px; backdrop-filter: blur(6px); }
+        .hero h1 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 14px; position: relative; }
+        .hero p { font-size: 16px; opacity: 0.92; line-height: 1.6; max-width: 540px; margin-bottom: 24px; position: relative; }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+        .hero-btn {
+            display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 30px;
+            font-weight: 700; font-size: 15px; border: none; transition: all 0.25s var(--ease);
+        }
+        .hero-btn.light { background: #fff; color: #0f172a; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .hero-btn.light:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,0,0,0.2); }
+        .hero-btn.ghost { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(6px); }
+        .hero-btn.ghost:hover { background: rgba(255,255,255,0.25); transform: translateY(-3px); }
 
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 24px; }
-        
+        .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; position: relative; }
+        .stat {
+            background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 18px; padding: 18px 14px; text-align: center; backdrop-filter: blur(8px);
+            transition: transform 0.3s var(--ease);
+        }
+        .stat:hover { transform: translateY(-4px); }
+        .stat .num { font-size: 28px; font-weight: 800; letter-spacing: -1px; display: block; }
+        .stat .lbl { font-size: 12px; opacity: 0.85; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; }
+
+        /* ---------- Toolbar (chips + sort) ---------- */
+        .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+        .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+        .chips::-webkit-scrollbar { display: none; }
+        .chip {
+            padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface);
+            color: var(--text-sub); font-weight: 600; font-size: 13px; white-space: nowrap; transition: all 0.25s var(--ease);
+            display: inline-flex; align-items: center; gap: 7px;
+        }
+        .chip:hover { border-color: var(--primary); color: var(--text-main); }
+        .chip.active { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); }
+        [data-theme="dark"] .chip.active { background: var(--primary); color: #052e1c; border-color: var(--primary); }
+
+        .toolbar-right { display: flex; align-items: center; gap: 10px; }
+        .select-wrap { position: relative; }
+        .select-wrap select {
+            appearance: none; -webkit-appearance: none; padding: 9px 36px 9px 14px; border-radius: 999px;
+            border: 1px solid var(--border); background: var(--surface); color: var(--text-main);
+            font-weight: 600; font-size: 13px; outline: none; cursor: pointer; font-family: inherit;
+        }
+        .select-wrap::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 10px; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-sub); pointer-events: none; }
+        .view-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--surface); }
+        .view-toggle button { border: none; background: none; width: 38px; height: 36px; color: var(--text-sub); }
+        .view-toggle button.active { background: var(--primary-light); color: var(--primary); }
+
+        .section-header { margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: var(--primary); font-size: 18px; }
+        .result-count { font-size: 13px; color: var(--text-sub); font-weight: 600; }
+
+        /* ---------- Recently played rail ---------- */
+        .rail-section { margin-bottom: 36px; }
+        .rail { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 8px; }
+        .rail::-webkit-scrollbar { display: none; }
+        .rail-card {
+            flex: 0 0 auto; display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 10px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px; text-decoration: none; color: inherit;
+            transition: all 0.25s var(--ease); box-shadow: var(--card-shadow); min-width: 200px;
+        }
+        .rail-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover-shadow); border-color: var(--primary-light); }
+        .rail-icon { width: 44px; height: 44px; border-radius: 12px; overflow: hidden; display: grid; place-items: center; color: #fff; font-size: 20px; flex-shrink: 0; }
+        .rail-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .rail-card strong { display: block; font-size: 14px; font-weight: 700; }
+        .rail-card span { font-size: 12px; color: var(--text-sub); }
+
+        /* ---------- Grid ---------- */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 22px; }
+        .app-grid.list-view { grid-template-columns: 1fr; gap: 12px; }
+
         .app-card {
-            background: var(--surface); display: flex; flex-direction: column; 
+            background: var(--surface); display: flex; flex-direction: column; position: relative;
             align-items: center; text-align: center; text-decoration: none; color: inherit;
-            padding: 24px 20px; border-radius: 24px; border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
-            animation: fadeInUp 0.5s ease backwards;
+            padding: 22px 18px 18px; border-radius: var(--radius-lg); border: 1px solid var(--border);
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
+            box-shadow: var(--card-shadow); animation: fadeInUp 0.5s var(--ease) backwards; cursor: pointer;
         }
-        .app-card:hover { 
-            transform: translateY(-6px) scale(1.02); 
-            box-shadow: var(--card-hover-shadow); 
-            border-color: var(--primary-light);
+        .app-card:hover { transform: translateY(-6px); box-shadow: var(--card-hover-shadow); border-color: rgba(var(--primary-rgb), 0.4); }
+
+        .card-badge {
+            position: absolute; top: 12px; left: 12px; font-size: 10px; font-weight: 800; letter-spacing: 0.6px;
+            text-transform: uppercase; padding: 4px 9px; border-radius: 999px; color: #fff;
+            background: linear-gradient(135deg, #f97316, #ef4444); box-shadow: 0 4px 10px rgba(239,68,68,0.3);
         }
+        .card-badge.new { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 10px rgba(99,102,241,0.3); }
+        .card-badge.top { background: linear-gradient(135deg, #f59e0b, #f97316); box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
+
+        .fav-btn {
+            position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%;
+            border: 1px solid var(--border); background: var(--surface); color: var(--text-sub); font-size: 14px;
+            display: grid; place-items: center; transition: all 0.25s var(--ease); z-index: 2;
+        }
+        .fav-btn:hover { transform: scale(1.1); color: var(--danger); border-color: var(--danger); }
+        .fav-btn.active { color: #fff; background: var(--danger); border-color: var(--danger); }
+        @keyframes heartPop { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+        .fav-btn.pop { animation: heartPop 0.35s ease; }
 
         .app-icon {
-            width: 85px; height: 85px; border-radius: 22px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 38px; color: white; margin-bottom: 18px;
-            overflow: hidden; transition: transform 0.3s ease;
+            width: 86px; height: 86px; border-radius: 22px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 38px; color: white; margin-bottom: 16px;
+            overflow: hidden; transition: transform 0.35s var(--ease);
         }
-        .app-card:hover .app-icon { transform: scale(1.05) rotate(-3deg); }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .app-card:hover .app-icon { transform: scale(1.06) rotate(-3deg); }
 
-        .app-info { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-bottom: 20px; }
+        .app-info { display: flex; flex-direction: column; gap: 5px; width: 100%; margin-bottom: 16px; }
         .app-title { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .app-title mark { background: var(--primary-light); color: var(--primary); border-radius: 4px; padding: 0 2px; }
         .app-dev { font-size: 13px; color: var(--text-sub); font-weight: 500; }
-        .app-meta { font-size: 12px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;}
-        .star { color: #fbbf24; font-size: 12px; }
+        .app-meta { font-size: 12px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 2px; }
+        .app-meta span { display: inline-flex; align-items: center; gap: 4px; }
+        .star { color: #fbbf24; }
+        .app-tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+        .tag { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--hover-bg); color: var(--text-sub); }
 
         .install-btn {
             background-color: var(--primary-light); color: var(--primary);
             border: none; padding: 10px 0; width: 100%;
-            border-radius: 30px; font-weight: 700; font-size: 14px;
-            cursor: pointer; transition: all 0.3s ease; margin-top: auto;
+            border-radius: 30px; font-weight: 700; font-size: 14px; text-decoration: none;
+            transition: all 0.3s ease; margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .app-card:hover .install-btn { background-color: var(--primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .app-card:hover .install-btn { background-color: var(--primary); color: white; box-shadow: 0 6px 14px rgba(var(--primary-rgb), 0.35); }
 
-        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 60px 20px; font-size: 18px; line-height: 1.6; font-weight: 500;}
+        /* List view */
+        .app-grid.list-view .app-card { flex-direction: row; text-align: left; padding: 14px 16px; gap: 16px; border-radius: 18px; }
+        .app-grid.list-view .app-icon { width: 64px; height: 64px; font-size: 28px; margin: 0; border-radius: 16px; flex-shrink: 0; }
+        .app-grid.list-view .app-info { margin: 0; flex: 1; text-align: left; }
+        .app-grid.list-view .app-meta, .app-grid.list-view .app-tags { justify-content: flex-start; }
+        .app-grid.list-view .install-btn { width: auto; padding: 10px 20px; margin: 0; }
+        .app-grid.list-view .card-badge { position: static; margin-bottom: 4px; align-self: flex-start; }
+        .app-grid.list-view .fav-btn { position: static; margin-left: 8px; order: 10; }
 
-        /* PWA Install Popup */
+        /* Skeleton */
+        .skeleton-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 18px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .sk { background: linear-gradient(90deg, var(--skeleton-a) 25%, var(--skeleton-b) 50%, var(--skeleton-a) 75%); background-size: 800px 100%; animation: shimmer 1.4s infinite linear; border-radius: 10px; }
+        .sk-icon { width: 86px; height: 86px; border-radius: 22px; }
+        .sk-line { height: 12px; width: 70%; } .sk-line.short { width: 45%; }
+        .sk-btn { height: 36px; width: 100%; border-radius: 30px; margin-top: 8px; }
+
+        .no-results { grid-column: 1 / -1; text-align: center; color: var(--text-sub); padding: 70px 20px; font-size: 17px; line-height: 1.6; font-weight: 500; }
+        .no-results i { display: block; margin: 0 auto 18px; }
+        .no-results .link-btn { margin-top: 14px; }
+        .link-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; color: var(--primary); font-weight: 700; font-size: 14px; }
+        .link-btn:hover { text-decoration: underline; }
+
+        /* ---------- Footer ---------- */
+        footer { border-top: 1px solid var(--border); background: var(--surface); padding: 40px 28px 110px; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 32px; }
+        .footer-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; margin-bottom: 12px; }
+        .footer-inner p { color: var(--text-sub); font-size: 14px; line-height: 1.6; max-width: 380px; }
+        .footer-inner h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); margin-bottom: 14px; }
+        .footer-inner ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-inner li button, .footer-inner li a { background: none; border: none; color: var(--text-main); font-size: 14px; font-weight: 600; text-decoration: none; padding: 0; }
+        .footer-inner li button:hover, .footer-inner li a:hover { color: var(--primary); }
+        .footer-bottom { max-width: 1280px; margin: 28px auto 0; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; color: var(--text-sub); font-size: 13px; }
+        .socials { display: flex; gap: 10px; }
+        .socials a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center; color: var(--text-main); text-decoration: none; transition: 0.25s; }
+        .socials a:hover { background: var(--primary); color: #fff; border-color: transparent; transform: translateY(-2px); }
+
+        /* ---------- Modal ---------- */
+        .modal-backdrop {
+            position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(6px);
+            z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-backdrop.open { opacity: 1; pointer-events: all; }
+        .modal {
+            background: var(--surface); border-radius: 28px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
+            border: 1px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            transform: translateY(30px) scale(0.97); transition: transform 0.35s var(--ease); position: relative;
+        }
+        .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+        .modal-hero { padding: 34px 28px 24px; background: var(--hero-grad); color: #fff; display: flex; gap: 20px; align-items: center; position: relative; overflow: hidden; }
+        .modal-hero::after { content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.15); right: -60px; top: -80px; filter: blur(10px); }
+        .modal-icon { width: 96px; height: 96px; border-radius: 26px; overflow: hidden; display: grid; place-items: center; font-size: 42px; color: #fff; box-shadow: 0 14px 30px rgba(0,0,0,0.25); flex-shrink: 0; position: relative; z-index: 1; }
+        .modal-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-hero h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; position: relative; z-index: 1; }
+        .modal-hero .m-dev { opacity: 0.9; font-size: 14px; font-weight: 600; position: relative; z-index: 1; }
+        .modal-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255,255,255,0.2); color: #fff; font-size: 16px; z-index: 2; transition: 0.2s; }
+        .modal-close:hover { background: rgba(255,255,255,0.35); transform: rotate(90deg); }
+        .modal-body { padding: 24px 28px 28px; }
+        .modal-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px; }
+        .m-stat { background: var(--hover-bg); border-radius: 14px; padding: 12px 8px; text-align: center; }
+        .m-stat strong { display: block; font-size: 16px; font-weight: 800; }
+        .m-stat span { font-size: 11px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+        .modal-body h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+        .modal-body p { font-size: 14px; line-height: 1.7; color: var(--text-sub); margin-bottom: 18px; }
+        .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+        .modal-tags .tag { font-size: 12px; padding: 6px 12px; }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-actions .pill-btn { flex: 1; justify-content: center; height: 48px; font-size: 15px; }
+        .modal-actions .icon-btn { width: 48px; height: 48px; border-radius: 16px; }
+
+        /* ---------- Toasts ---------- */
+        .toast-stack { position: fixed; top: 20px; right: 20px; z-index: 1300; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast {
+            background: var(--surface); color: var(--text-main); border: 1px solid var(--border);
+            border-left: 4px solid var(--primary); border-radius: 14px; padding: 12px 16px; min-width: 260px; max-width: 360px;
+            box-shadow: var(--card-hover-shadow); display: flex; gap: 12px; align-items: center; font-size: 14px; font-weight: 600;
+            animation: toastIn 0.35s var(--ease); pointer-events: all;
+        }
+        .toast i { color: var(--primary); font-size: 16px; }
+        .toast.error { border-left-color: var(--danger); } .toast.error i { color: var(--danger); }
+        .toast.info { border-left-color: var(--accent); } .toast.info i { color: var(--accent); }
+        .toast.out { animation: toastOut 0.3s ease forwards; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastOut { to { opacity: 0; transform: translateX(40px); } }
+
+        /* ---------- PWA popup ---------- */
         .pwa-popup {
             position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150%);
             width: 90%; max-width: 400px; background: var(--popup-bg);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             padding: 20px; border-radius: 24px; border: 1px solid var(--border);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 1000;
             display: flex; flex-direction: column; gap: 16px;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0;
+            transition: transform 0.5s var(--ease), opacity 0.4s; opacity: 0;
         }
         .pwa-popup.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        
         .pwa-content { display: flex; align-items: center; gap: 16px; }
-        .pwa-icon { width: 50px; height: 50px; border-radius: 14px; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white;}
-        .pwa-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text-main);}
-        .pwa-text p { font-size: 13px; color: var(--text-sub); line-height: 1.4;}
-        
+        .pwa-icon { width: 50px; height: 50px; border-radius: 14px; background: var(--hero-grad); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; flex-shrink: 0; }
+        .pwa-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .pwa-text p { font-size: 13px; color: var(--text-sub); line-height: 1.4; }
         .pwa-actions { display: flex; gap: 12px; }
-        .pwa-btn { flex: 1; padding: 10px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: 0.2s;}
+        .pwa-btn { flex: 1; padding: 11px; border-radius: 20px; font-weight: 700; font-size: 14px; border: none; transition: 0.2s; }
         .pwa-btn-cancel { background: var(--hover-bg); color: var(--text-main); }
         .pwa-btn-install { background: var(--primary); color: white; }
         .pwa-btn-install:hover { background: var(--primary-hover); }
 
-        /* Mobile Bottom Nav */
+        /* ---------- Bottom nav ---------- */
         .bottom-nav {
-            display: none; position: fixed; bottom: 0; width: 100%;
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--nav-bg); border-top: 1px solid var(--border);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            justify-content: space-around; padding: 14px 0; z-index: 99;
-            padding-bottom: env(safe-area-inset-bottom, 14px);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            justify-content: space-around; padding: 10px 0; z-index: 99;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
         }
-        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-sub); font-size: 12px; cursor: pointer; font-weight: 600; transition: color 0.3s ease;}
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-sub); font-size: 11px; background: none; border: none; font-weight: 600; transition: color 0.3s ease; padding: 4px 10px; position: relative; }
         .bottom-nav-item.active { color: var(--primary); }
-        .bottom-nav-item i { transition: transform 0.3s ease; }
-        .bottom-nav-item.active i { transform: translateY(-3px); }
+        .bottom-nav-item i { font-size: 19px; transition: transform 0.3s ease; }
+        .bottom-nav-item.active i { transform: translateY(-2px); }
+        .bottom-nav-item .dot { position: absolute; top: 2px; right: 10px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: none; }
+        .bottom-nav-item .dot.show { display: block; }
 
-        /* ------------- PREMIUM CHAT SYSTEM STYLES ------------- */
+        /* ---------- Back to top ---------- */
+        .to-top {
+            position: fixed; bottom: 30px; left: 30px; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--border);
+            background: var(--surface); color: var(--text-main); box-shadow: var(--card-shadow); z-index: 900;
+            opacity: 0; transform: translateY(20px); pointer-events: none; transition: all 0.3s var(--ease); display: grid; place-items: center;
+        }
+        .to-top.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+        .to-top:hover { background: var(--primary); color: #fff; }
+
+        /* ---------- Chat ---------- */
         .chat-toggle-btn {
             position: fixed; bottom: 30px; right: 30px; z-index: 1000;
             width: 60px; height: 60px; border-radius: 50%;
-            background: var(--primary); color: white; border: none;
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-            font-size: 24px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--hero-grad); color: white; border: none;
+            box-shadow: 0 10px 28px rgba(var(--primary-rgb), 0.4);
+            font-size: 24px; transition: all 0.3s var(--ease);
             display: flex; justify-content: center; align-items: center;
         }
-        .chat-toggle-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5); }
+        .chat-toggle-btn:hover { transform: translateY(-5px) scale(1.05); }
         .chat-toggle-btn .badge {
-            position: absolute; top: 0; right: 0; background: #ef4444; width: 14px; height: 14px;
-            border-radius: 50%; border: 2px solid var(--surface); display: none;
+            position: absolute; top: -2px; right: -2px; background: var(--danger); min-width: 20px; height: 20px; padding: 0 5px;
+            border-radius: 999px; border: 2px solid var(--surface); display: none; font-size: 11px; font-weight: 800; align-items: center; justify-content: center;
         }
+        .chat-toggle-btn .badge.show { display: flex; }
 
         .chat-window {
-            position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px;
-            background: var(--surface); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            position: fixed; bottom: 100px; right: 30px; width: 380px; height: 560px; max-height: calc(100vh - 130px);
+            background: var(--surface); border-radius: 26px; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
             z-index: 1001; border: 1px solid var(--border);
             display: flex; flex-direction: column; overflow: hidden;
-            transform: translateY(20px); opacity: 0; pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px) scale(0.98); opacity: 0; pointer-events: none;
+            transition: all 0.4s var(--ease);
         }
-        .chat-window.active { transform: translateY(0); opacity: 1; pointer-events: all; }
+        .chat-window.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
 
         .chat-header {
-            padding: 18px 20px; background: var(--primary); color: white;
+            padding: 16px 20px; background: var(--hero-grad); color: white;
             display: flex; justify-content: space-between; align-items: center;
-            font-weight: 700; font-size: 16px;
         }
-        .chat-header .close-btn { cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.2); transition: 0.2s;}
-        .chat-header .close-btn:hover { background: rgba(255,255,255,0.3); }
+        .chat-header .ch-title { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+        .chat-header .ch-sub { font-size: 11px; opacity: 0.85; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+        .online-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,0.3); display: inline-block; }
+        .chat-header .close-btn { cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: #fff; transition: 0.2s; }
+        .chat-header .close-btn:hover { background: rgba(255,255,255,0.35); }
 
         .chat-messages {
-            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
+            flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
             background: var(--bg-main); scroll-behavior: smooth;
         }
-        
-        .msg-row { display: flex; gap: 10px; max-width: 85%; position: relative; transition: all 0.3s ease; }
+        .chat-empty { margin: auto; text-align: center; color: var(--text-sub); font-size: 13px; line-height: 1.6; }
+        .chat-empty i { font-size: 36px; margin-bottom: 10px; color: var(--primary); display: block; }
+        .day-divider { align-self: center; font-size: 11px; font-weight: 700; color: var(--text-sub); background: var(--surface); border: 1px solid var(--border); padding: 4px 12px; border-radius: 999px; }
+
+        .msg-row { display: flex; gap: 10px; max-width: 85%; position: relative; animation: fadeInUp 0.25s ease; }
         .msg-row.me { align-self: flex-end; flex-direction: row-reverse; }
         .msg-row.other { align-self: flex-start; }
-        
-        /* Delete Animation */
-        @keyframes fadeOutMsg {
-            to { opacity: 0; transform: scale(0.9); margin-bottom: -50px; }
-        }
+        @keyframes fadeOutMsg { to { opacity: 0; transform: scale(0.9); margin-bottom: -50px; } }
         .msg-row.deleting { animation: fadeOutMsg 0.3s ease forwards; }
-        
-        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--border);}
-        
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--border); }
         .msg-content { display: flex; flex-direction: column; gap: 4px; position: relative; }
         .msg-row.me .msg-content { align-items: flex-end; }
         .msg-row.other .msg-content { align-items: flex-start; }
-
-        .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; display: flex; gap: 6px; align-items: center;}
-        .msg-time { font-size: 9px; opacity: 0.7; font-weight: normal; }
-        
+        .msg-name { font-size: 11px; color: var(--text-sub); font-weight: 600; padding: 0 4px; display: flex; gap: 6px; align-items: center; }
+        .msg-time { font-size: 10px; opacity: 0.7; font-weight: normal; }
         .msg-bubble {
-            padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4;
-            word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: relative;
+            padding: 11px 15px; border-radius: 18px; font-size: 14px; line-height: 1.45;
+            word-wrap: break-word; overflow-wrap: anywhere; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative;
         }
-        .msg-row.me .msg-bubble { background: var(--primary); color: white; border-top-right-radius: 4px; }
+        .msg-row.me .msg-bubble { background: var(--primary); color: #fff; border-top-right-radius: 4px; }
+        [data-theme="dark"] .msg-row.me .msg-bubble { color: #052e1c; }
         .msg-row.other .msg-bubble { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); border-top-left-radius: 4px; }
+        .msg-bubble a { color: inherit; text-decoration: underline; }
 
-        /* Delete Button UI */
         .delete-msg-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
-            left: -30px; width: 24px; height: 24px; border-radius: 50%;
-            background: #ef4444; color: white; border: none; cursor: pointer;
+            left: -34px; width: 26px; height: 26px; border-radius: 50%;
+            background: var(--danger); color: white; border: none;
             display: flex; align-items: center; justify-content: center;
             font-size: 10px; opacity: 0; transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
         }
-        .msg-row.me:hover .delete-msg-btn { opacity: 1; left: -35px; }
+        .msg-row.me:hover .delete-msg-btn { opacity: 1; }
         .delete-msg-btn:hover { background: #dc2626; transform: translateY(-50%) scale(1.1); }
 
-        .chat-input-area {
-            padding: 16px; background: var(--surface); border-top: 1px solid var(--border);
-            display: flex; gap: 10px; align-items: center;
-        }
+        .chat-input-area { padding: 14px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
         .chat-input-area input {
             flex: 1; padding: 12px 18px; border-radius: 24px; border: 1px solid var(--border);
-            background: var(--hover-bg); color: var(--text-main); outline: none; transition: 0.3s;
+            background: var(--hover-bg); color: var(--text-main); outline: none; transition: 0.3s; font-size: 14px;
         }
         .chat-input-area input:focus { border-color: var(--primary); background: var(--surface); }
+        .char-count { font-size: 11px; color: var(--text-sub); font-weight: 600; min-width: 30px; text-align: right; }
         .chat-send-btn {
             width: 44px; height: 44px; border-radius: 50%; background: var(--primary);
-            color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            color: white; border: none; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s; box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3); flex-shrink: 0;
         }
         .chat-send-btn:hover { background: var(--primary-hover); transform: scale(1.05); }
-        .chat-send-btn:disabled { background: var(--text-sub); cursor: not-allowed; box-shadow: none; transform: none;}
+        .chat-send-btn:disabled { background: var(--text-sub); cursor: not-allowed; box-shadow: none; transform: none; opacity: 0.6; }
 
         .chat-overlay-login {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(var(--bg-main), 0.9); backdrop-filter: blur(5px);
+            position: absolute; inset: 0; background: var(--popup-bg); backdrop-filter: blur(6px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10; gap: 15px; text-align: center; padding: 20px;
+            z-index: 10; gap: 14px; text-align: center; padding: 24px;
         }
+        .chat-overlay-login h3 { font-size: 18px; font-weight: 800; }
+        .chat-overlay-login p { color: var(--text-sub); font-size: 14px; line-height: 1.5; }
 
+        /* ---------- Responsive ---------- */
+        @media (max-width: 960px) {
+            .hero { grid-template-columns: 1fr; padding: 32px 26px; }
+            .hero-stats { grid-template-columns: repeat(3, 1fr); }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
         @media (max-width: 768px) {
-            .search-bar { width: 100%; max-width: none; margin-top: 12px; order: 3;}
-            nav { padding: 16px; justify-content: space-between; }
-            .nav-actions { order: 2; }
+            .search-bar { width: 100%; max-width: none; order: 3; padding: 10px 16px; }
+            .search-bar .kbd { display: none; }
+            nav.topbar { padding: 12px 16px; gap: 10px; }
+            .nav-actions { order: 2; gap: 8px; }
+            .logo-area { font-size: 20px; gap: 8px; }
+            .logo-area .beta { display: none; }
+            .logo-mark { width: 34px; height: 34px; font-size: 16px; }
+            .icon-btn { width: 40px; height: 40px; font-size: 16px; }
+            #loginBtn { width: 40px; height: 40px; padding: 0; justify-content: center; border-radius: 50%; }
+            #loginBtn span { display: none; }
+            .user-avatar { width: 38px; height: 38px; }
+            .hero h1 br { display: none; }
+            .tabs { top: 0; position: static; padding: 0 16px; gap: 22px; }
             .bottom-nav { display: flex; }
-            .container { padding: 24px 16px 100px 16px; }
-            .app-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
-            .app-card { padding: 20px 16px; border-radius: 20px;}
-            .app-icon { width: 75px; height: 75px; font-size: 32px; border-radius: 18px;}
+            .container { padding: 20px 16px 40px; }
+            .hero { border-radius: 22px; margin-bottom: 26px; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 14px; }
+            .stat .num { font-size: 22px; }
+            .app-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+            .app-card { padding: 20px 14px 16px; border-radius: 20px; }
+            .app-icon { width: 72px; height: 72px; font-size: 32px; border-radius: 18px; }
             .pwa-popup { bottom: 90px; width: 92%; }
-            .chat-window { width: 90%; right: 5%; bottom: 100px; height: 60vh; z-index: 1001; }
-            .chat-toggle-btn { bottom: 100px; right: 20px; width: 55px; height: 55px; z-index: 1000;}
-            .msg-row.me .delete-msg-btn { opacity: 1; left: -30px; } /* Always visible on mobile for user's msgs */
+            .chat-window { width: calc(100% - 20px); right: 10px; left: 10px; bottom: 90px; height: 65vh; max-height: calc(100vh - 110px); }
+            .chat-toggle-btn { bottom: 90px; right: 16px; width: 54px; height: 54px; font-size: 20px; }
+            .msg-row.me .delete-msg-btn { opacity: 1; }
+            .to-top { bottom: 90px; left: 16px; width: 42px; height: 42px; }
+            .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+            footer { padding: 32px 16px 120px; }
+            .modal-stats { grid-template-columns: repeat(2, 1fr); }
+            .modal-hero { padding: 28px 22px 20px; }
+            .modal-body { padding: 20px 22px 24px; }
+            .toast-stack { top: 12px; right: 12px; left: 12px; }
+            .toast { max-width: none; min-width: 0; }
+        }
+        @media (max-width: 420px) {
+            .app-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-stats { gap: 8px; }
+            .stat { padding: 12px 8px; }
         }
     </style>
 </head>
 <body>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <div class="offline-banner" id="offlineBanner" role="status"><i class="fa-solid fa-wifi"></i> You are offline — cached content is shown.</div>
 
-    <nav>
-        <div class="logo-area" onclick="filterCategory('All')">
-            <i class="fa-brands fa-google-play" style="color: var(--primary);"></i>
+    <!-- ========== NAVBAR ========== -->
+    <nav class="topbar" aria-label="Main navigation">
+        <button class="logo-area" onclick="filterCategory('All')" aria-label="N-Store home">
+            <span class="logo-mark"><i class="fa-solid fa-store"></i></span>
             <span>N-Store</span>
+            <span class="beta">PRO</span>
+        </button>
+
+        <div class="search-bar" id="searchBar" role="search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <label for="searchInput" class="sr-only">Search apps and games</label>
+            <input type="search" id="searchInput" placeholder="Search apps, games, tags..." autocomplete="off">
+            <span class="kbd" aria-hidden="true">/</span>
+            <button class="search-clear" id="searchClear" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
-        <div class="search-bar">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search premium apps & games...">
-        </div>
-        
+
         <div class="nav-actions">
+            <button class="icon-btn" id="favNavBtn" title="Favourites" aria-label="Favourites">
+                <i class="fa-regular fa-heart"></i>
+                <span class="count" id="favCount">0</span>
+            </button>
+
             <div id="auth-section" style="display: flex; gap: 10px; align-items: center;">
-                <button id="loginBtn" class="theme-btn" title="Login with Google" style="width: auto; padding: 0 16px; border-radius: 22px; font-size: 14px; font-weight: 700;">
-                    <i class="fa-brands fa-google" style="margin-right: 6px; color: var(--text-main);"></i> Login
+                <button id="loginBtn" class="pill-btn" title="Login with Google">
+                    <i class="fa-brands fa-google"></i> <span>Login</span>
                 </button>
-                <div id="userProfile" style="display: none; align-items: center; gap: 10px;">
-                    <img id="userPhoto" src="" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover;">
-                    <button id="logoutBtn" class="theme-btn" title="Logout" style="width: 38px; height: 38px;">
-                        <i class="fa-solid fa-sign-out-alt"></i>
-                    </button>
+                <div id="userProfile" class="user-wrap" style="display: none;">
+                    <img id="userPhoto" class="user-avatar" src="" alt="Your profile" referrerpolicy="no-referrer">
+                    <div class="user-menu" id="userMenu" role="menu">
+                        <div class="um-head"><strong id="umName">User</strong><span id="umEmail"></span></div>
+                        <button id="umFavBtn" role="menuitem"><i class="fa-solid fa-heart"></i> My favourites</button>
+                        <button id="umChatBtn" role="menuitem"><i class="fa-solid fa-comment-dots"></i> Open chat</button>
+                        <button id="logoutBtn" class="danger" role="menuitem"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+                    </div>
                 </div>
             </div>
 
-            <button class="theme-btn" id="themeToggle" title="Toggle Dark Mode">
+            <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle dark mode">
                 <i class="fa-regular fa-moon"></i>
             </button>
         </div>
     </nav>
 
-    <div class="tabs">
-        <div class="tab active" onclick="filterCategory('All')">For you</div>
-        <div class="tab" onclick="filterCategory('Top charts')">Top charts</div>
-        <div class="tab" onclick="filterCategory('Game')">Games</div>
-        <div class="tab" onclick="filterCategory('App')">Apps</div>
+    <!-- ========== TABS ========== -->
+    <div class="tabs" role="tablist" id="tabs">
+        <button class="tab active" role="tab" data-cat="All" onclick="filterCategory('All')"><i class="fa-solid fa-sparkles"></i>For you</button>
+        <button class="tab" role="tab" data-cat="Top charts" onclick="filterCategory('Top charts')"><i class="fa-solid fa-ranking-star"></i>Top charts</button>
+        <button class="tab" role="tab" data-cat="Game" onclick="filterCategory('Game')"><i class="fa-solid fa-gamepad"></i>Games <span class="tab-count" id="countGame">0</span></button>
+        <button class="tab" role="tab" data-cat="App" onclick="filterCategory('App')"><i class="fa-solid fa-layer-group"></i>Apps <span class="tab-count" id="countApp">0</span></button>
+        <button class="tab" role="tab" data-cat="Favourites" onclick="filterCategory('Favourites')"><i class="fa-solid fa-heart"></i>Favourites</button>
     </div>
 
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title" id="sectionTitle">Recommended for you</h2>
+    <main class="container">
+        <!-- ========== HERO ========== -->
+        <section class="hero" id="hero" aria-label="Welcome">
+            <div>
+                <span class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Instant Play · No Downloads</span>
+                <h1 id="heroTitle">Premium apps & games,<br>right in your browser.</h1>
+                <p>Hand-crafted HTML5 experiences by Nitesh. Zero installs, zero waiting — tap and play on any device, with offline support as a PWA.</p>
+                <div class="hero-actions">
+                    <button class="hero-btn light" onclick="filterCategory('Game'); scrollToGrid();"><i class="fa-solid fa-gamepad"></i> Explore Games</button>
+                    <button class="hero-btn ghost" id="heroInstallBtn"><i class="fa-solid fa-download"></i> Install App</button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><span class="num" data-count id="statTotal">0</span><span class="lbl">Titles</span></div>
+                <div class="stat"><span class="num" id="statRating">4.9</span><span class="lbl">Avg rating</span></div>
+                <div class="stat"><span class="num" data-count id="statPlays">0</span><span class="lbl">Plays</span></div>
+            </div>
+        </section>
+
+        <!-- ========== RECENTLY PLAYED ========== -->
+        <section class="rail-section" id="recentSection" style="display:none;">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Continue playing</h2>
+                <button class="link-btn" id="clearRecent"><i class="fa-solid fa-trash-can"></i> Clear</button>
+            </div>
+            <div class="rail" id="recentRail"></div>
+        </section>
+
+        <!-- ========== TOOLBAR ========== -->
+        <div class="toolbar">
+            <div class="chips" id="chips" aria-label="Filter by tag"></div>
+            <div class="toolbar-right">
+                <div class="select-wrap">
+                    <label for="sortSelect" class="sr-only">Sort</label>
+                    <select id="sortSelect">
+                        <option value="featured">Featured</option>
+                        <option value="rating">Top rated</option>
+                        <option value="plays">Most played</option>
+                        <option value="newest">Newest</option>
+                        <option value="az">A → Z</option>
+                    </select>
+                </div>
+                <div class="view-toggle" role="group" aria-label="View">
+                    <button id="viewGrid" class="active" title="Grid view" aria-label="Grid view"><i class="fa-solid fa-grip"></i></button>
+                    <button id="viewList" title="List view" aria-label="List view"><i class="fa-solid fa-list"></i></button>
+                </div>
+            </div>
         </div>
-        <div class="app-grid" id="projectGrid">
+
+        <!-- ========== GRID ========== -->
+        <section aria-live="polite">
+            <div class="section-header">
+                <h2 class="section-title" id="sectionTitle"><i class="fa-solid fa-sparkles"></i> Recommended for you</h2>
+                <span class="result-count" id="resultCount"></span>
             </div>
+            <div class="app-grid" id="projectGrid"></div>
+        </section>
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand"><span class="logo-mark"><i class="fa-solid fa-store"></i></span> N-Store</div>
+                <p>A curated hub of premium web apps and HTML5 games. Built with love by Nitesh — fast, installable, and free forever.</p>
+            </div>
+            <div>
+                <h4>Browse</h4>
+                <ul>
+                    <li><button onclick="filterCategory('Game'); scrollToGrid();">Games</button></li>
+                    <li><button onclick="filterCategory('App'); scrollToGrid();">Apps</button></li>
+                    <li><button onclick="filterCategory('Top charts'); scrollToGrid();">Top charts</button></li>
+                    <li><button onclick="filterCategory('Favourites'); scrollToGrid();">Favourites</button></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Community</h4>
+                <ul>
+                    <li><button onclick="document.getElementById('chatToggleBtn').click()">Global chat</button></li>
+                    <li><a href="https://github.com/Nitesh99390/N-store-" target="_blank" rel="noopener">GitHub repository</a></li>
+                    <li><button id="footerInstallBtn">Install as app</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© <span id="year"></span> N-Store · Made by Nitesh · v2.0</span>
+            <div class="socials">
+                <a href="https://github.com/Nitesh99390" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:?subject=Check out N-Store&body=https://nitesh99390.github.io/N-store-/" aria-label="Share via email"><i class="fa-solid fa-envelope"></i></a>
+                <a href="#" id="shareSite" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== APP DETAIL MODAL ========== -->
+    <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <button class="modal-close" id="modalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-hero">
+                <div class="modal-icon" id="modalIcon"></div>
+                <div>
+                    <h2 id="modalTitle">App</h2>
+                    <div class="m-dev" id="modalDev"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-stats">
+                    <div class="m-stat"><strong id="mRating">-</strong><span>Rating</span></div>
+                    <div class="m-stat"><strong id="mPlays">-</strong><span>Plays</span></div>
+                    <div class="m-stat"><strong id="mSize">-</strong><span>Size</span></div>
+                    <div class="m-stat"><strong id="mCat">-</strong><span>Type</span></div>
+                </div>
+                <h3>About</h3>
+                <p id="modalDesc"></p>
+                <div class="modal-tags" id="modalTags"></div>
+                <div class="modal-actions">
+                    <a class="pill-btn primary" id="modalPlay" href="#" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> Play now</a>
+                    <button class="icon-btn" id="modalFav" title="Favourite" aria-label="Toggle favourite"><i class="fa-regular fa-heart"></i></button>
+                    <button class="icon-btn" id="modalShare" title="Share" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="pwa-install-prompt" class="pwa-popup">
+    <!-- ========== PWA POPUP ========== -->
+    <div id="pwa-install-prompt" class="pwa-popup" role="dialog" aria-label="Install N-Store">
         <div class="pwa-content">
-            <div class="pwa-icon">
-                <i class="fa-brands fa-google-play"></i>
-            </div>
+            <div class="pwa-icon"><i class="fa-solid fa-store"></i></div>
             <div class="pwa-text">
                 <h4>Install N-Store App</h4>
-                <p>Add to home screen for faster access & offline features!</p>
+                <p>Add to home screen for faster access & offline play!</p>
             </div>
         </div>
         <div class="pwa-actions">
@@ -387,245 +882,504 @@
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="bottom-nav-item active" onclick="filterCategory('Game')">
-            <i class="fa-solid fa-gamepad fa-lg"></i>
-            <span>Games</span>
-        </div>
-        <div class="bottom-nav-item" onclick="filterCategory('App')">
-            <i class="fa-solid fa-layer-group fa-lg"></i>
-            <span>Apps</span>
-        </div>
-        <div class="bottom-nav-item" onclick="document.getElementById('searchInput').focus(); window.scrollTo(0,0);">
-            <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-            <span>Search</span>
-        </div>
-    </div>
+    <!-- ========== MOBILE BOTTOM NAV ========== -->
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+        <button class="bottom-nav-item active" data-cat="All" onclick="filterCategory('All'); window.scrollTo({top:0,behavior:'smooth'});">
+            <i class="fa-solid fa-house"></i><span>Home</span>
+        </button>
+        <button class="bottom-nav-item" data-cat="Game" onclick="filterCategory('Game'); scrollToGrid();">
+            <i class="fa-solid fa-gamepad"></i><span>Games</span>
+        </button>
+        <button class="bottom-nav-item" data-cat="App" onclick="filterCategory('App'); scrollToGrid();">
+            <i class="fa-solid fa-layer-group"></i><span>Apps</span>
+        </button>
+        <button class="bottom-nav-item" data-cat="Favourites" onclick="filterCategory('Favourites'); scrollToGrid();">
+            <i class="fa-solid fa-heart"></i><span>Saved</span>
+        </button>
+        <button class="bottom-nav-item" onclick="document.getElementById('chatToggleBtn').click()">
+            <i class="fa-solid fa-comment-dots"></i><span>Chat</span><span class="dot" id="chatNavDot"></span>
+        </button>
+    </nav>
 
-    <button class="chat-toggle-btn" id="chatToggleBtn" title="Global Chat">
+    <button class="to-top" id="toTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <!-- ========== CHAT ========== -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" title="Global Chat" aria-label="Open global chat">
         <i class="fa-solid fa-comment-dots"></i>
-        <div class="badge" id="chatBadge"></div>
+        <span class="badge" id="chatBadge">0</span>
     </button>
 
-    <div class="chat-window" id="chatWindow">
+    <div class="chat-window" id="chatWindow" role="dialog" aria-label="Global chat">
         <div class="chat-header">
-            <div><i class="fa-solid fa-users" style="margin-right: 8px;"></i> Global Lounge</div>
-            <div class="close-btn" id="chatCloseBtn"><i class="fa-solid fa-xmark"></i></div>
-        </div>
-        
-        <div class="chat-messages" id="chatMessages">
+            <div>
+                <div class="ch-title"><i class="fa-solid fa-users"></i> Global Lounge</div>
+                <div class="ch-sub"><span class="online-dot"></span> <span id="chatStatus">Connecting…</span></div>
             </div>
-
-        <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Type a message..." disabled>
-            <button class="chat-send-btn" id="chatSendBtn" disabled>
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
+            <button class="close-btn" id="chatCloseBtn" aria-label="Close chat"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-empty" id="chatEmpty"><i class="fa-regular fa-comments"></i>No messages yet.<br>Say hello to the community!</div>
+        </div>
+        <div class="chat-input-area">
+            <label for="chatInput" class="sr-only">Message</label>
+            <input type="text" id="chatInput" placeholder="Type a message..." maxlength="300" disabled>
+            <span class="char-count" id="charCount">300</span>
+            <button class="chat-send-btn" id="chatSendBtn" disabled aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
         <div class="chat-overlay-login" id="chatLoginOverlay">
             <i class="fa-solid fa-lock fa-3x" style="color: var(--text-sub);"></i>
-            <h3 style="color: var(--text-main);">Login to Chat</h3>
-            <p style="color: var(--text-sub); font-size: 14px;">Join the community to talk with other players.</p>
-            <button class="theme-btn" id="chatOverlayLoginBtn" style="width: auto; padding: 0 20px; border-radius: 20px; background: var(--primary); color: white; border: none; font-weight: bold;">
-                <i class="fa-brands fa-google" style="margin-right: 8px;"></i> Login with Google
-            </button>
+            <h3>Login to Chat</h3>
+            <p>Join the community to talk with other players in real time.</p>
+            <button class="pill-btn primary" id="chatOverlayLoginBtn"><i class="fa-brands fa-google"></i> Login with Google</button>
         </div>
     </div>
 
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <!-- ========== APP LOGIC ========== -->
     <script>
-        // Data & App Logic Setup (Unchanged)
+        /* ------------------------------------------------------------
+           DATA
+        ------------------------------------------------------------ */
         const myProjects = [
             {
-                title: "Tic Tac Toe",
-                developer: "Nitesh",
-                category: "Game",
-                rating: "4.9",
-                link: "tictactoe.html",
-                iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png",
-                iconBg: "#ffffff"
+                id: "tictactoe", title: "Tic Tac Toe Pro", developer: "Nitesh", category: "Game", rating: 4.9, plays: 12400,
+                size: "38 KB", added: "2025-08-20", link: "tictoctoe.html", badge: "top",
+                tags: ["Puzzle", "2 Player", "Time Attack"],
+                desc: "A modern take on the classic. Time-attack mode, smart AI opponent, win-streak tracking and buttery smooth animations.",
+                iconImg: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=1200,fit=cover,f=png/b72f31aa574acaa5cbf6b6c69104c988/tictactoe.png", iconBg: "#ffffff"
             },
             {
-                title: "Simon Game",
-                developer: "Nitesh",
-                category: "Game",
-                rating: "4.9",
-                link: "simon.html",
-                imageIcon: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", 
-                iconBg: "#4caf50" 
+                id: "simon", title: "Simon Game", developer: "Nitesh", category: "Game", rating: 4.9, plays: 8900,
+                size: "10 KB", added: "2025-07-02", link: "simon.html",
+                tags: ["Memory", "Arcade", "Sound"],
+                desc: "Test your memory with colours and sound. Levels ramp up fast — how long can you keep the sequence going?",
+                iconImg: "https://m.media-amazon.com/images/I/61MHBFYV0mL.png", iconBg: "#4caf50"
             },
             {
-                title: "Memory Game",
-                developer: "Nitesh",
-                category: "Game",
-                rating: "4.9",
-                link: "memorygame.html",
-                imageIcon: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", 
-                iconBg: "#ffffff"
+                id: "memory", title: "Memory Match", developer: "Nitesh", category: "Game", rating: 4.8, plays: 7600,
+                size: "14 KB", added: "2025-06-15", link: "memorygame.html",
+                tags: ["Memory", "Cards", "Casual"],
+                desc: "Flip cards, find pairs, beat the clock. Multiple difficulty levels with a move counter and best-time leaderboard.",
+                iconImg: "https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150120462.jpg", iconBg: "#ffffff"
             },
             {
-                title: "Bubble Shooter",
-                developer: "Nitesh",
-                category: "Game",
-                rating: "4.8",
-                link: "hello1.html",
-                iconClass: "fa-solid fa-circle-dot", 
-                iconBg: "#3b82f6" 
+                id: "bubble", title: "Star Bubble Shooter", developer: "Nitesh", category: "Game", rating: 4.8, plays: 15200,
+                size: "34 KB", added: "2025-09-01", link: "hello1.html", badge: "new",
+                tags: ["Arcade", "Shooter", "Casual"],
+                desc: "Aim, shoot and pop colourful bubbles across endless levels. Premium visual effects with combo scoring.",
+                iconClass: "fa-solid fa-circle-dot", iconBg: "linear-gradient(135deg,#3b82f6,#8b5cf6)"
             },
             {
-                title: "FM Radio",
-                developer: "Nitesh",
-                category: "App",
-                rating: "4.8",
-                link: "hello.html",
-                iconClass: "fa-solid fa-radio",
-                iconBg: "#f97316" 
+                id: "radio", title: "Global FM Radio", developer: "Nitesh", category: "App", rating: 4.7, plays: 5300,
+                size: "10 KB", added: "2025-05-10", link: "hello.html",
+                tags: ["Music", "Live", "Utility"],
+                desc: "Stream live radio stations from around the world. Clean player UI with favourites and a sleek visualiser.",
+                iconClass: "fa-solid fa-radio", iconBg: "linear-gradient(135deg,#f97316,#ef4444)"
             },
             {
-                title: "N-OS System",
-                developer: "Nitesh",
-                category: "App",
-                rating: "5.0",
-                link: "hi.html",
-                iconClass: "fa-solid fa-mobile-screen-button",
-                iconBg: "#6366f1" 
+                id: "nos", title: "N-OS System", developer: "Nitesh", category: "App", rating: 5.0, plays: 21000,
+                size: "77 KB", added: "2025-08-28", link: "hi.html", badge: "hot",
+                tags: ["OS", "Productivity", "Showcase"],
+                desc: "A full mobile-OS simulation in the browser — home screen, widgets, apps and gestures. The flagship N-Store experience.",
+                iconClass: "fa-solid fa-mobile-screen-button", iconBg: "linear-gradient(135deg,#6366f1,#06b6d4)"
             }
         ];
 
-        const grid = document.getElementById('projectGrid');
-        const searchInput = document.getElementById('searchInput');
-        const sectionTitle = document.getElementById('sectionTitle');
+        /* ------------------------------------------------------------
+           HELPERS
+        ------------------------------------------------------------ */
+        const $ = (id) => document.getElementById(id);
+        const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const fmtNum = (n) => n >= 1000 ? (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'K' : String(n);
+        const store = {
+            get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+            set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+        };
+
+        function toast(msg, type = 'success', ms = 2600) {
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${escapeHtml(msg)}</span>`;
+            $('toastStack').appendChild(el);
+            setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, ms);
+        }
+
+        function iconMarkup(p) {
+            if (p.iconImg) return `<img src="${escapeHtml(p.iconImg)}" alt="${escapeHtml(p.title)} icon" loading="lazy">`;
+            return `<i class="${escapeHtml(p.iconClass)}"></i>`;
+        }
+
+        function highlight(text, q) {
+            if (!q) return escapeHtml(text);
+            const i = text.toLowerCase().indexOf(q.toLowerCase());
+            if (i < 0) return escapeHtml(text);
+            return escapeHtml(text.slice(0, i)) + '<mark>' + escapeHtml(text.slice(i, i + q.length)) + '</mark>' + escapeHtml(text.slice(i + q.length));
+        }
+
+        /* ------------------------------------------------------------
+           STATE
+        ------------------------------------------------------------ */
+        const grid = $('projectGrid');
+        const searchInput = $('searchInput');
+        const sectionTitle = $('sectionTitle');
         let currentFilter = 'All';
+        let currentTag = null;
+        let currentSort = store.get('nstore-sort', 'featured');
+        let favourites = new Set(store.get('nstore-favs', []));
+        let recents = store.get('nstore-recent', []);
+        let viewMode = store.get('nstore-view', 'grid');
 
-        function renderProjects(searchQuery = '') {
-            grid.innerHTML = '';
+        const allTags = [...new Set(myProjects.flatMap(p => p.tags))].sort();
 
-            if (myProjects.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fa-solid fa-folder-open fa-3x" style="margin-bottom:20px; color: var(--primary);"></i><br>Abhi tak koi app add nahi kiya gaya hai.</div>';
-                return;
-            }
-            
-            const filtered = myProjects.filter(project => {
-                const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesCategory = currentFilter === 'All' || currentFilter === 'Top charts' || project.category === currentFilter;
-                return matchesSearch && matchesCategory;
+        /* ------------------------------------------------------------
+           RENDER: chips
+        ------------------------------------------------------------ */
+        function renderChips() {
+            const chips = $('chips');
+            chips.innerHTML = `<button class="chip ${!currentTag ? 'active' : ''}" data-tag=""><i class="fa-solid fa-layer-group"></i>All</button>` +
+                allTags.map(t => `<button class="chip ${currentTag === t ? 'active' : ''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</button>`).join('');
+        }
+        $('chips').addEventListener('click', (e) => {
+            const chip = e.target.closest('.chip'); if (!chip) return;
+            currentTag = chip.dataset.tag || null;
+            renderChips(); renderProjects(searchInput.value);
+        });
+
+        /* ------------------------------------------------------------
+           RENDER: grid
+        ------------------------------------------------------------ */
+        function getFiltered(q = '') {
+            const query = q.trim().toLowerCase();
+            let list = myProjects.filter(p => {
+                const matchesSearch = !query || p.title.toLowerCase().includes(query) || p.tags.some(t => t.toLowerCase().includes(query)) || p.category.toLowerCase().includes(query);
+                const matchesCategory =
+                    currentFilter === 'All' || currentFilter === 'Top charts' ? true :
+                    currentFilter === 'Favourites' ? favourites.has(p.id) :
+                    p.category === currentFilter;
+                const matchesTag = !currentTag || p.tags.includes(currentTag);
+                return matchesSearch && matchesCategory && matchesTag;
             });
+            const sort = currentFilter === 'Top charts' ? 'plays' : currentSort;
+            const sorters = {
+                featured: (a, b) => myProjects.indexOf(a) - myProjects.indexOf(b),
+                rating: (a, b) => b.rating - a.rating || b.plays - a.plays,
+                plays: (a, b) => b.plays - a.plays,
+                newest: (a, b) => new Date(b.added) - new Date(a.added),
+                az: (a, b) => a.title.localeCompare(b.title)
+            };
+            return list.sort(sorters[sort] || sorters.featured);
+        }
+
+        function renderProjects(q = '') {
+            const filtered = getFiltered(q);
+            grid.classList.toggle('list-view', viewMode === 'list');
+            $('resultCount').textContent = `${filtered.length} ${filtered.length === 1 ? 'title' : 'titles'}`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<div class="no-results"><i class="fa-regular fa-face-frown fa-3x" style="margin-bottom:20px; color: var(--text-sub);"></i><br>No matching apps found.</div>';
+                const isFav = currentFilter === 'Favourites';
+                grid.innerHTML = `<div class="no-results">
+                    <i class="${isFav ? 'fa-regular fa-heart' : 'fa-regular fa-face-frown'} fa-3x" style="color: var(--text-sub);"></i>
+                    ${isFav ? 'No favourites yet. Tap the ♥ on any card to save it here.' : 'No matching apps found.'}<br>
+                    <button class="link-btn" onclick="resetFilters()"><i class="fa-solid fa-rotate-left"></i> Reset filters</button>
+                </div>`;
                 return;
             }
 
-            filtered.forEach((project, index) => {
-                let iconContent = '';
-                if (project.imageIcon || project.iconImg) {
-                    const imgSrc = project.imageIcon ? project.imageIcon : project.iconImg;
-                    iconContent = `<img src="${imgSrc}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 22px;">`;
-                } else {
-                    iconContent = `<i class="${project.iconClass}"></i>`;
-                }
-
-                const animationDelay = index * 0.05;
-
-                const card = `
-                    <a href="${project.link}" target="_blank" class="app-card" style="animation-delay: ${animationDelay}s">
-                        <div class="app-icon" style="background-color: ${project.iconBg}">
-                            ${iconContent}
+            grid.innerHTML = filtered.map((p, index) => {
+                const isFav = favourites.has(p.id);
+                const badge = p.badge ? `<span class="card-badge ${p.badge}">${p.badge === 'top' ? '★ Top' : p.badge}</span>` : '';
+                const rank = currentFilter === 'Top charts' ? `<span class="card-badge top">#${index + 1}</span>` : badge;
+                return `
+                <article class="app-card" data-id="${p.id}" style="animation-delay: ${index * 0.05}s" tabindex="0" role="button" aria-label="Open ${escapeHtml(p.title)} details">
+                    ${rank}
+                    <button class="fav-btn ${isFav ? 'active' : ''}" data-fav="${p.id}" aria-label="${isFav ? 'Remove from' : 'Add to'} favourites" aria-pressed="${isFav}">
+                        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                    </button>
+                    <div class="app-icon" style="background: ${p.iconBg}">${iconMarkup(p)}</div>
+                    <div class="app-info">
+                        <div class="app-title" title="${escapeHtml(p.title)}">${highlight(p.title, q.trim())}</div>
+                        <div class="app-dev">${escapeHtml(p.developer)}</div>
+                        <div class="app-meta">
+                            <span>${p.rating.toFixed(1)} <i class="fa-solid fa-star star"></i></span>
+                            <span><i class="fa-solid fa-play" style="font-size:9px"></i> ${fmtNum(p.plays)}</span>
                         </div>
-                        <div class="app-info">
-                            <div class="app-title" title="${project.title}">${project.title}</div>
-                            <div class="app-dev">${project.developer}</div>
-                            <div class="app-meta">
-                                ${project.rating} <i class="fa-solid fa-star star"></i>
-                            </div>
-                        </div>
-                        <button class="install-btn">Play</button>
-                    </a>
-                `;
-                grid.innerHTML += card;
-            });
+                        <div class="app-tags">${p.tags.slice(0, 2).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+                    </div>
+                    <a class="install-btn" href="${escapeHtml(p.link)}" target="_blank" rel="noopener" data-play="${p.id}"><i class="fa-solid fa-play"></i> ${p.category === 'Game' ? 'Play' : 'Open'}</a>
+                </article>`;
+            }).join('');
         }
 
+        function resetFilters() {
+            currentTag = null; searchInput.value = ''; $('searchBar').classList.remove('has-value');
+            renderChips(); filterCategory('All');
+        }
+
+        // Grid interactions (delegated)
+        grid.addEventListener('click', (e) => {
+            const fav = e.target.closest('[data-fav]');
+            if (fav) { e.preventDefault(); e.stopPropagation(); toggleFav(fav.dataset.fav, fav); return; }
+            const play = e.target.closest('[data-play]');
+            if (play) { e.stopPropagation(); trackPlay(play.dataset.play); return; }
+            const card = e.target.closest('.app-card');
+            if (card) openModal(card.dataset.id);
+        });
+        grid.addEventListener('keydown', (e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('app-card')) { e.preventDefault(); openModal(e.target.dataset.id); }
+        });
+
+        /* ------------------------------------------------------------
+           FAVOURITES & RECENTS
+        ------------------------------------------------------------ */
+        function updateFavCount() {
+            const c = $('favCount'); c.textContent = favourites.size; c.classList.toggle('show', favourites.size > 0);
+            $('favNavBtn').querySelector('i').className = favourites.size ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+        }
+        function toggleFav(id, btn) {
+            const p = myProjects.find(x => x.id === id); if (!p) return;
+            if (favourites.has(id)) { favourites.delete(id); toast(`Removed "${p.title}" from favourites`, 'info'); }
+            else { favourites.add(id); toast(`Saved "${p.title}" to favourites`); }
+            store.set('nstore-favs', [...favourites]);
+            updateFavCount();
+            if (btn) { btn.classList.add('pop'); setTimeout(() => btn.classList.remove('pop'), 350); }
+            if (currentFilter === 'Favourites') renderProjects(searchInput.value);
+            else {
+                document.querySelectorAll(`[data-fav="${id}"]`).forEach(b => {
+                    const on = favourites.has(id);
+                    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on);
+                    b.querySelector('i').className = `${on ? 'fa-solid' : 'fa-regular'} fa-heart`;
+                });
+            }
+            if (modalState.id === id) syncModalFav();
+        }
+
+        function trackPlay(id) {
+            recents = [id, ...recents.filter(r => r !== id)].slice(0, 6);
+            store.set('nstore-recent', recents);
+            renderRecents();
+        }
+        function renderRecents() {
+            const items = recents.map(id => myProjects.find(p => p.id === id)).filter(Boolean);
+            $('recentSection').style.display = items.length ? 'block' : 'none';
+            $('recentRail').innerHTML = items.map(p => `
+                <a class="rail-card" href="${escapeHtml(p.link)}" target="_blank" rel="noopener" data-play="${p.id}">
+                    <div class="rail-icon" style="background:${p.iconBg}">${iconMarkup(p)}</div>
+                    <div><strong>${escapeHtml(p.title)}</strong><span>${escapeHtml(p.category)} · ${p.rating.toFixed(1)} ★</span></div>
+                </a>`).join('');
+        }
+        $('recentRail').addEventListener('click', (e) => { const a = e.target.closest('[data-play]'); if (a) trackPlay(a.dataset.play); });
+        $('clearRecent').addEventListener('click', () => { recents = []; store.set('nstore-recent', []); renderRecents(); toast('History cleared', 'info'); });
+
+        /* ------------------------------------------------------------
+           CATEGORY / TABS
+        ------------------------------------------------------------ */
+        const titles = {
+            'All': ['fa-sparkles', 'Recommended for you'],
+            'Top charts': ['fa-ranking-star', 'Top charts'],
+            'Game': ['fa-gamepad', 'Premium Games'],
+            'App': ['fa-layer-group', 'Premium Apps'],
+            'Favourites': ['fa-heart', 'Your favourites']
+        };
         function filterCategory(category) {
             currentFilter = category;
-            
-            if(category === 'All') sectionTitle.innerText = 'Recommended for you';
-            else if(category === 'Top charts') sectionTitle.innerText = 'Top charts';
-            else sectionTitle.innerText = `Premium ${category}s`;
-
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-                if(tab.innerText.includes(category) || (category === 'All' && tab.innerText === 'For you')) {
-                    tab.classList.add('active');
-                }
+            const [icon, label] = titles[category] || titles.All;
+            sectionTitle.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
+            if (category === 'All' && window.__firstName) sectionTitle.innerHTML = `<i class="fa-solid fa-hand-sparkles"></i> Welcome back, ${escapeHtml(window.__firstName)}!`;
+            document.querySelectorAll('.tab, .bottom-nav-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.cat === category);
+                if (el.classList.contains('tab')) el.setAttribute('aria-selected', el.dataset.cat === category);
             });
-
-            document.querySelectorAll('.bottom-nav-item').forEach(item => {
-                item.classList.remove('active');
-                if(item.innerText.includes(category)) item.classList.add('active');
-            });
-
+            $('sortSelect').disabled = category === 'Top charts';
             renderProjects(searchInput.value);
         }
+        function scrollToGrid() {
+            const y = document.querySelector('.toolbar').getBoundingClientRect().top + window.scrollY - 130;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+        $('favNavBtn').addEventListener('click', () => { filterCategory('Favourites'); scrollToGrid(); });
 
+        /* ------------------------------------------------------------
+           SEARCH / SORT / VIEW
+        ------------------------------------------------------------ */
+        let searchTimer;
         searchInput.addEventListener('input', (e) => {
-            renderProjects(e.target.value);
+            $('searchBar').classList.toggle('has-value', e.target.value.length > 0);
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => renderProjects(e.target.value), 120);
         });
-
-        // Theme Toggle Logic
-        const themeBtn = document.getElementById('themeToggle');
-        const html = document.documentElement;
-        
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', newTheme);
-            
-            if (newTheme === 'dark') {
-                themeBtn.innerHTML = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0f172a');
-            } else {
-                themeBtn.innerHTML = '<i class="fa-regular fa-moon"></i>';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+        $('searchClear').addEventListener('click', () => { searchInput.value = ''; $('searchBar').classList.remove('has-value'); renderProjects(''); searchInput.focus(); });
+        document.addEventListener('keydown', (e) => {
+            const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
+            if (e.key === '/' && !typing) { e.preventDefault(); searchInput.focus(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            if (e.key === 'Escape') {
+                if ($('modalBackdrop').classList.contains('open')) closeModal();
+                else if (document.activeElement === searchInput) { searchInput.value = ''; $('searchBar').classList.remove('has-value'); renderProjects(''); searchInput.blur(); }
+                $('userMenu').classList.remove('open');
             }
         });
 
-        // PWA Install Logic
-        let deferredPrompt;
-        const pwaPopup = document.getElementById('pwa-install-prompt');
-        const installBtn = document.getElementById('pwa-install-btn');
-        const cancelBtn = document.getElementById('pwa-cancel-btn');
+        $('sortSelect').value = currentSort;
+        $('sortSelect').addEventListener('change', (e) => { currentSort = e.target.value; store.set('nstore-sort', currentSort); renderProjects(searchInput.value); });
 
-        window.addEventListener('beforeinstallprompt', (e) => {
+        function setView(mode) {
+            viewMode = mode; store.set('nstore-view', mode);
+            $('viewGrid').classList.toggle('active', mode === 'grid'); $('viewList').classList.toggle('active', mode === 'list');
+            renderProjects(searchInput.value);
+        }
+        $('viewGrid').addEventListener('click', () => setView('grid'));
+        $('viewList').addEventListener('click', () => setView('list'));
+
+        /* ------------------------------------------------------------
+           MODAL
+        ------------------------------------------------------------ */
+        const modalState = { id: null };
+        function syncModalFav() {
+            const on = favourites.has(modalState.id);
+            $('modalFav').querySelector('i').className = `${on ? 'fa-solid' : 'fa-regular'} fa-heart`;
+            $('modalFav').style.color = on ? 'var(--danger)' : '';
+        }
+        function openModal(id) {
+            const p = myProjects.find(x => x.id === id); if (!p) return;
+            modalState.id = id;
+            $('modalIcon').innerHTML = iconMarkup(p); $('modalIcon').style.background = p.iconBg;
+            $('modalTitle').textContent = p.title;
+            $('modalDev').textContent = `by ${p.developer} · ${p.category}`;
+            $('mRating').innerHTML = `${p.rating.toFixed(1)} <i class="fa-solid fa-star star" style="font-size:12px"></i>`;
+            $('mPlays').textContent = fmtNum(p.plays);
+            $('mSize').textContent = p.size;
+            $('mCat').textContent = p.category;
+            $('modalDesc').textContent = p.desc;
+            $('modalTags').innerHTML = p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+            $('modalPlay').href = p.link;
+            $('modalPlay').innerHTML = `<i class="fa-solid fa-play"></i> ${p.category === 'Game' ? 'Play now' : 'Open app'}`;
+            syncModalFav();
+            $('modalBackdrop').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => $('modalClose').focus(), 50);
+        }
+        function closeModal() { $('modalBackdrop').classList.remove('open'); document.body.style.overflow = ''; modalState.id = null; }
+        $('modalClose').addEventListener('click', closeModal);
+        $('modalBackdrop').addEventListener('click', (e) => { if (e.target === $('modalBackdrop')) closeModal(); });
+        $('modalFav').addEventListener('click', () => toggleFav(modalState.id, $('modalFav')));
+        $('modalPlay').addEventListener('click', () => { trackPlay(modalState.id); closeModal(); });
+        $('modalShare').addEventListener('click', async () => {
+            const p = myProjects.find(x => x.id === modalState.id); if (!p) return;
+            const url = new URL(p.link, location.href).href;
+            try {
+                if (navigator.share) await navigator.share({ title: `${p.title} — N-Store`, text: p.desc, url });
+                else { await navigator.clipboard.writeText(url); toast('Link copied to clipboard'); }
+            } catch (err) { if (err.name !== 'AbortError') toast('Could not share', 'error'); }
+        });
+        $('shareSite').addEventListener('click', async (e) => {
             e.preventDefault();
-            deferredPrompt = e;
-            setTimeout(() => {
-                pwaPopup.classList.add('show');
-            }, 2000);
+            const url = 'https://nitesh99390.github.io/N-store-/';
+            try {
+                if (navigator.share) await navigator.share({ title: 'N-Store', text: 'Premium apps & games hub', url });
+                else { await navigator.clipboard.writeText(url); toast('Link copied to clipboard'); }
+            } catch (err) { if (err.name !== 'AbortError') toast('Could not share', 'error'); }
         });
 
-        installBtn.addEventListener('click', async () => {
+        /* ------------------------------------------------------------
+           THEME
+        ------------------------------------------------------------ */
+        const themeBtn = $('themeToggle');
+        const html = document.documentElement;
+        function applyThemeIcon() {
+            const dark = html.getAttribute('data-theme') === 'dark';
+            themeBtn.innerHTML = dark ? '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>' : '<i class="fa-regular fa-moon"></i>';
+            document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute('content', dark ? '#0b1120' : '#ffffff'));
+        }
+        themeBtn.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            try { localStorage.setItem('nstore-theme', next); } catch {}
+            applyThemeIcon();
+        });
+        applyThemeIcon();
+
+        /* ------------------------------------------------------------
+           PWA INSTALL
+        ------------------------------------------------------------ */
+        let deferredPrompt = null;
+        const pwaPopup = $('pwa-install-prompt');
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e;
+            if (!store.get('nstore-pwa-dismissed', false)) setTimeout(() => pwaPopup.classList.add('show'), 2500);
+        });
+        async function promptInstall() {
             pwaPopup.classList.remove('show');
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
+            if (!deferredPrompt) {
+                if (window.matchMedia('(display-mode: standalone)').matches) toast('N-Store is already installed', 'info');
+                else toast('Use your browser menu → "Add to Home screen" / "Install"', 'info', 4000);
+                return;
             }
-        });
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') toast('N-Store installed! 🎉');
+            deferredPrompt = null;
+        }
+        $('pwa-install-btn').addEventListener('click', promptInstall);
+        $('heroInstallBtn').addEventListener('click', promptInstall);
+        $('footerInstallBtn').addEventListener('click', promptInstall);
+        $('pwa-cancel-btn').addEventListener('click', () => { pwaPopup.classList.remove('show'); store.set('nstore-pwa-dismissed', true); });
+        window.addEventListener('appinstalled', () => { pwaPopup.classList.remove('show'); toast('Installed successfully'); });
 
-        cancelBtn.addEventListener('click', () => {
-            pwaPopup.classList.remove('show');
-        });
+        /* ------------------------------------------------------------
+           SCROLL UX / OFFLINE / MISC
+        ------------------------------------------------------------ */
+        const toTop = $('toTop'), progress = $('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement.scrollHeight - window.innerHeight;
+            progress.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+            toTop.classList.toggle('show', window.scrollY > 500);
+        }, { passive: true });
+        toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-        // Initial render
-        renderProjects();
+        const offline = $('offlineBanner');
+        const updateOnline = () => { offline.classList.toggle('show', !navigator.onLine); if (!navigator.onLine) toast('You are offline', 'error'); };
+        window.addEventListener('online', () => { offline.classList.remove('show'); toast('Back online'); });
+        window.addEventListener('offline', updateOnline);
+        if (!navigator.onLine) offline.classList.add('show');
+
+        $('year').textContent = new Date().getFullYear();
+
+        // Animated counters
+        function animateCount(el, target, suffix = '') {
+            const dur = 900, start = performance.now();
+            const step = (t) => {
+                const k = Math.min(1, (t - start) / dur), eased = 1 - Math.pow(1 - k, 3);
+                el.textContent = fmtNum(Math.round(target * eased)) + suffix;
+                if (k < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        /* ------------------------------------------------------------
+           INIT
+        ------------------------------------------------------------ */
+        function init() {
+            $('countGame').textContent = myProjects.filter(p => p.category === 'Game').length;
+            $('countApp').textContent = myProjects.filter(p => p.category === 'App').length;
+            $('statRating').textContent = (myProjects.reduce((s, p) => s + p.rating, 0) / myProjects.length).toFixed(1);
+            animateCount($('statTotal'), myProjects.length);
+            animateCount($('statPlays'), myProjects.reduce((s, p) => s + p.plays, 0), '+');
+            updateFavCount(); renderChips(); renderRecents();
+            $('viewGrid').classList.toggle('active', viewMode === 'grid'); $('viewList').classList.toggle('active', viewMode === 'list');
+
+            // skeleton → content
+            grid.innerHTML = Array.from({ length: 6 }, () => `<div class="skeleton-card"><div class="sk sk-icon"></div><div class="sk sk-line"></div><div class="sk sk-line short"></div><div class="sk sk-btn"></div></div>`).join('');
+            setTimeout(() => filterCategory('All'), 350);
+        }
+        init();
     </script>
 
+    <!-- ========== FIREBASE AUTH + REALTIME CHAT ========== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        // Added 'remove' and 'onChildRemoved' for delete functionality
-        import { getDatabase, ref, push, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded, onChildRemoved, remove, serverTimestamp, query, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCIfn-tI5koy-ZZOWrErlrNDd6kWN2AsKA",
@@ -637,176 +1391,162 @@
             measurementId: "G-QB4HC3YYRF"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        const db = getDatabase(app);
-        
-        const messagesRef = ref(db, 'global_chat');
-        const recentMessagesQuery = query(messagesRef, limitToLast(50));
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const linkify = (text) => esc(text).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener nofollow">${u}</a>`);
+        const AVATAR_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="#10b981"/><circle cx="32" cy="26" r="11" fill="#fff"/><path d="M12 56c3-12 12-18 20-18s17 6 20 18z" fill="#fff"/></svg>');
 
-        // UI Elements
-        const loginBtn = document.getElementById('loginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const userProfile = document.getElementById('userProfile');
-        const userPhoto = document.getElementById('userPhoto');
-        const sectionTitleElement = document.getElementById('sectionTitle');
-        
-        const chatToggleBtn = document.getElementById('chatToggleBtn');
-        const chatWindow = document.getElementById('chatWindow');
-        const chatCloseBtn = document.getElementById('chatCloseBtn');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const chatSendBtn = document.getElementById('chatSendBtn');
-        const chatLoginOverlay = document.getElementById('chatLoginOverlay');
-        const chatOverlayLoginBtn = document.getElementById('chatOverlayLoginBtn');
-        const chatBadge = document.getElementById('chatBadge');
+        let app, auth, db, provider, messagesRef;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            provider = new GoogleAuthProvider();
+            db = getDatabase(app);
+            messagesRef = ref(db, 'global_chat');
+        } catch (err) {
+            console.error('[N-Store] Firebase init failed', err);
+            $('chatStatus').textContent = 'Chat unavailable';
+        }
 
-        // Chat Toggle
-        let isChatOpen = false;
-        chatToggleBtn.onclick = () => {
-            isChatOpen = true;
-            chatWindow.classList.add('active');
-            chatBadge.style.display = 'none';
-            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 300);
+        // UI
+        const loginBtn = $('loginBtn'), logoutBtn = $('logoutBtn'), userProfile = $('userProfile'), userPhoto = $('userPhoto');
+        const userMenu = $('userMenu'), chatToggleBtn = $('chatToggleBtn'), chatWindow = $('chatWindow'), chatCloseBtn = $('chatCloseBtn');
+        const chatMessages = $('chatMessages'), chatInput = $('chatInput'), chatSendBtn = $('chatSendBtn');
+        const chatLoginOverlay = $('chatLoginOverlay'), chatOverlayLoginBtn = $('chatOverlayLoginBtn'), chatBadge = $('chatBadge'), chatNavDot = $('chatNavDot');
+        const chatEmpty = $('chatEmpty'), charCount = $('charCount'), chatStatus = $('chatStatus');
+
+        // User menu
+        userPhoto.addEventListener('click', (e) => { e.stopPropagation(); userMenu.classList.toggle('open'); });
+        document.addEventListener('click', (e) => { if (!userProfile.contains(e.target)) userMenu.classList.remove('open'); });
+        $('umFavBtn').addEventListener('click', () => { userMenu.classList.remove('open'); filterCategory('Favourites'); scrollToGrid(); });
+        $('umChatBtn').addEventListener('click', () => { userMenu.classList.remove('open'); openChat(); });
+
+        // Chat toggle
+        let isChatOpen = false, unread = 0;
+        const setUnread = (n) => {
+            unread = n; chatBadge.textContent = n > 9 ? '9+' : n;
+            chatBadge.classList.toggle('show', n > 0); chatNavDot.classList.toggle('show', n > 0);
         };
-        chatCloseBtn.onclick = () => {
-            isChatOpen = false;
-            chatWindow.classList.remove('active');
-        };
+        function openChat() {
+            isChatOpen = true; chatWindow.classList.add('active'); setUnread(0);
+            chatToggleBtn.setAttribute('aria-expanded', 'true');
+            setTimeout(() => { chatMessages.scrollTop = chatMessages.scrollHeight; if (!chatInput.disabled) chatInput.focus(); }, 300);
+        }
+        function closeChat() { isChatOpen = false; chatWindow.classList.remove('active'); chatToggleBtn.setAttribute('aria-expanded', 'false'); }
+        chatToggleBtn.onclick = () => isChatOpen ? closeChat() : openChat();
+        chatCloseBtn.onclick = closeChat;
 
-        // Authentication
-        const loginUser = () => signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
+        // Auth
+        const loginUser = async () => {
+            if (!auth) return toast('Chat is unavailable right now', 'error');
+            try { await signInWithPopup(auth, provider); }
+            catch (err) {
+                if (err.code === 'auth/popup-blocked') { try { await signInWithRedirect(auth, provider); } catch (e2) { toast('Login failed: ' + e2.message, 'error'); } }
+                else if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') toast('Login failed: ' + (err.message || err.code), 'error');
+            }
+        };
         loginBtn.onclick = loginUser;
         chatOverlayLoginBtn.onclick = loginUser;
-        logoutBtn.onclick = () => signOut(auth);
+        logoutBtn.onclick = async () => { userMenu.classList.remove('open'); await signOut(auth); toast('Signed out', 'info'); };
 
         let currentUser = null;
-        onAuthStateChanged(auth, (user) => {
+        if (auth) onAuthStateChanged(auth, (user) => {
             currentUser = user;
             if (user) {
-                loginBtn.style.display = 'none';
-                userProfile.style.display = 'flex';
-                userPhoto.src = user.photoURL || 'https://via.placeholder.com/38';
-                
-                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
-                if (document.querySelector('.tab.active').innerText === 'For you') {
-                    sectionTitleElement.innerText = `Welcome back, ${firstName}!`;
-                }
-                
-                chatLoginOverlay.style.display = 'none';
-                chatInput.disabled = false;
-                chatSendBtn.disabled = false;
+                loginBtn.style.display = 'none'; userProfile.style.display = 'block';
+                userPhoto.src = user.photoURL || AVATAR_FALLBACK;
+                userPhoto.onerror = () => { userPhoto.src = AVATAR_FALLBACK; };
+                $('umName').textContent = user.displayName || 'User';
+                $('umEmail').textContent = user.email || '';
+                window.__firstName = user.displayName ? user.displayName.split(' ')[0] : 'Gamer';
+                chatLoginOverlay.style.display = 'none'; chatInput.disabled = false; chatSendBtn.disabled = false;
+                toast(`Welcome, ${window.__firstName}!`);
             } else {
-                loginBtn.style.display = 'flex';
-                userProfile.style.display = 'none';
-                
-                if (document.querySelector('.tab.active').innerText === 'For you') {
-                    sectionTitleElement.innerText = 'Recommended for you';
-                }
-                
-                chatLoginOverlay.style.display = 'flex';
-                chatInput.disabled = true;
-                chatSendBtn.disabled = true;
+                loginBtn.style.display = 'inline-flex'; userProfile.style.display = 'none';
+                window.__firstName = null;
+                chatLoginOverlay.style.display = 'flex'; chatInput.disabled = true; chatSendBtn.disabled = true;
             }
+            // re-mark own messages + refresh title
+            document.querySelectorAll('.msg-row').forEach(row => {
+                const mine = !!(user && row.dataset.uid === user.uid);
+                row.classList.toggle('me', mine); row.classList.toggle('other', !mine);
+                row.querySelector('.msg-name-text').textContent = mine ? 'You' : row.dataset.name;
+                const del = row.querySelector('.delete-msg-btn'); if (del) del.style.display = mine ? '' : 'none';
+            });
+            if (typeof filterCategory === 'function' && document.querySelector('.tab.active')?.dataset.cat === 'All') filterCategory('All');
         });
 
-        // Send Message
+        // Send
+        let lastSent = 0;
         const sendMessage = () => {
-            if (!currentUser) return;
+            if (!currentUser || !messagesRef) return;
             const text = chatInput.value.trim();
-            if (text.length === 0) return;
+            if (!text) return;
+            if (Date.now() - lastSent < 800) return toast('Slow down a little 🙂', 'info', 1500);
+            lastSent = Date.now();
+            push(messagesRef, { uid: currentUser.uid, name: currentUser.displayName || 'User', photo: currentUser.photoURL || '', text: text.slice(0, 300), timestamp: serverTimestamp() })
+                .catch(err => toast('Failed to send: ' + err.message, 'error'));
+            chatInput.value = ''; charCount.textContent = '300'; chatInput.focus();
+        };
+        chatSendBtn.onclick = sendMessage;
+        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+        chatInput.addEventListener('input', () => { charCount.textContent = 300 - chatInput.value.length; });
 
-            push(messagesRef, {
-                uid: currentUser.uid,
-                name: currentUser.displayName,
-                photo: currentUser.photoURL,
-                text: text,
-                timestamp: serverTimestamp() // Save exact server time
-            });
-
-            chatInput.value = '';
-            chatInput.focus();
+        // Listeners
+        let lastDay = null;
+        const dayLabel = (ts) => {
+            const d = new Date(ts), now = new Date();
+            const same = (a, b) => a.toDateString() === b.toDateString();
+            if (same(d, now)) return 'Today';
+            const y = new Date(now); y.setDate(now.getDate() - 1);
+            if (same(d, y)) return 'Yesterday';
+            return d.toLocaleDateString([], { day: 'numeric', month: 'short' });
         };
 
-        chatSendBtn.onclick = sendMessage;
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        if (messagesRef) {
+            onChildAdded(query(messagesRef, limitToLast(60)), (snapshot) => {
+                const msg = snapshot.val() || {}; const msgId = snapshot.key;
+                const isMe = !!(currentUser && msg.uid === currentUser.uid);
+                const ts = typeof msg.timestamp === 'number' ? msg.timestamp : Date.now();
+                const day = dayLabel(ts);
+                chatEmpty.style.display = 'none';
+                if (day !== lastDay) { lastDay = day; const div = document.createElement('div'); div.className = 'day-divider'; div.textContent = day; chatMessages.appendChild(div); }
 
-        // --------------------------------------------------------
-        // FIREBASE REALTIME LISTENERS (Add & Remove)
-        // --------------------------------------------------------
+                const firstName = msg.name ? String(msg.name).split(' ')[0] : 'User';
+                const row = document.createElement('div');
+                row.className = `msg-row ${isMe ? 'me' : 'other'}`;
+                row.id = `msg-${msgId}`; row.dataset.id = msgId; row.dataset.uid = msg.uid || ''; row.dataset.name = firstName;
+                const timeString = new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                row.innerHTML = `
+                    <img src="${esc(msg.photo || AVATAR_FALLBACK)}" class="msg-avatar" alt="" referrerpolicy="no-referrer" onerror="this.src='${AVATAR_FALLBACK}'">
+                    <div class="msg-content">
+                        <span class="msg-name"><span class="msg-name-text">${isMe ? 'You' : esc(firstName)}</span><span class="msg-time">${timeString}</span></span>
+                        <div class="msg-bubble">${linkify(msg.text || '')}
+                            <button class="delete-msg-btn" title="Delete message" aria-label="Delete message" style="${isMe ? '' : 'display:none'}"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
+                chatMessages.appendChild(row);
+                const nearBottom = chatMessages.scrollHeight - chatMessages.scrollTop - chatMessages.clientHeight < 200;
+                if (isMe || nearBottom) chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (!isChatOpen && !isMe && Date.now() - ts < 60000) setUnread(unread + 1);
+            });
 
-        // 1. When a message is ADDED
-        onChildAdded(recentMessagesQuery, (snapshot) => {
-            const msg = snapshot.val();
-            const msgId = snapshot.key; // Get Unique ID for the message
-            const isMe = currentUser && msg.uid === currentUser.uid;
-            
-            const msgDiv = document.createElement('div');
-            // Add custom ID attribute so we can find it later when deleting
-            msgDiv.className = `msg-row ${isMe ? 'me' : 'other'}`;
-            msgDiv.id = `msg-${msgId}`; 
-            msgDiv.dataset.id = msgId;
-            
-            const photoUrl = msg.photo || 'https://via.placeholder.com/32';
-            const firstName = msg.name ? msg.name.split(' ')[0] : 'User';
-            
-            // Format time (Fallback to current time if serverTimestamp is pending)
-            const timeString = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            chatMessages.addEventListener('click', (e) => {
+                const btn = e.target.closest('.delete-msg-btn'); if (!btn) return;
+                const row = btn.closest('.msg-row'); if (!row || !currentUser || row.dataset.uid !== currentUser.uid) return;
+                if (confirm('Delete this message?')) remove(ref(db, `global_chat/${row.dataset.id}`)).then(() => toast('Message deleted', 'info')).catch(err => toast('Error: ' + err.message, 'error'));
+            });
 
-            msgDiv.innerHTML = `
-                <img src="${photoUrl}" class="msg-avatar" alt="User">
-                <div class="msg-content">
-                    <span class="msg-name">
-                        ${!isMe ? firstName : 'You'} 
-                        <span class="msg-time">${timeString}</span>
-                    </span>
-                    <div class="msg-bubble">
-                        ${msg.text}
-                        ${isMe ? `<button class="delete-msg-btn" title="Delete Message"><i class="fa-solid fa-trash"></i></button>` : ''}
-                    </div>
-                </div>
-            `;
-            
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            onChildRemoved(messagesRef, (snapshot) => {
+                const el = $(`msg-${snapshot.key}`);
+                if (el) { el.classList.add('deleting'); setTimeout(() => { el.remove(); if (!chatMessages.querySelector('.msg-row')) chatEmpty.style.display = ''; }, 300); }
+            });
 
-            if (!isChatOpen && !isMe) chatBadge.style.display = 'block';
-        });
-
-        // 2. Event Delegation for Delete Button Click
-        // Since this is a module, we attach the event to the parent container
-        chatMessages.addEventListener('click', (e) => {
-            const deleteBtn = e.target.closest('.delete-msg-btn');
-            if (deleteBtn) {
-                const msgRow = deleteBtn.closest('.msg-row');
-                const msgId = msgRow.dataset.id;
-                
-                // Confirm before deleting
-                if(confirm("Kya aap wakai is message ko delete karna chahte hain?")) {
-                    remove(ref(db, `global_chat/${msgId}`))
-                        .catch(err => alert("Error deleting message: " + err));
-                }
-            }
-        });
-
-        // 3. When a message is REMOVED from Firebase (Sync for everyone)
-        onChildRemoved(messagesRef, (snapshot) => {
-            const msgId = snapshot.key;
-            const msgElement = document.getElementById(`msg-${msgId}`);
-            
-            if (msgElement) {
-                // Add CSS animation class
-                msgElement.classList.add('deleting');
-                // Remove from DOM after animation completes
-                setTimeout(() => {
-                    msgElement.remove();
-                }, 300);
-            }
-        });
-
+            onValue(ref(db, '.info/connected'), (snap) => {
+                chatStatus.textContent = snap.val() ? 'Live · Global Lounge' : 'Reconnecting…';
+                document.querySelector('.online-dot').style.background = snap.val() ? '#4ade80' : '#f59e0b';
+            });
+        }
     </script>
 </body>
 </html>
